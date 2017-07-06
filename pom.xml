@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>clt</groupId>
+	<artifactId>clt</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	
+	<name>clt</name>
+	<url>http://maven.apache.prg</url>
+	
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.4.2.RELEASE</version>
+		<relativePath></relativePath>
+	</parent>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<maven.version>3.3.9</maven.version>
+	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+            <!-- test -->
+        	<dependency>
+                 <groupId>junit</groupId>
+                 <artifactId>junit</artifactId>
+                 <version>4.12</version>
+                 <scope>test</scope>
+          	</dependency>
+          	
+            <dependency>
+            	<groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>4.3.4.RELEASE</version>
+            </dependency>
+                 
+            <!-- log -->
+            <dependency> 
+                <groupId>org.slf4j</groupId> 
+                <artifactId>slf4j-log4j12</artifactId> 
+                <version>1.7.21</version> 
+            </dependency>
+                 
+            <!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
+            <dependency>
+                <groupId>dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>1.6.1</version>
+            </dependency>
+            
+            <dependency>
+			    <groupId>com.force.api</groupId>
+			    <artifactId>force-wsc</artifactId>
+			    <version>40.1.1</version>
+			</dependency>
+			
+			<!-- larw.data org -->
+			<dependency>
+			    <groupId>com.force.wsdl</groupId>
+			    <artifactId>apex</artifactId>
+			    <version>1.0.0</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>com.force.wsdl</groupId>
+			    <artifactId>partner</artifactId>
+			    <version>1.0.0</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>com.force.wsdl</groupId>
+			    <artifactId>metadata</artifactId>
+			    <version>1.0.0</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>com.force.wsdl</groupId>
+			    <artifactId>enterprise</artifactId>
+			    <version>1.0.0</version>
+			</dependency>
+			
+    	</dependencies>    
+    </dependencyManagement>
+	
+	<!-- <build>
+		<plugins>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-dependency-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <id>copy-dependencies</id>
+			            <phase>package</phase>
+			            <goals><goal>copy-dependencies</goal></goals>
+			        </execution>
+			    </executions>
+			</plugin>
+		</plugins>
+	</build>
+	 -->
+	<modules>
+		<module>clt-repository</module>
+		<module>clt-service</module>
+		<module>clt-larw-app</module>
+		<module>clt-util</module>
+		<module>clt-sfdc</module>
+		<module>clt-oauth-app</module>
+		<module>clt-main-app</module>
+	</modules>
+</project>

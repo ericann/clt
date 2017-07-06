@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>clt</groupId>
+    <artifactId>clt</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>clt-sfdc</artifactId>
+  <name>clt-sfdc</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    
+    <!-- https://mvnrepository.com/artifact/com.force.api/force-wsc -->
+	<dependency>
+	    <groupId>com.force.api</groupId>
+	    <artifactId>force-wsc</artifactId>
+	</dependency>
+	
+	<dependency>
+	    <groupId>com.force.wsdl</groupId>
+	    <artifactId>apex</artifactId>
+	</dependency>
+	
+	<dependency>
+	    <groupId>com.force.wsdl</groupId>
+	    <artifactId>partner</artifactId>
+	</dependency>
+	
+	<dependency>
+	    <groupId>com.force.wsdl</groupId>
+	    <artifactId>metadata</artifactId>
+	</dependency>
+	
+	<dependency>
+	    <groupId>com.force.wsdl</groupId>
+	    <artifactId>enterprise</artifactId>
+	</dependency>
+	    
+  </dependencies>
+</project>

@@ -1,0 +1,34 @@
+.plate .title {
+	border-bottom: 1px solid #e7e7eb;
+	padding: 0 0 0;
+	margin: 0 50px;
+	line-height: 40px;
+	font-size: 16px;
+	font-weight: bolder;
+}
+
+.plate .content {
+	//border-bottom: 1px solid #e7e7eb;
+	padding: 2 0;
+	margin: 0 60px;
+	line-height: 30px;
+	font-size: 14px;
+	font-family: "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", "\9ED1\4F53", Arial, sans-serif;
+	color: #222;
+}
+
+.plate .imgs {
+	padding: 2 0;
+	margin: 20px 60px;
+}
+
+.plate .imgs img {
+	width: 100%;
+	height: auto;
+	margin: auto;
+}
+
+.support {
+	position: inherit;
+	margin-bottom: 20px;
+}

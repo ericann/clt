@@ -1,0 +1,71 @@
+.flowSelect .title {
+    display: inline-block;
+}
+    
+.section .field {
+    margin: 5px 0;
+}
+    
+.section .field .f_label {
+    width: 28%;
+    display: inline-block;
+    text-align: left;
+    padding-left: 10%;
+    vertical-align: top;
+}
+
+.section .field .f_content {
+    width: 58%;
+    display: inline-block;
+    text-align: left;
+}
+
+.section .field .f_content span,a {
+    font-size: 12px;
+    margin: 3px;
+    vertical-align: bottom;
+    display: inline-block;
+    text-align: center;
+    color: #a3a3a3;
+}
+
+.section .field .f_content div {
+    word-wrap: break-word;
+}
+
+.section .field .f_content img {
+    margin: 3px;
+    vertical-align: bottom;
+    display: inline-block;
+    text-align: center;
+}
+
+.section .field .helptext {
+    text-align: left;
+    color: #a3a3a3;
+    margin-left: 38%;
+    font-size: 12px;
+}
+
+.section .f_action {
+    text-align: center;
+}
+
+.section .f_action .f_button {
+    text-align: center;
+    width: auto;
+    min-width: 80px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 3px;
+    background: rgb(190, 190, 190);
+    display: inline-block;
+    margin: 10px;
+}
+
+.section .error_title {
+	color: #F08080;
+	text-align: center;
+	height: 20px;
+}

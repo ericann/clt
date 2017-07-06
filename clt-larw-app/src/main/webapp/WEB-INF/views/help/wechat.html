@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Wechat Infor.</title>
+	<link rel="stylesheet" href="../../resources/css/generic.css" type="text/css" />
+	<link rel="stylesheet" href="../../resources/css/help.css" type="text/css" />
+</head>
+<body>
+	<div class="prompt">微信设置 文档</div>
+	<div>
+		<div class="plate">
+			<div class="title">登录</div>
+			<div class="content">1.登录微信公众号官网 <a href="https://mp.weixin.qq.com/cgi-bin/loginpage?t=wxm2-login&lang=zh_CN" target="_blank">点击登录</a></div>
+		</div>
+		<div class="plate">
+			<div class="title">Account Id</div>
+			<div class="content">找到左侧导航栏 “设置” 下的 “公众号设置”，点击进入，在主面板最下方可以看到 “注册信息” 下的 “原始ID”，即为本服务所指Account Id。如下图：</div>
+			<div class="imgs"><img alt="" src="../../resources/images/accountid.png"></div>
+		</div>
+		<div class="plate">
+			<div class="title">App Id/App Secret/Token</div>
+			<div class="content">找到导航栏 “设置” 下方 的 “开发” - “基本配置”， 点击进入，在主面板上方可以看到：</br>
+			1、 “开发者ID” 即本服务所指App Id；</br>
+			2、 “开发者密码” 即本服务所指App Secret；</br>
+			3、 “令牌” 即本服务所指Token。若需本服务刷新Access Token，请在 “服务器地址” 内输入：http://47.93.254.177/clt/wechat/msg/text（“令牌” 自定义填写）。如下图：</div>
+			<div class="imgs"><img alt="" src="../../resources/images/appid_secret_token.png"></div>
+		</div>
+		<div class="plate">
+			<div class="title">注</div>
+			<div class="content">在微信公众号更新后，刷新Access Token, 需将刷新服务器置为IP白名单。因此，若您需要本服务刷新Access Token，请将IP：47.93.254.177，设置在IP白名单内；否则，请您及时将Access Token推送到本服务中。
+			</br>推送地址：http://47.93.254.177/clt/token/refresh/single；
+			</br>推送类型：POST；
+			</br>数据类型：JSON；
+			</br>数据样板：
+			</br> {
+			</br>&nbsp;&nbsp;&nbsp;&nbsp;wechatAccount: "Your Account Id",
+			</br>&nbsp;&nbsp;&nbsp;&nbsp;access_token: "refreshed access token"
+			</br> }</div>
+		</div>
+	</div>
+	<div class="support">Support Infor. <a href="mailto:yxeysy@126.com">Contact Email</a> <a href="tel:15210063460">Contact Phone 15210063460</a> Name: Eric</div>
+	
+</body>
+</html>
