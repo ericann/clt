@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+        
+	<bean id="mylogger" class="org.clt.util.Logger" />
+    
+    <bean id="printer" class="org.clt.util.print.Printer" />
+        
+    <aop:config proxy-target-class="true">
+        <aop:aspect id="log" ref="mylogger" >
+            <aop:pointcut id="printerPC" expression="execution(* org.clt.util.print..*.*(..))" />
+            <aop:before method="before" pointcut-ref="printerPC" />
+            <aop:after method="after" pointcut-ref="printerPC" />
+            <aop:after-returning method="afterReturn" pointcut-ref="printerPC"/>
+            <aop:after-throwing method="afterThrow" pointcut-ref="printerPC"/>
+            <aop:around method="around" pointcut-ref="printerPC"/>
+        	
+        </aop:aspect>
+    </aop:config>
+        
+</beans>
