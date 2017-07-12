@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd 
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd">
+  	
+  	<context:annotation-config />
+  	<context:component-scan base-package="org.clt.repository"/>
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+	
+    <context:property-placeholder location="classpath*:properties/db.properties" ignore-unresolvable="true"/>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${mysql_driverClassName}" />
+        <property name="url" value="${mysql_url}" />
+        <property name="username" value="${mysql_username}" />
+        <property name="password" value="${mysql_password}" />
+    </bean>
+     
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	    <property name="dataSource" ref="dataSource"/>
+	    <property name="packagesToScan" value="org.clt.repository.pojo" />
+	    <property name="persistenceProvider" ref="persistenceProvider"/>
+	    <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
+	    <property name="jpaDialect" ref="jpaDialect"/>
+	    <property name="jpaProperties">
+	    	<props>
+	    		<prop key="hibernate.hbm2ddl.auto">update</prop>
+			    <prop key="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop>
+			    <prop key="hibernate.format_sql">true</prop>
+		        <prop key="hibernate.show_sql">false</prop>
+	    	</props>
+	    </property>
+	</bean>
+	
+	<bean id="persistenceProvider" class="org.hibernate.ejb.HibernatePersistence" />
+	<bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		<property name="generateDdl" value="false" />
+		<property name="database" value="MYSQL"/>
+		<property name="databasePlatform" value="org.hibernate.dialect.MySQLInnoDBDialect" />  
+	</bean>
+	<bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+	
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+    
+    <!-- repository-impl-postfix="Impl" -->
+	<jpa:repositories base-package="org.clt.repository.dao" 
+		entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager" />
+</beans>
