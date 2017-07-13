@@ -1,0 +1,82 @@
+
+	<!-- 
+	<!-- 
+	<dependency>
+	    <groupId>com.force.wsdl</groupId>
+	    <artifactId>enterprise</artifactId>
+	</dependency> 
+	
+	
+	<!-- https://mvnrepository.com/artifact/com.force.sdk/force-connector 
+	<!-- Force Connector 
+	<dependency>
+	    <groupId>com.force.sdk</groupId>
+	    <artifactId>force-connector</artifactId>
+	    <version>22.0.9-BETA</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/com.force.sdk/force-codegen -->
+	<!-- Force Codegen 
+	<dependency>
+	    <groupId>com.force.sdk</groupId>
+	    <artifactId>force-codegen</artifactId>
+	    <version>22.0.9-BETA</version>
+	</dependency>
+	 
+	<!-- https://mvnrepository.com/artifact/com.force.sdk/force-oauth -->
+	<!-- Force Oauth 
+	<dependency>
+	    <groupId>com.force.sdk</groupId>
+	    <artifactId>force-oauth</artifactId>
+	    <version>22.0.9-BETA</version>
+	</dependency>
+	 
+	<!-- https://mvnrepository.com/artifact/com.force.sdk/force-jpa 
+	<!-- Force Jpa 
+	<dependency>
+	    <groupId>com.force.sdk</groupId>
+	    <artifactId>force-jpa</artifactId>
+	    <version>22.0.9-BETA</version>
+	</dependency>
+	 
+	<!-- https://mvnrepository.com/artifact/com.force.sdk/force-build-tools 
+	<!-- Force Build Tools  
+	<dependency>
+	    <groupId>com.force.sdk</groupId>
+	    <artifactId>force-build-tools</artifactId>
+	    <version>22.0.9-BETA</version>
+	</dependency>
+		
+	<!-- https://mvnrepository.com/artifact/com.force.sdk/force-springsecurity -->
+	<!-- Force Springsecurity 
+	<dependency>
+	    <groupId>com.force.sdk</groupId>
+	    <artifactId>force-springsecurity</artifactId>
+	    <version>22.0.9-BETA</version>
+	</dependency>
+		 
+	<!-- https://mvnrepository.com/artifact/com.force.sdk/springmvc-archetype -->
+	<!-- Spring MVC Project with Database.com Support 
+	<dependency>
+	    <groupId>com.force.sdk</groupId>
+	    <artifactId>springmvc-archetype</artifactId>
+	    <version>22.0.7-BETA</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/com.force.sdk/force-sdk 
+	<!-- Database.com SDK for Java 
+	<dependency>
+	    <groupId>com.force.sdk</groupId>
+	    <artifactId>force-sdk</artifactId>
+	    <version>22.0.9-BETA</version>
+	    <type>pom</type>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/com.force/maven-force-plugin 
+	<!-- Maven Plugin the Force.com platform 
+	<dependency>
+	    <groupId>com.force</groupId>
+	    <artifactId>maven-force-plugin</artifactId>
+	    <version>22.0.5-BETA</version>
+	</dependency>
+	 -->
