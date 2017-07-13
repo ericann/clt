@@ -28,6 +28,7 @@
 	    <artifactId>force-wsc</artifactId>
 	</dependency>
 	
+	<!-- 
 	<dependency>
 	    <groupId>com.force.wsdl</groupId>
 	    <artifactId>apex</artifactId>
@@ -37,16 +38,41 @@
 	    <groupId>com.force.wsdl</groupId>
 	    <artifactId>partner</artifactId>
 	</dependency>
+	 -->
+	 
+	<!-- https://mvnrepository.com/artifact/com.force.api/force-partner-api -->
+	<dependency>
+	    <groupId>com.force.api</groupId>
+	    <artifactId>force-partner-api</artifactId>
+	    <version>39.0.0</version>
+	</dependency>
 	
+	<!-- https://mvnrepository.com/artifact/com.force.api/force-partner-api -->
+	<dependency>
+	    <groupId>com.force.api</groupId>
+	    <artifactId>force-partner-api</artifactId>
+	    <version>39.0.0</version>
+	</dependency>
+	
+	<!-- 
 	<dependency>
 	    <groupId>com.force.wsdl</groupId>
 	    <artifactId>metadata</artifactId>
+	</dependency> -->
+	
+	<!-- https://mvnrepository.com/artifact/com.force.api/force-metadata-api -->
+	<dependency>
+	    <groupId>com.force.api</groupId>
+	    <artifactId>force-metadata-api</artifactId>
+	    <version>39.0.0</version>
 	</dependency>
 	
+	<!-- 
 	<dependency>
 	    <groupId>com.force.wsdl</groupId>
 	    <artifactId>enterprise</artifactId>
-	</dependency>
+	</dependency> 
+	 -->
 	    
   </dependencies>
 </project>
