@@ -1,9 +1,37 @@
 package org.clt.util.inter;
 
-import org.aopalliance.intercept.Joinpoint;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 
 public interface AopGeneric {
 	
-	void before(Joinpoint joinPoint);
-	void after(Joinpoint joinPoint);
+	/**
+	 * 
+	 * @param joinPoint
+	 */
+	void before(JoinPoint jp);
+	
+	/**
+	 * 
+	 * @param joinPoint
+	 */
+	void after(JoinPoint jp);
+	
+	/**
+	 * 
+	 * @param joinPoint
+	 */
+	void around(ProceedingJoinPoint jp) throws Throwable;
+	
+	/**
+	 * 
+	 * @param joinPoint
+	 */
+	void afterThrow(JoinPoint jp);
+	
+	/**
+	 * 
+	 * @param joinPoint
+	 */
+	void afterReturn(JoinPoint jp);
 }
