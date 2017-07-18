@@ -1,6 +1,7 @@
-package org.clt.util.vo;
+package org.clt.util.metadata;
 
 public class Field {
+	
 	/**
 	 * label of field
 	 */
@@ -40,6 +41,19 @@ public class Field {
 	 * reference object id
 	 */
 	private String referenceId;
+	
+	/**
+	 * display or not
+	 */
+	private String display;
+
+	public String getDisplay() {
+		return display;
+	}
+
+	public void setDisplay(String display) {
+		this.display = display;
+	}
 
 	public String getLabel() {
 		return label;
@@ -105,4 +119,16 @@ public class Field {
 		this.referenceId = referenceId;
 	}
 	
+	public String toString() {
+		return " Field:" + 
+				"\n label: " + label +
+				"\n type: " + type +
+				"\n value: " + value +
+				"\n readonly: " + readonly +
+				"\n help: " + help +
+				"\n link: " + link +
+				"\n referenceTo: " + referenceTo +
+				"\n referenceId: " + referenceId +
+				"\n display: " + display;
+	}
 }
