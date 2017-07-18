@@ -3,11 +3,11 @@ package org.clt.util;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 
-public class Logger {//implements AopGeneric {
+public class Log {//implements AopGeneric {
 	
 	//private (org.slf4j.Logger) Logger logger;
 	
-	public Logger() {
+	public Log() {
 		//logger = LoggerFactory.getLogger(this.getClass());
 		System.out.println("-- Logger init");
 	}
