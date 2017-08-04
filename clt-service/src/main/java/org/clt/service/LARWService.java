@@ -47,7 +47,7 @@ public class LARWService implements Runnable {
     
     public void startChat() {
     	
-        Map<String, String> chatInfo = this.wechatService.parseXML(this.xmlString);
+        Map<String, String> chatInfo = this.wechatService.parseChatXML(this.xmlString);
         this.chatSession = this.chatMessageDao.findByOpenId(chatInfo.get("openId"));
         this.basicConfig = this.basicConfigDao.findByWechatAccount(chatInfo.get("wechatAccount"));
         

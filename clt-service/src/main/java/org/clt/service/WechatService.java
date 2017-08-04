@@ -5,9 +5,11 @@ import java.net.URLDecoder;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.clt.util.DigitalSignature;
+import org.clt.util.XML;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -61,13 +63,10 @@ public class WechatService {
 		return flag;
 	}
 	
-    public Map<String, String> parseXML(String xmlString) {
+    public Map<String, String> parseChatXML(String xmlString) {
     	Map<String, String> chatInfo = new HashMap<String, String>();
 		
 		try {
-			//服务器不需要这句
-			//xmlString = xmlString.substring(0, xmlString.length() - 1);
-			
 			logger.debug(" textXML: " + xmlString);
 			logger.debug("Decode textXML: " + URLDecoder.decode(xmlString, "utf-8"));
 			Document textMsg = DocumentHelper.parseText(URLDecoder.decode(xmlString, "utf-8"));
@@ -112,4 +111,16 @@ public class WechatService {
 		this.wechatAccessToken = wechatAccessToken;
 	}
 	
+	public static void main(String[] args) {
+		String xml = "<xml><ToUserName><![CDATA[toUser]]></ToUserName>" +
+			"<FromUserName><![CDATA[FromUser]]></FromUserName>" +
+			"<CreateTime>123456789</CreateTime>" +
+			"<MsgType><![CDATA[event]]></MsgType>" +
+			"<Event><![CDATA[subscribe]]></Event>" +
+			"<EventKey><![CDATA[qrscene_123123]]></EventKey>" +
+			"<Ticket><![CDATA[TICKET]]></Ticket>" +
+			"</xml>";
+		
+		System.out.println(XML.parse(xml));
+	}
 }

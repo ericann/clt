@@ -1,8 +1,11 @@
 package org.clt.larw.controller;
 
+import java.util.Map;
+
 import org.clt.service.BasicConfigService;
 import org.clt.service.LARWService;
 import org.clt.service.WechatTokenService;
+import org.clt.util.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +44,34 @@ public class WechatListener {
 	}
 	
 	@RequestMapping(value="/msg/text", method=RequestMethod.POST, consumes="text/xml")
-	public @ResponseBody String textMsg(@RequestBody String textXML) {
+	public @ResponseBody String textMsg(@RequestBody String xml) {
 		logger.debug("it");
 		final String MESSAGE = "success";
-		this.larwService.setXmlString(textXML);
-		new Thread(this.larwService).start();
+		
+		Map<String, String> result = XML.parse(xml);
+		
+		switch(result.get("MsgType")) {
+			case "event" :
+				switch(result.get("Event").toLowerCase()) {
+					case "unsubscribe" :
+						break;
+					case "subscribe" :
+						
+						break;
+					case "scan" :
+						
+						break;
+					default: 
+						
+				}
+				break;
+			case "text" : 
+				this.larwService.setXmlString(xml);
+				new Thread(this.larwService).start();
+				break;
+			default: 
+				
+		}
 		
 		return MESSAGE;
 	}

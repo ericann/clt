@@ -30,6 +30,8 @@ public class Contact implements Serializable {
 	
 	private String sessionId;
 	
+	private String openId;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
 	
@@ -133,5 +135,13 @@ public class Contact implements Serializable {
 
 	public void setSessionUpdateTime(Date sessionUpdateTime) {
 		this.sessionUpdateTime = sessionUpdateTime;
+	}
+	
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
 	}
 }
