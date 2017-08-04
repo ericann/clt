@@ -8,7 +8,7 @@
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
         
-	<bean id="mylogger" class="org.clt.util.Logger" />
+	<bean id="mylogger" class="org.clt.util.Log" />
     
     <bean id="printer" class="org.clt.util.print.Printer" />
         

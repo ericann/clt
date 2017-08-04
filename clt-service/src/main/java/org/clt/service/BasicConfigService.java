@@ -38,7 +38,7 @@ public class BasicConfigService {
 	public String getAll() {
 		JSONObject result = new JSONObject();
 		JSONArray arr = new JSONArray();
-		List<BasicConfig> bcL = this.basicConfigDao.findAll();
+		List<BasicConfig> bcL = this.basicConfigDao.findAllByRefreshByOthers(true);
 		
 		for(BasicConfig bc : bcL) {
 			JSONObject o = new JSONObject();

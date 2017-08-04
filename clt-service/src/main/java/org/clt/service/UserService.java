@@ -10,6 +10,7 @@ import org.clt.repository.dao.AccountDao;
 import org.clt.repository.dao.ContactDao;
 import org.clt.repository.pojo.Contact;
 import org.clt.util.DefaultMsg;
+import org.clt.util.Token;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +23,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Integer EXPIRES_IN = 3600;
 	
 	@Autowired
 	private AccountDao accDao;
 	
 	@Autowired
 	private ContactDao conDao;
+	
+	public String login(String openId, String url) {
+		String accessToken = Token.generateAccessToken(EXPIRES_IN, openId);
+		return accessToken;
+	}
 	
 	public String getSessionId(String conId){
 		Map<String, Object> result = DefaultMsg.initErrorResult("E_1");

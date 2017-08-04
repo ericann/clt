@@ -7,13 +7,13 @@ import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 import static io.jsonwebtoken.impl.crypto.MacProvider.generateKey;
 import static java.security.SecureRandom.getInstance;
 import static org.clt.util.DateUtil.addSeconds;
-import static org.springframework.util.Assert.hasLength;
 
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.Map;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.impl.compression.GzipCompressionCodec;
@@ -43,29 +43,29 @@ public class Token {
      * @return access_token
      */
 	
-	public static String generateHttpToken(int expiresIn, String username) {
+	public static String generateAccessToken(int expiresIn, String info) {
 		//hasLength(username, "username");
 		final Date now = new Date();
-		return builder().setClaims(claims().setId(username)).signWith(HS256, KEY).setIssuer(HEADING)
+		return builder().setClaims(claims().setId(info)).signWith(HS256, KEY).setIssuer(HEADING)
 	        .setIssuedAt(now).setExpiration(addSeconds(now, expiresIn))
 	        .compressWith(new GzipCompressionCodec()).compact();
 	}
 	
-	public static String parse(String token) {
-	    //hasLength(token, "token");
-		String body = null;
+	@SuppressWarnings("unchecked")
+	public static Map<String, String> parse(String token) {
+		Map<String, String> result = null;
 	    try {
-	    	body = parser().setSigningKey(KEY).parse(token).getBody().toString();
+	    	result = (Map<String, String>)parser().setSigningKey(KEY).parse(token).getBody();
 	    	//return body;
 	    } catch (JwtException ex) {
 	    
 	    }
 	    
-	    return body;
+	    return result;
 	}
 	
 	public static void main(String[] args) {
-		String at = generateHttpToken(3600, "123");
+		String at = generateAccessToken(3600, "123");
 		System.out.println(at);
 		System.out.println(parse(at));
 	}

@@ -52,18 +52,7 @@ public class WechatListener {
 		
 		switch(result.get("MsgType")) {
 			case "event" :
-				switch(result.get("Event").toLowerCase()) {
-					case "unsubscribe" :
-						break;
-					case "subscribe" :
-						
-						break;
-					case "scan" :
-						
-						break;
-					default: 
-						
-				}
+				
 				break;
 			case "text" : 
 				this.larwService.setXmlString(xml);
