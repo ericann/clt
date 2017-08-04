@@ -39,6 +39,9 @@ public interface BasicConfigDao extends Repository<BasicConfig, String> {
 	@Query("SELECT bc FROM BasicConfig bc")
 	public List<BasicConfig> findAll();
 	
+	@Query("SELECT bc FROM BasicConfig bc WHERE refreshByOthers=:flag")
+	public List<BasicConfig> findAllByRefreshByOthers(@Param("flag") Boolean flag);
+	
 	@Query("SELECT bc FROM BasicConfig bc WHERE bc.accountId=:accId")
 	public BasicConfig findByAccountId(@Param("accId") String accId);
 }
