@@ -2,6 +2,7 @@ package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -18,11 +19,8 @@ public class ChatMessage implements Serializable {
 
 	private String affinityToken;
 
-	//@Column(insertable=false, updatable=false)
-	private String bcId;
-
-	//@Column(insertable=false, updatable=false)
-	private String buttonId;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createTime;
 
 	private String openId;
 
@@ -32,7 +30,20 @@ public class ChatMessage implements Serializable {
 
 	private String sessionKey;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updateTime;
+
 	private String wechatAccount;
+
+	//bi-directional many-to-one association to Button
+	@ManyToOne
+	@JoinColumn(name="buttonId")
+	private Button button;
+
+	//bi-directional many-to-one association to LiveAgent
+	@ManyToOne
+	@JoinColumn(name="laId")
+	private LiveAgent liveagent;
 
 	public ChatMessage() {
 	}
@@ -53,20 +64,12 @@ public class ChatMessage implements Serializable {
 		this.affinityToken = affinityToken;
 	}
 
-	public String getBcId() {
-		return this.bcId;
+	public Date getCreateTime() {
+		return this.createTime;
 	}
 
-	public void setBcId(String bcId) {
-		this.bcId = bcId;
-	}
-
-	public String getButtonId() {
-		return this.buttonId;
-	}
-
-	public void setButtonId(String buttonId) {
-		this.buttonId = buttonId;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	public String getOpenId() {
@@ -101,12 +104,36 @@ public class ChatMessage implements Serializable {
 		this.sessionKey = sessionKey;
 	}
 
+	public Date getUpdateTime() {
+		return this.updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
 	public String getWechatAccount() {
 		return this.wechatAccount;
 	}
 
 	public void setWechatAccount(String wechatAccount) {
 		this.wechatAccount = wechatAccount;
+	}
+
+	public Button getButton() {
+		return this.button;
+	}
+
+	public void setButton(Button button) {
+		this.button = button;
+	}
+
+	public LiveAgent getLiveagent() {
+		return this.liveagent;
+	}
+
+	public void setLiveagent(LiveAgent liveagent) {
+		this.liveagent = liveagent;
 	}
 
 }

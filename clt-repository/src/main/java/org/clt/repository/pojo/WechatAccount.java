@@ -1,4 +1,4 @@
-package model;
+package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;

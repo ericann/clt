@@ -1,9 +1,9 @@
 package org.clt.repository.pojo;
 
 import java.io.Serializable;
-import java.util.Date;
-
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -18,33 +18,37 @@ public class Contact implements Serializable {
 	@Id
 	private String id;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createTime;
+
 	private String email;
+
+	private Boolean master;
 
 	private String mobile;
 
 	private String name;
-	
-	private String password;
-	
-	private Boolean master;
-	
-	private String sessionId;
-	
+
 	private String openId;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date createTime;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date updateTime;
-	
+
+	private String password;
+
+	private String sessionId;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date sessionUpdateTime;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updateTime;
 
 	//bi-directional many-to-one association to Account
 	@ManyToOne
 	@JoinColumn(name="accountId")
 	private Account account;
+
+	//bi-directional many-to-one association to UserApp
+	@OneToMany(mappedBy="contact")
+	private List<UserApp> userapps;
 
 	public Contact() {
 	}
@@ -57,12 +61,28 @@ public class Contact implements Serializable {
 		this.id = id;
 	}
 
+	public Date getCreateTime() {
+		return this.createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
 	public String getEmail() {
 		return this.email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Boolean getMaster() {
+		return this.master;
+	}
+
+	public void setMaster(Boolean master) {
+		this.master = master;
 	}
 
 	public String getMobile() {
@@ -81,6 +101,46 @@ public class Contact implements Serializable {
 		this.name = name;
 	}
 
+	public String getOpenId() {
+		return this.openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+
+	public String getPassword() {
+		return this.password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getSessionId() {
+		return this.sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+
+	public Date getSessionUpdateTime() {
+		return this.sessionUpdateTime;
+	}
+
+	public void setSessionUpdateTime(Date sessionUpdateTime) {
+		this.sessionUpdateTime = sessionUpdateTime;
+	}
+
+	public Date getUpdateTime() {
+		return this.updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
 	public Account getAccount() {
 		return this.account;
 	}
@@ -89,59 +149,26 @@ public class Contact implements Serializable {
 		this.account = account;
 	}
 
-	public String getPassword() {
-		return password;
+	public List<UserApp> getUserapps() {
+		return this.userapps;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setUserapps(List<UserApp> userapps) {
+		this.userapps = userapps;
 	}
 
-	public Boolean getMaster() {
-		return master;
+	public UserApp addUserapp(UserApp userapp) {
+		getUserapps().add(userapp);
+		userapp.setContact(this);
+
+		return userapp;
 	}
 
-	public void setMaster(Boolean master) {
-		this.master = master;
+	public UserApp removeUserapp(UserApp userapp) {
+		getUserapps().remove(userapp);
+		userapp.setContact(null);
+
+		return userapp;
 	}
 
-	public String getSessionId() {
-		return sessionId;
-	}
-
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
-
-	public Date getSessionUpdateTime() {
-		return sessionUpdateTime;
-	}
-
-	public void setSessionUpdateTime(Date sessionUpdateTime) {
-		this.sessionUpdateTime = sessionUpdateTime;
-	}
-	
-	public String getOpenId() {
-		return openId;
-	}
-
-	public void setOpenId(String openId) {
-		this.openId = openId;
-	}
 }

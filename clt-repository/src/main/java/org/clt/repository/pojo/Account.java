@@ -2,6 +2,7 @@ package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 
@@ -17,21 +18,27 @@ public class Account implements Serializable {
 	@Id
 	private String id;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createTime;
+
+	private Object master;
+
 	private String name;
-	
-	private Boolean master;
 
-	public Boolean getMaster() {
-		return master;
-	}
-
-	public void setMaster(Boolean master) {
-		this.master = master;
-	}
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updateTime;
 
 	//bi-directional many-to-one association to Contact
 	@OneToMany(mappedBy="account")
 	private List<Contact> contacts;
+
+	//bi-directional many-to-one association to LiveAgent
+	@OneToMany(mappedBy="account")
+	private List<LiveAgent> liveagents;
+
+	//bi-directional many-to-one association to WechatAccount
+	@OneToMany(mappedBy="account")
+	private List<WechatAccount> wechataccounts;
 
 	public Account() {
 	}
@@ -44,12 +51,36 @@ public class Account implements Serializable {
 		this.id = id;
 	}
 
+	public Date getCreateTime() {
+		return this.createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Object getMaster() {
+		return this.master;
+	}
+
+	public void setMaster(Object master) {
+		this.master = master;
+	}
+
 	public String getName() {
 		return this.name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Date getUpdateTime() {
+		return this.updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 
 	public List<Contact> getContacts() {
@@ -72,6 +103,50 @@ public class Account implements Serializable {
 		contact.setAccount(null);
 
 		return contact;
+	}
+
+	public List<LiveAgent> getLiveagents() {
+		return this.liveagents;
+	}
+
+	public void setLiveagents(List<LiveAgent> liveagents) {
+		this.liveagents = liveagents;
+	}
+
+	public LiveAgent addLiveagent(LiveAgent liveagent) {
+		getLiveagents().add(liveagent);
+		liveagent.setAccount(this);
+
+		return liveagent;
+	}
+
+	public LiveAgent removeLiveagent(LiveAgent liveagent) {
+		getLiveagents().remove(liveagent);
+		liveagent.setAccount(null);
+
+		return liveagent;
+	}
+
+	public List<WechatAccount> getWechataccounts() {
+		return this.wechataccounts;
+	}
+
+	public void setWechataccounts(List<WechatAccount> wechataccounts) {
+		this.wechataccounts = wechataccounts;
+	}
+
+	public WechatAccount addWechataccount(WechatAccount wechataccount) {
+		getWechataccounts().add(wechataccount);
+		wechataccount.setAccount(this);
+
+		return wechataccount;
+	}
+
+	public WechatAccount removeWechataccount(WechatAccount wechataccount) {
+		getWechataccounts().remove(wechataccount);
+		wechataccount.setAccount(null);
+
+		return wechataccount;
 	}
 
 }

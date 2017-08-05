@@ -1,17 +1,15 @@
 package org.clt.repository.dao;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.clt.repository.pojo.Contact;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
-public interface ContactDao extends Repository<Contact, String> {
-	
-	public Contact save(Contact con);
-	
-	@Query("SELECT con FROM Contact con WHERE con.id=:id")
-	public Contact findById(@Param("id") String id);
+public interface ContactDao extends GenericDao<Contact, String> {
 	
 	@Query("SELECT con FROM Contact con WHERE con.account.id=:accId")
 	public Contact findByAccountId(@Param("accId") String accId);
@@ -27,5 +25,10 @@ public interface ContactDao extends Repository<Contact, String> {
 	
 	@Modifying
 	@Query("UPDATE Contact c SET c.sessionId=:sessionId WHERE id=:id")
-	public Contact updateBySessionIdById(@Param("sessionId") String sessionId, @Param("id") String id);
+	public Contact updateBySessionIdAndId(@Param("sessionId") String sessionId, @Param("id") String id);
+
+	@Override
+    public default Object[] toPredicate(Root<Contact> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+		return null;
+	}
 }

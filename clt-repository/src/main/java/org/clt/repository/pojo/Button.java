@@ -2,6 +2,8 @@ package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -18,16 +20,26 @@ public class Button implements Serializable {
 
 	private String buttonId;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createTime;
+
 	private String displayInfo;
 
-	private Boolean isDefault;
-	
+	private Object isDefault;
+
 	private int limitCount;
 
-	//bi-directional many-to-one association to BasicConfig
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updateTime;
+
+	//bi-directional many-to-one association to LiveAgent
 	@ManyToOne
-	@JoinColumn(name="bcId")
-	private BasicConfig basicConfig;
+	@JoinColumn(name="laId")
+	private LiveAgent liveagent;
+
+	//bi-directional many-to-one association to ChatMessage
+	@OneToMany(mappedBy="button")
+	private List<ChatMessage> chatmessages;
 
 	public Button() {
 	}
@@ -48,6 +60,14 @@ public class Button implements Serializable {
 		this.buttonId = buttonId;
 	}
 
+	public Date getCreateTime() {
+		return this.createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
 	public String getDisplayInfo() {
 		return this.displayInfo;
 	}
@@ -56,20 +76,12 @@ public class Button implements Serializable {
 		this.displayInfo = displayInfo;
 	}
 
-	public Boolean getIsDefault() {
+	public Object getIsDefault() {
 		return this.isDefault;
 	}
 
-	public void setIsDefault(Boolean isDefault) {
+	public void setIsDefault(Object isDefault) {
 		this.isDefault = isDefault;
-	}
-
-	public BasicConfig getBasicconfig() {
-		return this.basicConfig;
-	}
-
-	public void setBasicconfig(BasicConfig basicconfig) {
-		this.basicConfig = basicconfig;
 	}
 
 	public int getLimitCount() {
@@ -78,6 +90,44 @@ public class Button implements Serializable {
 
 	public void setLimitCount(int limitCount) {
 		this.limitCount = limitCount;
+	}
+
+	public Date getUpdateTime() {
+		return this.updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public LiveAgent getLiveagent() {
+		return this.liveagent;
+	}
+
+	public void setLiveagent(LiveAgent liveagent) {
+		this.liveagent = liveagent;
+	}
+
+	public List<ChatMessage> getChatmessages() {
+		return this.chatmessages;
+	}
+
+	public void setChatmessages(List<ChatMessage> chatmessages) {
+		this.chatmessages = chatmessages;
+	}
+
+	public ChatMessage addChatmessage(ChatMessage chatmessage) {
+		getChatmessages().add(chatmessage);
+		chatmessage.setButton(this);
+
+		return chatmessage;
+	}
+
+	public ChatMessage removeChatmessage(ChatMessage chatmessage) {
+		getChatmessages().remove(chatmessage);
+		chatmessage.setButton(null);
+
+		return chatmessage;
 	}
 
 }

@@ -1,4 +1,4 @@
-package model;
+package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -6,12 +6,12 @@ import java.util.Date;
 
 
 /**
- * The persistent class for the functionobject database table.
+ * The persistent class for the scope database table.
  * 
  */
 @Entity
-@NamedQuery(name="FunctionObject.findAll", query="SELECT f FROM FunctionObject f")
-public class FunctionObject implements Serializable {
+@NamedQuery(name="Scope.findAll", query="SELECT s FROM Scope s")
+public class Scope implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -20,20 +20,22 @@ public class FunctionObject implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
 
+	private String name;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateTime;
+
+	//bi-directional many-to-one association to ConnectApp
+	@ManyToOne
+	@JoinColumn(name="appId")
+	private ConnectApp connectapp;
 
 	//bi-directional many-to-one association to FunctionPermission
 	@ManyToOne
 	@JoinColumn(name="functionPermissionId")
 	private FunctionPermission functionpermission;
 
-	//bi-directional many-to-one association to ObjectPermission
-	@ManyToOne
-	@JoinColumn(name="objectPermissionId")
-	private ObjectPermission objectpermission;
-
-	public FunctionObject() {
+	public Scope() {
 	}
 
 	public String getId() {
@@ -52,6 +54,14 @@ public class FunctionObject implements Serializable {
 		this.createTime = createTime;
 	}
 
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Date getUpdateTime() {
 		return this.updateTime;
 	}
@@ -60,20 +70,20 @@ public class FunctionObject implements Serializable {
 		this.updateTime = updateTime;
 	}
 
+	public ConnectApp getConnectapp() {
+		return this.connectapp;
+	}
+
+	public void setConnectapp(ConnectApp connectapp) {
+		this.connectapp = connectapp;
+	}
+
 	public FunctionPermission getFunctionpermission() {
 		return this.functionpermission;
 	}
 
 	public void setFunctionpermission(FunctionPermission functionpermission) {
 		this.functionpermission = functionpermission;
-	}
-
-	public ObjectPermission getObjectpermission() {
-		return this.objectpermission;
-	}
-
-	public void setObjectpermission(ObjectPermission objectpermission) {
-		this.objectpermission = objectpermission;
 	}
 
 }
