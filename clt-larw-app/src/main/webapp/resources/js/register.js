@@ -1,6 +1,8 @@
 window.clt = window.clt || {};
 
 clt.default = {
+		
+	url: window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split("/")[1],
 	type: ["introduction", "account", "wechat", "liveagent", "confirm", "congratulations"],
 	introduction: {
 		title: "Introduction",
@@ -350,7 +352,7 @@ clt.action = {
 		
 		//save account info
 		if(clt.default.type[clt.default.currentStep - 1] == "account") {
-			clt.action.doCall("http://47.93.254.177/clt/larwint/insert/acc_con",
+			clt.action.doCall(clt.default.url + "/larwint/insert/acc_con",
 					JSON.stringify(clt.data),
 					function(result) {
 						var r = JSON.parse(result);
@@ -402,7 +404,7 @@ clt.action = {
 
 	confirm: function() {
 		var obj = {
-			url: "http://47.93.254.177/clt/larwint/insert/bc_b",
+			url: clt.default.url+ "/larwint/insert/bc_b",
 			data: JSON.stringify(clt.data),
 			success: success,
 			error: error
@@ -438,7 +440,7 @@ clt.action = {
 	},
 	
 	complete: function() {
-		window.location.href = "http://47.93.254.177/clt/pages/help/larw.html";
+		window.location.href = clt.default.url + "/pages/help/larw.html";
 	},
 
 	cancel: function() {
