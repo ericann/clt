@@ -31,8 +31,13 @@ public class UserService {
 	@Autowired
 	private ContactDao conDao;
 	
-	public String login(String openId, String url) {
+	public void login(String openId, String url) {
 		String accessToken = Token.generateAccessToken(EXPIRES_IN, openId);
+		
+	}
+	
+	public String login(String url) {
+		String accessToken = null;
 		return accessToken;
 	}
 	

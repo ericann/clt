@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.clt.service.BasicConfigService;
 import org.clt.service.LARWService;
+import org.clt.service.WechatEventService;
 import org.clt.service.WechatTokenService;
 import org.clt.util.XML;
 import org.slf4j.Logger;
@@ -31,7 +32,23 @@ public class WechatListener {
 	@Autowired
 	private BasicConfigService bcService;
 	
+	@Autowired
+	private WechatEventService wechatEventService;
+	
 	@RequestMapping(value="/msg/text", method=RequestMethod.GET)
+	public @ResponseBody String verification_v1(@RequestParam String signature,@RequestParam String timestamp,
+			@RequestParam String nonce, @RequestParam String echostr) {
+		
+		return this.verification(signature, timestamp, nonce, echostr);
+	}
+	
+	@RequestMapping(value="/msg/text", method=RequestMethod.POST, consumes="text/xml")
+	public @ResponseBody String textMsg(@RequestBody String xml) {
+		
+		return this.msg(xml);
+	}
+	
+	@RequestMapping(value="/msg/", method=RequestMethod.GET)
 	public @ResponseBody String verification(@RequestParam String signature,@RequestParam String timestamp,
 			@RequestParam String nonce, @RequestParam String echostr) {
 		
@@ -43,8 +60,8 @@ public class WechatListener {
 		return flag ? echostr : result;
 	}
 	
-	@RequestMapping(value="/msg/text", method=RequestMethod.POST, consumes="text/xml")
-	public @ResponseBody String textMsg(@RequestBody String xml) {
+	@RequestMapping(value="/msg/", method=RequestMethod.POST, consumes="text/xml")
+	public @ResponseBody String msg(@RequestBody String xml) {
 		logger.debug("it");
 		final String MESSAGE = "success";
 		
@@ -52,7 +69,7 @@ public class WechatListener {
 		
 		switch(result.get("MsgType")) {
 			case "event" :
-				
+				wechatEventService.checkEvent(result);
 				break;
 			case "text" : 
 				this.larwService.setXmlString(xml);

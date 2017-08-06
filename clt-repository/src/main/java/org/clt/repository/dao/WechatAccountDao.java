@@ -34,7 +34,7 @@ public interface WechatAccountDao extends GenericDao<WechatAccount, String> {
 	public Integer updateWechatAccessTokenById(@Param("wechatAccessToken") String wechatAccessToken, @Param("id") String id);
 	
 	@Query("SELECT wa FROM WechatAccount wa WHERE wa.refreshByUs=:flag")
-	public List<WechatAccount> findAllByRefreshByOthers(@Param("flag") Boolean flag);
+	public List<WechatAccount> findAllByRefreshByUs(@Param("flag") Boolean flag);
 	
 	@Query("SELECT wa FROM WechatAccount wa WHERE wa.account.id=:accId")
 	public WechatAccount findByAccountId(@Param("accId") String accId);

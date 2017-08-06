@@ -34,7 +34,7 @@ public class BasicConfigService {
 	public String getAll() {
 		JSONObject result = new JSONObject();
 		JSONArray arr = new JSONArray();
-		List<WechatAccount> waL = this.waDao.findAllByRefreshByOthers(true);
+		List<WechatAccount> waL = this.waDao.findAllByRefreshByUs(true);
 		
 		for(WechatAccount wa : waL) {
 			JSONObject o = new JSONObject();

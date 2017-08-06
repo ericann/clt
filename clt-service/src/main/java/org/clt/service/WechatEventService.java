@@ -30,7 +30,7 @@ public class WechatEventService {
 	private void scanEvent(String eventKey, String scanResult, String openId) {
 		switch(eventKey) {
 			case "login":
-				String accesstoken = userService.login(openId, scanResult);
+				userService.login(openId, scanResult);
 				break;
 			default:
 		}
