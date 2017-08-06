@@ -2,7 +2,7 @@ package org.clt.service;
 
 import java.util.List;
 
-import org.clt.repository.pojo.BasicConfig;
+import org.clt.repository.pojo.WechatAccount;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,25 +43,25 @@ public class WechatTokenService {
 	
 	public Boolean refreshAll() {
 		Boolean flag = false;
-		List<BasicConfig> bcL = this.bcService.findAll();
+		List<WechatAccount> waL = this.bcService.findAll();
 		
-		if(bcL != null && bcL.size() > 0) {
-			for(BasicConfig bc : bcL) {
+		if(waL != null && waL.size() > 0) {
+			for(WechatAccount wa : waL) {
 				StringBuilder Endpoint = new StringBuilder("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential");
 				Endpoint.append("&appid=");
-				Endpoint.append(bc.getWechatAppId());
+				Endpoint.append(wa.getWechatAppId());
 				Endpoint.append("&secret=");
-				Endpoint.append(bc.getWechatAppSecret());
+				Endpoint.append(wa.getWechatAppSecret());
 				ResponseEntity<String> res = http.exchange(Endpoint.toString(), HttpMethod.GET, null, String.class);
 				
 				System.out.println("---------------------WechatAccessToken Refresh---------------------");
-				System.out.println("-- Id:" + bc.getId() + " request result:" + res.getBody());
+				System.out.println("-- Id:" + wa.getId() + " request result:" + res.getBody());
 				System.out.println();
 				
 				try {
 					JSONObject o = new JSONObject(res.getBody());
 					String accessToken = o.getString("access_token");
-					this.bcService.updateWechatAccessToken(bc.getWechatAccount(), accessToken);
+					this.bcService.updateWechatAccessToken(wa.getWechatAccount(), accessToken);
 					flag = true;
 				} catch(Exception ex) {
 					System.out.println("ex: " + ex.getMessage());

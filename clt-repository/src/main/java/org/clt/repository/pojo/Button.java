@@ -25,7 +25,7 @@ public class Button implements Serializable {
 
 	private String displayInfo;
 
-	private Object isDefault;
+	private Boolean isDefault;
 
 	private int limitCount;
 
@@ -76,11 +76,11 @@ public class Button implements Serializable {
 		this.displayInfo = displayInfo;
 	}
 
-	public Object getIsDefault() {
+	public Boolean getIsDefault() {
 		return this.isDefault;
 	}
 
-	public void setIsDefault(Object isDefault) {
+	public void setIsDefault(Boolean isDefault) {
 		this.isDefault = isDefault;
 	}
 

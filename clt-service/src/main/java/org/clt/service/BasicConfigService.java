@@ -3,8 +3,8 @@ package org.clt.service;
 import java.util.List;
 import java.util.UUID;
 
-import org.clt.repository.dao.BasicConfigDao;
-import org.clt.repository.pojo.BasicConfig;
+import org.clt.repository.dao.WechatAccountDao;
+import org.clt.repository.pojo.WechatAccount;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,35 +16,31 @@ import org.springframework.transaction.annotation.Transactional;
 public class BasicConfigService {
 	
 	@Autowired
-	private BasicConfigDao basicConfigDao;
+	private WechatAccountDao waDao;
 	
-	public BasicConfig saveWithoutButtons(BasicConfig bc) {
-		return null;
-	}
-	
-	public BasicConfig save(BasicConfig bc) {
-		bc.setId(String.valueOf(UUID.randomUUID()));
-		return basicConfigDao.save(bc);
+	public WechatAccount save(WechatAccount wa) {
+		wa.setId(String.valueOf(UUID.randomUUID()));
+		return this.waDao.save(wa);
 	}
 	
 	public Boolean updateWechatAccessToken(String wechatAccount, String wechatAccessToken) {
-		return (this.basicConfigDao.updateWechatAccessTokenByWechatAccount(wechatAccount, wechatAccessToken) == 1 ? true : false);
+		return (this.waDao.updateWechatAccessTokenByWechatAccount(wechatAccount, wechatAccessToken) == 1 ? true : false);
 	}
 	
-	public List<BasicConfig> findAll() {
-		return this.basicConfigDao.findAll();
+	public List<WechatAccount> findAll() {
+		return this.waDao.findAll();
 	}
 	
 	public String getAll() {
 		JSONObject result = new JSONObject();
 		JSONArray arr = new JSONArray();
-		List<BasicConfig> bcL = this.basicConfigDao.findAllByRefreshByOthers(true);
+		List<WechatAccount> waL = this.waDao.findAllByRefreshByOthers(true);
 		
-		for(BasicConfig bc : bcL) {
+		for(WechatAccount wa : waL) {
 			JSONObject o = new JSONObject();
-			o.put("appId", bc.getWechatAppId());
-			o.put("appSecret", bc.getWechatAppSecret());
-			o.put("accountId", bc.getWechatAccount());
+			o.put("appId", wa.getWechatAppId());
+			o.put("appSecret", wa.getWechatAppSecret());
+			o.put("accountId", wa.getWechatAccount());
 			arr.put(o);
 		}
 		

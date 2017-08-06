@@ -3,12 +3,12 @@ package org.clt.service;
 import java.util.List;
 import java.util.Map;
 
-import org.clt.repository.dao.BasicConfigDao;
 import org.clt.repository.dao.ButtonDao;
 import org.clt.repository.dao.ChatMessageDao;
-import org.clt.repository.pojo.BasicConfig;
+import org.clt.repository.dao.WechatAccountDao;
 import org.clt.repository.pojo.Button;
 import org.clt.repository.pojo.ChatMessage;
+import org.clt.repository.pojo.WechatAccount;
 import org.clt.util.DefaultMsg;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +24,7 @@ public class LARWService implements Runnable {
     @Autowired
     private ButtonDao buttonDao;
     @Autowired
-    private BasicConfigDao basicConfigDao;
+    private WechatAccountDao waDao;
     
     @Autowired
 	private WechatService wechatService;
@@ -33,7 +33,7 @@ public class LARWService implements Runnable {
     
     private Button button;
     private ChatMessage chatSession;
-    private BasicConfig basicConfig;
+    private WechatAccount wa;
     private String xmlString;
     
 	@Override
@@ -49,14 +49,14 @@ public class LARWService implements Runnable {
     	
         Map<String, String> chatInfo = this.wechatService.parseChatXML(this.xmlString);
         this.chatSession = this.chatMessageDao.findByOpenId(chatInfo.get("openId"));
-        this.basicConfig = this.basicConfigDao.findByWechatAccount(chatInfo.get("wechatAccount"));
+        this.wa = this.waDao.findAndLiveAgentByWechatAccount(chatInfo.get("wechatAccount"));
         
         if(this.chatSession == null) {
         	
         	//platform limit connection count check by org id
         	//this.chatMessageDao.findCountByButtonId(buttonId);
         	
-            this.button = this.buttonDao.findByIsDefaultAndBasicConfigId(true, this.basicConfig.getId());
+            this.button = this.buttonDao.findByIsDefaultAndLaId(true, this.wa.getLiveagent().getId());
             
             //platform limit connection count check by button id
             Integer buttonLimitCount = this.chatMessageDao.findCountByButtonId(this.button.getButtonId());
@@ -66,15 +66,16 @@ public class LARWService implements Runnable {
             	return;
             }
             
-            this.wechatService.setWechatAccessToken(this.basicConfig.getWechatAccessToken());
+            this.wechatService.setWechatAccessToken(this.wa.getWechatAccessToken());
             
-            this.laService.setBasicConfig(this.basicConfig);
+            this.laService.setLiveagent(this.wa.getLiveagent());
         	this.chatSession = this.initLiveAgentChat(chatInfo.get("openId"), this.button.getButtonId());
             
             if(this.chatSession == null) {
                 this.wechatService.sendTextMSG(chatInfo.get("openId"), chatInfo.get("wechatAccount"), this.button.getDisplayInfo());
             } else {
-            	this.chatSession.setBcId(this.basicConfig.getId());
+            	this.chatSession.setWechatAccount(this.wa.getWechatAccount());
+            	this.chatSession.setLiveagent(this.wa.getLiveagent());
                 this.chatMessageDao.save(this.chatSession);
                 this.laService.chatMessage(this.chatSession, chatInfo.get("msg"));
                 
@@ -140,7 +141,7 @@ public class LARWService implements Runnable {
     }
     
     public Boolean verfiyAddress(String signature, String timestamp, String nonce) {
-    	List<String> wechatTokens = this.basicConfigDao.findWechatToken();
+    	List<String> wechatTokens = this.waDao.findWechatToken();
     	Boolean flag = false;
     	
     	for(String wechatToken : wechatTokens) {

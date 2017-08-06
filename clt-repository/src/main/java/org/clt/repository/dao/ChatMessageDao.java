@@ -20,7 +20,7 @@ public interface ChatMessageDao extends Repository<ChatMessage, String> {
 	@Query("DELETE ChatMessage WHERE openId=:openId")
 	public int deleteByOpenId(@Param("openId") String openId);
 	
-	@Query("SELECT count(Id) FROM ChatMessage cm WHERE cm.buttonId=:buttonId")
+	@Query("SELECT count(Id) FROM ChatMessage cm WHERE cm.button.buttonId=:buttonId")
 	public Integer findCountByButtonId(@Param("buttonId") String buttonId);
 	
 	//@Query("SELECT count(Id) FROM ChatMessage cm WHERE cm.buttonId=:buttonId")

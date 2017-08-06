@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
 public interface WechatAccountDao extends GenericDao<WechatAccount, String> {
 	
 	@Query("SELECT wa FROM WechatAccount wa WHERE wa.wechatAccount=:wechatAccount")
 	public WechatAccount findByWechatAccount(@Param("wechatAccount") String wechatAccount);
+	
+	@Query("SELECT wa FROM WechatAccount wa JOIN wa.liveagent la WHERE wa.liveagent.id=la.id AND wa.wechatAccount=:wechatAccount")
+	public WechatAccount findAndLiveAgentByWechatAccount(@Param("wechatAccount") String wechatAccount);
 	
 	@Query("SELECT wa.wechatToken FROM WechatAccount wa")
 	public List<String> findWechatToken();
@@ -32,6 +36,10 @@ public interface WechatAccountDao extends GenericDao<WechatAccount, String> {
 	@Query("SELECT wa FROM WechatAccount wa WHERE wa.refreshByUs=:flag")
 	public List<WechatAccount> findAllByRefreshByOthers(@Param("flag") Boolean flag);
 	
-	@Query("SELECT wa FROM WechatAccount wa WHERE wa.accountId=:accId")
+	@Query("SELECT wa FROM WechatAccount wa WHERE wa.account.id=:accId")
 	public WechatAccount findByAccountId(@Param("accId") String accId);
+	
+	@Query("SELECT wa FROM WechatAccount wa JOIN wa.liveagent la WHERE wa.liveagent.id=la.id AND wa.id=:id")
+	public WechatAccount findAndLiveAgentById(@Param("id") String id);
+	
 }

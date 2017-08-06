@@ -21,7 +21,7 @@ public class Account implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
 
-	private Object master;
+	private Boolean master;
 
 	private String name;
 
@@ -59,11 +59,11 @@ public class Account implements Serializable {
 		this.createTime = createTime;
 	}
 
-	public Object getMaster() {
+	public Boolean getMaster() {
 		return this.master;
 	}
 
-	public void setMaster(Object master) {
+	public void setMaster(Boolean master) {
 		this.master = master;
 	}
 

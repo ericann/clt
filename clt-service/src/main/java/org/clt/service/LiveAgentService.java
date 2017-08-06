@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.clt.repository.pojo.BasicConfig;
+import org.clt.repository.pojo.Button;
 import org.clt.repository.pojo.ChatMessage;
+import org.clt.repository.pojo.LiveAgent;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,12 +29,12 @@ public class LiveAgentService {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	private BasicConfig basicConfig;
+	private LiveAgent liveagent;
 	private ChatMessage chatMessage;
 	
 	public ChatMessage createSession(String openId, String buttonId) {
 		
-        final String ENDPOINT = this.basicConfig.getLiveAgentEndPoint() + "/System/SessionId";
+        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + "/System/SessionId";
         final HttpMethod METHOD = HttpMethod.GET;
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-LIVEAGENT-API-VERSION", "37");
@@ -41,6 +42,8 @@ public class LiveAgentService {
         
         String result = this.doCall(ENDPOINT, METHOD, new HttpEntity<String>(headers));
         JSONObject sessionObj = new JSONObject(result);
+        Button b = new Button();
+        b.setButtonId(buttonId);
         
         this.chatMessage = new ChatMessage();
         this.chatMessage.setId(String.valueOf(UUID.randomUUID()));
@@ -48,10 +51,9 @@ public class LiveAgentService {
         this.chatMessage.setAffinityToken((String) sessionObj.get("affinityToken"));
         this.chatMessage.setSessionKey((String) sessionObj.get("key"));
         this.chatMessage.setSequence(this.chatMessage.getSequence() + 1);
-        this.chatMessage.setButtonId(buttonId);
+        this.chatMessage.setButton(b);
         this.chatMessage.setOpenId(openId);
         this.chatMessage.setSequence(1);
-        this.chatMessage.setWechatAccount(this.basicConfig.getWechatAccount());
         
         this.chasitorInit(this.chatMessage, openId, buttonId);
         
@@ -59,7 +61,7 @@ public class LiveAgentService {
     }
 	
     public void chasitorInit(ChatMessage cm, String openId, String buttonId) {
-        final String ENDPOINT = this.basicConfig.getLiveAgentEndPoint() + "/Chasitor/ChasitorInit";
+        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + "/Chasitor/ChasitorInit";
         final HttpMethod METHOD = HttpMethod.POST;
         JSONObject body = new JSONObject();
         HttpHeaders headers = new HttpHeaders();
@@ -68,8 +70,8 @@ public class LiveAgentService {
         headers.add("X-LIVEAGENT-SESSION-KEY", cm.getSessionKey());
         headers.add("X-LIVEAGENT-SEQUENCE", "1");
         
-        body.put("organizationId", this.basicConfig.getLiveAgentOrgId());
-        body.put("deploymentId", this.basicConfig.getLiveAgentDeploymentId());
+        body.put("organizationId", this.liveagent.getLiveAgentOrgId());
+        body.put("deploymentId", this.liveagent.getLiveAgentDeploymentId());
         body.put("buttonId", buttonId);
         body.put("sessionId", chatMessage.getSessionId());
         body.put("trackingId", "");
@@ -87,14 +89,14 @@ public class LiveAgentService {
     }
     
 	public String availability(String buttonId) {
-        final StringBuilder ENDPOINT = new StringBuilder(this.basicConfig.getLiveAgentEndPoint());
+        final StringBuilder ENDPOINT = new StringBuilder(this.liveagent.getLiveAgentEndPoint());
         final HttpMethod METHOD = HttpMethod.GET;
         
         ENDPOINT.append("/Visitor/Availability");
         ENDPOINT.append("?org_id=");
-        ENDPOINT.append(basicConfig.getLiveAgentOrgId()); 
+        ENDPOINT.append(liveagent.getLiveAgentOrgId()); 
         ENDPOINT.append("&deployment_id=");
-        ENDPOINT.append(basicConfig.getLiveAgentDeploymentId());
+        ENDPOINT.append(liveagent.getLiveAgentDeploymentId());
         ENDPOINT.append("&Availability.ids=[");
         ENDPOINT.append(buttonId);
         ENDPOINT.append("]");
@@ -107,7 +109,7 @@ public class LiveAgentService {
 	
     public void chatMessage(ChatMessage cm, String text) {
 
-        final String ENDPOINT = this.basicConfig.getLiveAgentEndPoint() + "/Chasitor/ChatMessage";
+        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + "/Chasitor/ChatMessage";
         final HttpMethod METHOD = HttpMethod.POST;
         JSONObject body = new JSONObject();
         HttpHeaders headers = new HttpHeaders();
@@ -126,7 +128,7 @@ public class LiveAgentService {
     
     public String messages(ChatMessage cm) {
 	    
-    	final String ENDPOINT = this.basicConfig.getLiveAgentEndPoint() + "/System/Messages";
+    	final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + "/System/Messages";
         final HttpMethod METHOD = HttpMethod.GET;
 
         HttpHeaders headers = new HttpHeaders();
@@ -140,8 +142,8 @@ public class LiveAgentService {
 	}
     
     public String getVisitorId() {
-        final String ENDPOINT = basicConfig.getLiveAgentEndPoint() + "/Visitor/VisitorId" +
-            "?org_id=" + this.basicConfig.getLiveAgentOrgId() + "&deployment_id=" + this.basicConfig.getLiveAgentDeploymentId();
+        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + "/Visitor/VisitorId" +
+            "?org_id=" + this.liveagent.getLiveAgentOrgId() + "&deployment_id=" + this.liveagent.getLiveAgentDeploymentId();
         final HttpMethod METHOD = HttpMethod.GET;
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-LIVEAGENT-API-VERSION", "37");
@@ -176,8 +178,8 @@ public class LiveAgentService {
         return result;
     }
     
-	public void setBasicConfig(BasicConfig basicConfig) {
-		this.basicConfig = basicConfig;
+	public void setLiveagent(LiveAgent liveagent) {
+		this.liveagent = liveagent;
 	}
 	
 }

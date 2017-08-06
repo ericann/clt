@@ -48,7 +48,7 @@ public class UserService {
 	}
 	
 	private Contact updateSessionId(String conId) {
-		return this.conDao.updateBySessionIdById(UUID.randomUUID().toString(), conId);
+		return this.conDao.updateBySessionIdAndId(UUID.randomUUID().toString(), conId);
 	}
 	
 	private Map<String, Object> checkSessionValid(String sessionId) {

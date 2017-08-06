@@ -27,8 +27,4 @@ public interface ContactDao extends GenericDao<Contact, String> {
 	@Query("UPDATE Contact c SET c.sessionId=:sessionId WHERE id=:id")
 	public Contact updateBySessionIdAndId(@Param("sessionId") String sessionId, @Param("id") String id);
 
-	@Override
-    public default Object[] toPredicate(Root<Contact> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-		return null;
-	}
 }
