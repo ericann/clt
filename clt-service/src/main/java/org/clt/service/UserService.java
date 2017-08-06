@@ -8,6 +8,7 @@ import javax.print.attribute.standard.DateTimeAtCompleted;
 
 import org.clt.repository.dao.AccountDao;
 import org.clt.repository.dao.ContactDao;
+import org.clt.repository.dao.WechatAccountDao;
 import org.clt.repository.pojo.Contact;
 import org.clt.util.DefaultMsg;
 import org.clt.util.Token;
@@ -31,14 +32,17 @@ public class UserService {
 	@Autowired
 	private ContactDao conDao;
 	
-	public void login(String openId, String url) {
+	@Autowired
+	private WechatAccountDao wechatAccountDao;
+	
+	public String login(String openId, String url) {
 		String accessToken = Token.generateAccessToken(EXPIRES_IN, openId);
+		return null;
 		
 	}
 	
-	public String login(String url) {
+	public void login(String url) {
 		String accessToken = null;
-		return accessToken;
 	}
 	
 	public String getSessionId(String conId){

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.clt.util.DigitalSignature;
+import org.clt.util.HttpCall;
 import org.clt.util.XML;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -105,6 +106,25 @@ public class WechatService {
         logger.debug("----- result: " + result);
         //logger.debug("----- header: " + res.getHeaders());
         logger.debug("------------Out WechatSerivce sendTextMSG-------------");
+    }
+    
+    public String getQRTicked(String accessToken) {
+        
+        final String ENDPOINT = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + accessToken;
+        final String bodyTemplate = "{\"expire_seconds\": {0}, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"redirect_uri\": {1}}}}";
+        String body = bodyTemplate.replace("{0}", "120").replace("{1}", null);
+        
+        ResponseEntity<String> res = HttpCall.post(ENDPOINT, null, body, String.class);
+        JSONObject obj = new JSONObject(res.getBody());
+        String result = this.getQRImage(obj.getString("ticket"));
+        return result;
+    }
+    
+    private String getQRImage(String ticket) {
+        
+        final String ENDPOINT = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + ticket;
+        ResponseEntity<String> res = HttpCall.get(ENDPOINT, null, String.class);
+        return res.getBody();
     }
     
 	public void setWechatAccessToken(String wechatAccessToken) {
