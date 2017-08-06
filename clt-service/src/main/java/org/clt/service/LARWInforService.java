@@ -90,6 +90,7 @@ public class LARWInforService {
 					this.wtService.refreshSingle(o.getString("appid"), o.getString("appsecret")) : null;
 
 			LiveAgent la = new LiveAgent();
+			la.setId(UUID.randomUUID().toString());
 			la.setLiveAgentDeploymentId(o.getString("deploymentid"));
 			la.setLiveAgentEndPoint(o.getString("endpoint"));
 			la.setLiveAgentOrgId(o.getString("organizationid"));
@@ -106,6 +107,7 @@ public class LARWInforService {
 			wa.setWechatAppSecret(o.getString("appsecret"));
 			wa.setWechatToken(o.getString("token"));
 			wa.setAccount(acc);
+			wa.setLiveagent(la);
 			wa.setLimitCount(Integer.parseInt(DefaultMsg.get("ORG_C_COUNT")));
 			
 			this.waDao.save(wa);
