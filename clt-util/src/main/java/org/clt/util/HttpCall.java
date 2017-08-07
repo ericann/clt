@@ -68,6 +68,14 @@ public class HttpCall {
 		return get(getURL(url, params), entity, String.class);
 	}
 	
+	public static <E> ResponseEntity<String> get(String url, Map<String, Object> params) {
+		return get(getURL(url, params), null, null, String.class);
+	}
+	
+	public static <E> ResponseEntity<String> get(String url) {
+		return get(url, null, null, String.class);
+	}
+	
 	private static String getURL(String url, Map<String, Object> params) {
 		StringBuilder sb = new StringBuilder(url);
 		sb.append(url.contains("?") ? "&" : "?");

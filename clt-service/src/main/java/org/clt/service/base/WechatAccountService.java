@@ -1,5 +1,7 @@
 package org.clt.service.base;
 
+import java.util.List;
+
 import org.clt.repository.pojo.WechatAccount;
 import org.springframework.stereotype.Service;
 
@@ -7,4 +9,13 @@ import org.springframework.stereotype.Service;
 public interface WechatAccountService extends GenericService<WechatAccount, String>  {
 	
 	WechatAccount findByUseDefault(Boolean flag);
+	
+	Integer updateWechatAccessToken(String appId, String appSecret, String accessToken);
+
+	String findAccessTokenByUseDefault(Boolean flag);
+	
+	List<WechatAccount> findAllByRefreshByUs(Boolean flag);
+	
+	Integer updateWechatAccessToken(String wechatAccount, String accessToken);
+	
 }

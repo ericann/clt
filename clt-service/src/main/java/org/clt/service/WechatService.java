@@ -122,15 +122,17 @@ public class WechatService {
         ResponseEntity<String> res = HttpCall.post(ENDPOINT, null, body, String.class);
         JSONObject obj = new JSONObject(res.getBody());
         System.out.println("-- obj: " + obj);
-        String result = this.getQRImage(obj.getString("ticket"));
-        return result;
+        return obj.getString("ticket");
     }
     
-    private String getQRImage(String ticket) {
-        
+    public String getQRImage(String ticket) {
         final String ENDPOINT = WC_GETQRIMG.replace("{0}", ticket);
-        ResponseEntity<String> res = HttpCall.get(ENDPOINT, null, String.class);
+        ResponseEntity<String> res = HttpCall.get(ENDPOINT);
         return res.getBody();
+    }
+    
+    public String getQRImgShort(String accessToken) {
+    	return getQRTicked(accessToken);
     }
     
 	public void setWechatAccessToken(String wechatAccessToken) {

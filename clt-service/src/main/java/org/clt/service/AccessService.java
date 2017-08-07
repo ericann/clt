@@ -16,6 +16,9 @@ public class AccessService {
 	@Autowired
 	private WechatAccountService wechatAccountService;
 	
+	@Autowired
+	private WechatService wechatService;
+	
 	public Map<String, String> getPermissions() {
 		return null;
 	}
@@ -26,5 +29,15 @@ public class AccessService {
 	
 	public Contact getUser() {
 		return null;
+	}
+	
+	public String getAccessTokenForUseDefault(Boolean flag) {
+		return this.wechatAccountService.findAccessTokenByUseDefault(flag);
+	}
+	
+	public String getQRInfoShort() {
+		String accessToken = this.wechatAccountService.findAccessTokenByUseDefault(true);
+		String qrInfo = this.wechatService.getQRImgShort(accessToken);
+		return qrInfo;
 	}
 }

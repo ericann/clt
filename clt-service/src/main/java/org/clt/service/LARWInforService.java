@@ -90,7 +90,7 @@ public class LARWInforService {
 			acc.setId(o.getString("accId"));
 			
 			String wechatAccessToken = o.getBoolean("refreshnow") ? 
-					this.wtService.refreshSingle(o.getString("appid"), o.getString("appsecret")) : null;
+					this.wtService.getByAppIdAndSecret(o.getString("appid"), o.getString("appsecret")) : null;
 
 			LiveAgent la = new LiveAgent();
 			la.setId(UUID.randomUUID().toString());

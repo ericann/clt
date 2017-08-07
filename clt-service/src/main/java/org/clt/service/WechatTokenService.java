@@ -3,36 +3,31 @@ package org.clt.service;
 import java.util.List;
 
 import org.clt.repository.pojo.WechatAccount;
+import org.clt.service.base.WechatAccountService;
 
 import static org.clt.util.DefaultMsg.WC_ACCESSTOKEN;
+import static org.clt.util.HttpCall.get;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 public class WechatTokenService {
 	
 	@Autowired
-	private BasicConfigService bcService;
+	private WechatAccountService wechatAccountService;
 	
-	@Autowired
-	private RestTemplate http;
-	
-	public String refreshSingle(String appId, String appSecret) {
-		String result = "Get Token Failed";
-		
+	public String getByAppIdAndSecret(String appId, String appSecret) {
+		String result = null;
 		String Endpoint = WC_ACCESSTOKEN.replace("{0}", appId).replace("{1}", appSecret);
-		ResponseEntity<String> res = http.exchange(Endpoint.toString(), HttpMethod.GET, null, String.class);
+		ResponseEntity<String> res = get(Endpoint);
 		
 		try {
 			JSONObject o = new JSONObject(res.getBody());
 			result = o.getString("access_token");
-			
 		} catch(Exception ex) {
 			System.out.println("ex: " + ex.getMessage());
 		}
@@ -40,41 +35,52 @@ public class WechatTokenService {
 		return result;
 	}
 	
+	public Boolean refreshSingle(String appId, String appSecret) {
+		Boolean flag = false;
+		
+		String accessToken = this.getByAppIdAndSecret(appId, appSecret);
+		if(accessToken != null) {
+			this.wechatAccountService.updateWechatAccessToken(appId, appSecret, accessToken);
+			flag = true;
+		}
+		
+		return flag;
+	}
+	
+	/**
+	 * @function refresh all accessToken(refreshByUs is true only) for external
+	 * @return refresh result
+	 */
 	public Boolean refreshAll() {
 		Boolean flag = false;
-		List<WechatAccount> waL = this.bcService.findAll();
+		List<WechatAccount> waL = this.wechatAccountService.findAllByRefreshByUs(true);
 		
 		if(waL != null && waL.size() > 0) {
 			for(WechatAccount wa : waL) {
-				String Endpoint = WC_ACCESSTOKEN.replace("{0}", wa.getWechatAppId()).replace("{1}", wa.getWechatAppSecret());
-				ResponseEntity<String> res = http.exchange(Endpoint.toString(), HttpMethod.GET, null, String.class);
-				
-				System.out.println("---------------------WechatAccessToken Refresh---------------------");
-				System.out.println("-- Id:" + wa.getId() + " request result:" + res.getBody());
-				System.out.println();
-				
-				try {
-					JSONObject o = new JSONObject(res.getBody());
-					String accessToken = o.getString("access_token");
-					this.bcService.updateWechatAccessToken(wa.getWechatAccount(), accessToken);
+				String accessToken = this.getByAppIdAndSecret(wa.getWechatAppId(), wa.getWechatAppSecret());
+				if(accessToken != null) {
+					this.wechatAccountService.updateWechatAccessToken(wa.getWechatAccount(), accessToken);
 					flag = true;
-				} catch(Exception ex) {
-					System.out.println("ex: " + ex.getMessage());
 				}
 			}
 		}
 		return flag;
 	}
 	
+	/**
+	 * @function refresh accessToken for external user(own only) 
+	 * @param json
+	 * @return
+	 */
 	public Boolean refreshTokenByWechatAccount(String json) {
 		Boolean flag = false;
 		
 		try {
 			JSONObject o = new JSONObject(json);
 			String wechatAccount = String.valueOf(o.get("wechatAccount"));
-			String wechatAccessToken = String.valueOf(o.get("access_token"));
+			String accessToken = String.valueOf(o.get("access_token"));
 			
-			this.bcService.updateWechatAccessToken(wechatAccount, wechatAccessToken);
+			this.wechatAccountService.updateWechatAccessToken(wechatAccount, accessToken);
 			flag = true;
 		} catch(Exception ex) {
 			System.out.println("--ex: " + ex.getMessage());
@@ -83,6 +89,11 @@ public class WechatTokenService {
 		return flag;
 	}
 	
+	/**
+	 * @function refresh accessTokens for external user(own only) 
+	 * @param json
+	 * @return
+	 */
 	public Boolean refreshTokensByWechatAccount(String json) {
 		Boolean flag = false;
 		
@@ -95,7 +106,7 @@ public class WechatTokenService {
 				String wechatAccount = String.valueOf(o.get("wechatAccount"));//o.getString("wechatAccount");
 				String wechatAccessToken = String.valueOf(o.get("access_token"));//o.getString("access_token");
 				
-				this.bcService.updateWechatAccessToken(wechatAccount, wechatAccessToken);
+				this.wechatAccountService.updateWechatAccessToken(wechatAccount, wechatAccessToken);
 			}
 			
 			flag = true;
