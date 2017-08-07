@@ -3,6 +3,7 @@ package org.clt.service;
 import java.util.Map;
 
 import org.clt.repository.pojo.Contact;
+import org.clt.service.base.UserService;
 import org.clt.service.base.WechatAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
