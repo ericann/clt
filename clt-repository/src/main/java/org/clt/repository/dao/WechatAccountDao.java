@@ -30,7 +30,8 @@ public interface WechatAccountDao extends GenericDao<WechatAccount, String> {
 	public Integer updateWechatAccessTokenByWechatAccount(@Param("wechatAccount") String wechatAccount, @Param("wechatAccessToken") String wechatAccessToken);
 
 	@Modifying
-	public Integer updateWechatAccessTokenByWechatAppIdAndWechatAppSecret(String wechatAccessToken, String wechatAppId, String wechatAppSecret);
+	@Query("UPDATE WechatAccount wa SET wa.wechatAccessToken=:wechatAccessToken WHERE wa.wechatAppId=:wechatAppId AND wa.wechatAppSecret=:wechatAppSecret")
+	public Integer updateWechatAccessTokenByWechatAppIdAndWechatAppSecret(@Param("wechatAccessToken") String wechatAccessToken, @Param("wechatAppId") String wechatAppId, @Param("wechatAppSecret") String wechatAppSecret);
 
 	@Modifying
 	@Query("UPDATE WechatAccount wa SET wa.wechatAccessToken=:wechatAccessToken WHERE wa.id=:id")
@@ -45,7 +46,9 @@ public interface WechatAccountDao extends GenericDao<WechatAccount, String> {
 	@Query("SELECT wa FROM WechatAccount wa JOIN wa.liveagent la WHERE wa.liveagent.id=la.id AND wa.id=:id")
 	public WechatAccount findAndLiveAgentById(@Param("id") String id);
 	
-	public WechatAccount findByUseDefault(Boolean useDefault);
+	@Query("SELECT wa FROM WechatAccount wa WHERE wa.useDefault=:useDefault")
+	public WechatAccount findByUseDefault(@Param("useDefault") Boolean useDefault);
 	
-	public String findWechatAccessTokenByWechatAppIdAndWechatAppSecret(Boolean useDefault);
+	@Query("SELECT wa.wechatAccessToken FROM WechatAccount wa WHERE wa.useDefault=:useDefault")
+	public String findWechatAccessTokenByUseDefault(@Param("useDefault") Boolean useDefault);
 }

@@ -4,13 +4,17 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.clt.repository.dao.GenericDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public abstract class GenericService<E extends Serializable, PK extends Serializable> {
 	
-	@Autowired
 	protected GenericDao<E, PK> genericDao;
 	
+	public GenericService(GenericDao<E, PK> genericDao) {
+		this.genericDao = genericDao;
+	}
+
 	E findById(PK id) {
 		return null;
 	}

@@ -47,13 +47,6 @@
 	    <version>39.0.0</version>
 	</dependency>
 	
-	<!-- https://mvnrepository.com/artifact/com.force.api/force-partner-api -->
-	<dependency>
-	    <groupId>com.force.api</groupId>
-	    <artifactId>force-partner-api</artifactId>
-	    <version>39.0.0</version>
-	</dependency>
-	
 	<!-- 
 	<dependency>
 	    <groupId>com.force.wsdl</groupId>

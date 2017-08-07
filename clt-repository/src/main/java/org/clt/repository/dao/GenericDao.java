@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
+//@Repository
 public interface GenericDao<E extends Serializable, PK extends Serializable> 
 	extends JpaRepository<E, PK>, JpaSpecificationExecutor<Object>{
 	

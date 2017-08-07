@@ -6,11 +6,18 @@ import org.clt.repository.dao.WechatAccountDao;
 import org.clt.repository.pojo.WechatAccount;
 import org.clt.service.base.WechatAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class WechatAccountServiceImpl extends GenericService<WechatAccount, String> implements WechatAccountService {
 	
-	@Autowired
 	private WechatAccountDao wechatAccountDao;
+	
+	@Autowired
+	public WechatAccountServiceImpl(WechatAccountDao wechatAccountDao) {
+		super(wechatAccountDao);
+		this.wechatAccountDao = wechatAccountDao;
+	}
 	
 	@Override
 	public WechatAccount findByUseDefault(Boolean flag) {
@@ -24,7 +31,7 @@ public class WechatAccountServiceImpl extends GenericService<WechatAccount, Stri
 
 	@Override
 	public String findWechatAccessTokenByUseDefault(Boolean flag) {
-		return this.wechatAccountDao.findWechatAccessTokenByWechatAppIdAndWechatAppSecret(flag);
+		return this.wechatAccountDao.findWechatAccessTokenByUseDefault(flag);
 	}
 
 	@Override

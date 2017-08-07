@@ -3,14 +3,11 @@ package org.clt.repository.dao;
 import org.clt.repository.pojo.ChatMessage;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 
-public interface ChatMessageDao extends Repository<ChatMessage, String> {
-	
-	public ChatMessage save(ChatMessage cm);
+public interface ChatMessageDao extends GenericDao<ChatMessage, String> {
 	
 	@Query("SELECT cm FROM ChatMessage cm WHERE cm.openId=:openId")
 	public ChatMessage findByOpenId(@Param("openId") String openId);
