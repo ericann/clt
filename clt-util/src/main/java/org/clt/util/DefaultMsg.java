@@ -107,6 +107,10 @@ public class DefaultMsg {
 		return getErrorResult(code, null, data);
 	}
 	
+	public static Map<String, Object> getErrorResult(String code) {
+		return getErrorResult(code, null, null);
+	}
+	
 	public static void main(String[] args) {
 		System.out.println(DefaultMsg.get("button_limit"));
 		System.out.println(DefaultMsg.get("button_limi"));
