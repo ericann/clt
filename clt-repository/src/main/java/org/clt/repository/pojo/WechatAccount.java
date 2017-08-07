@@ -38,6 +38,8 @@ public class WechatAccount implements Serializable {
 	private String wechatAppSecret;
 
 	private String wechatToken;
+	
+	private Boolean useDefault;
 
 	//bi-directional many-to-one association to Account
 	@ManyToOne
@@ -156,4 +158,12 @@ public class WechatAccount implements Serializable {
 		this.liveagent = liveagent;
 	}
 
+	public Boolean getUseDefault() {
+		return useDefault;
+	}
+
+	public void setUseDefault(Boolean useDefault) {
+		this.useDefault = useDefault;
+	}
+	
 }

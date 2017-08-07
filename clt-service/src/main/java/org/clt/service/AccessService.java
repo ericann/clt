@@ -33,11 +33,11 @@ public class AccessService {
 	}
 	
 	public String getAccessTokenForUseDefault(Boolean flag) {
-		return this.wechatAccountService.findAccessTokenByUseDefault(flag);
+		return this.wechatAccountService.findWechatAccessTokenByUseDefault(flag);
 	}
 	
 	public String getQRInfoShort() {
-		String accessToken = this.wechatAccountService.findAccessTokenByUseDefault(true);
+		String accessToken = this.wechatAccountService.findWechatAccessTokenByUseDefault(true);
 		String qrInfo = this.wechatService.getQRImgShort(accessToken);
 		return qrInfo;
 	}
