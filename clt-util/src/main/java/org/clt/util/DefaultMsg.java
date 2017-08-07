@@ -5,61 +5,61 @@ import java.util.Map;
 
 public class DefaultMsg {
 	
-	private final static String BUTTON_LIMIT = " The connection is reach the limit, wait or contact service provider please.";
-	private final static String ORG_LIMIT = " The connection is reach the limit, wait or contact service provider please.";
+	public final static String BUTTON_LIMIT = " The connection is reach the limit, wait or contact service provider please.";
+	public final static String ORG_LIMIT = " The connection is reach the limit, wait or contact service provider please.";
 	
 	//默认org、button限制连接数
-	private final static String BUTTON_C_COUNT = "3";
-	private final static String ORG_C_COUNT = "3";
+	public final static String BUTTON_C_COUNT = "3";
+	public final static String ORG_C_COUNT = "3";
 	
 	//默认 无在线客服 提示信息
-	private final static String NO_AGENTS_ALERT = "There are currently no agents online, try again later pls.";
+	public final static String NO_AGENTS_ALERT = "There are currently no agents online, try again later pls.";
 	
 	//错误编码
-	private final static String E_0 = "0";
-	private final static String E_1 = "-1";
+	public final static String E_0 = "0";
+	public final static String E_1 = "-1";
 	
 	//Http Error
-	private final static String H_400 = "2001";
+	public final static String H_400 = "2001";
 	
 	//Not Support Error
-	private final static String N_0 = "3001";
+	public final static String N_0 = "3001";
 	
 	//JSON Error
-	private final static String J_0 = "4001";
+	public final static String J_0 = "4001";
 	
 	//通用异常信息
-	private final static String E_0_M = "Success.";
-	private final static String E_1_M = "Unknown Error.";
-	private final static String H_400_M = "400 Bad Request.Check your input information, please.";
+	public final static String E_0_M = "Success.";
+	public final static String E_1_M = "Unknown Error.";
+	public final static String H_400_M = "400 Bad Request.Check your input information, please.";
 	
-	private final static String E_1001 = "Refresh Tokens Error.";
+	public final static String E_1001 = "Refresh Tokens Error.";
 	
-	private final static String N_0_M = "Not Support.";
+	public final static String N_0_M = "Not Support.";
 	
-	private final static String J_0_M = "JSON Exception: {0}.";
+	public final static String J_0_M = "JSON Exception: {0}.";
 	
 	//SFDC Oauth2.0
-	private final static String O_WS_CONFIRM = "authorize?response_type=code&client_id={0}&redirect_uri={1}";
-	private final static String O_UA_CONFIRM = "authorize?response_type=token&client_id={0}&redirect_uri={1}";
-	private final static String O_UP = "token?grant_type=password&client_id={0}&client_secret={1}&username={2}&password={3}";
-	private final static String O_CODE = "token?grant_type=authorization_code&code={0}&client_id={1}&client_secret={2}&redirect_uri={3}";
+	public final static String O_WS_CONFIRM = "authorize?response_type=code&client_id={0}&redirect_uri={1}";
+	public final static String O_UA_CONFIRM = "authorize?response_type=token&client_id={0}&redirect_uri={1}";
+	public final static String O_UP = "token?grant_type=password&client_id={0}&client_secret={1}&username={2}&password={3}";
+	public final static String O_CODE = "token?grant_type=authorization_code&code={0}&client_id={1}&client_secret={2}&redirect_uri={3}";
 	
-	private final static String BASE_URL = "https://{0}.salesforce.com/services/oauth2/";
+	public final static String BASE_URL = "https://{0}.salesforce.com/services/oauth2/";
 	
 	//Object Mapping
-	private final static String ACC = "Account";
-	private final static String CON = "Contact";
-	private final static String BC = "BasicConfig";
-	private final static String B = "Button";
-	private final static String CM = "ChatMessage";
+	public final static String ACC = "Account";
+	public final static String CON = "Contact";
+	public final static String BC = "BasicConfig";
+	public final static String B = "Button";
+	public final static String CM = "ChatMessage";
 	
 	//Field Metadata
-	private final static String M_FIELD = "{\"label\":null,\"type\":null,\"default\":null,\"error\":null,\"readonly\":null,\"help\":null,\"link\":null,\"ref\":null}";
-	private final static String M_OBJECT = "{\"title\":null,\"buttons\":[],\"fields\":[]}";
+	public final static String M_FIELD = "{\"label\":null,\"type\":null,\"default\":null,\"error\":null,\"readonly\":null,\"help\":null,\"link\":null,\"ref\":null}";
+	public final static String M_OBJECT = "{\"title\":null,\"buttons\":[],\"fields\":[]}";
 	
 	//Session Expire second
-	private final static String SESSION_EXPIRE = "7200";
+	public final static String SESSION_EXPIRE = "7200";
 	
 	public static String get(String name) {
 		String result = null;
@@ -88,7 +88,7 @@ public class DefaultMsg {
 		return result;
 	}
 	
-	public static Map<String, Object> getErrorResult(String code, Object data) {
+	public static Map<String, Object> getErrorResult(String code, String replaceStr, Object data) {
 		String errCode = get(code);
 		String errMsg = get(code + "_M");
 		
@@ -101,6 +101,10 @@ public class DefaultMsg {
 		}
 		
 		return result;
+	}
+	
+	public static Map<String, Object> getErrorResult(String code, Object data) {
+		return getErrorResult(code, null, data);
 	}
 	
 	public static void main(String[] args) {

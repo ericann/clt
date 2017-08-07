@@ -27,8 +27,6 @@ public class Util {
 	@Autowired
 	private RestTemplate http;
 	
-	
-	
 	private ResponseEntity<String> getUserConfirm(String url, HttpMethod type) {
 		return http.exchange(url, type, null, String.class);
 	}

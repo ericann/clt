@@ -2,7 +2,9 @@ package org.clt.oauth.controller;
 
 import java.util.Map;
 
-import org.clt.util.DefaultMsg;
+import static org.clt.util.DefaultMsg.initErrorResult;
+import static org.clt.util.DefaultMsg.getErrorResult;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -22,7 +24,7 @@ public class OauthService {
 	
 	@RequestMapping(value="/token", method=RequestMethod.POST)
 	public @ResponseBody String token(@RequestBody String json) {
-		Map<String, Object> result = DefaultMsg.initErrorResult("E_1");
+		Map<String, Object> result = initErrorResult("E_1");
 		
 		try {
 			
@@ -37,13 +39,13 @@ public class OauthService {
 				case "token" :
 					break;
 				default :
-					result = DefaultMsg.getErrorResult("N_0", "");
+					result = getErrorResult("N_0", "");
 			}
 			
 		} catch(JSONException ex) {
 			logger.debug("JSONExcetion");
 			ex.printStackTrace();
-			result = DefaultMsg.getErrorResult("J_0", ex.getMessage());
+			result = getErrorResult("J_0", ex.getMessage());
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -56,7 +58,7 @@ public class OauthService {
 	public @ResponseBody String authorize(@RequestParam("grant_type") String grant_type,
 			@RequestParam("client_id") String client_id, 
 			@RequestParam("client_secret") String client_secret) {
-		Map<String, Object> result = DefaultMsg.initErrorResult("E_1");
+		Map<String, Object> result = initErrorResult("E_1");
 		
 		try {
 			

@@ -2,6 +2,7 @@ package org.clt.service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Map;
 import java.util.UUID;
 
 import org.clt.repository.dao.AccountDao;
@@ -14,7 +15,14 @@ import org.clt.repository.pojo.Button;
 import org.clt.repository.pojo.Contact;
 import org.clt.repository.pojo.LiveAgent;
 import org.clt.repository.pojo.WechatAccount;
-import org.clt.util.DefaultMsg;
+
+import static org.clt.util.DefaultMsg.initErrorResult;
+import static org.clt.util.DefaultMsg.getErrorResult;
+import static org.clt.util.DefaultMsg.NO_AGENTS_ALERT;
+import static org.clt.util.DefaultMsg.ORG_C_COUNT;
+import static org.clt.util.DefaultMsg.BUTTON_C_COUNT;
+import static org.clt.util.DefaultMsg.E_1;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,9 +85,7 @@ public class LARWInforService {
 	}
 	
 	public String addBasicConfigAndButton(String json) {
-		JSONObject result = new JSONObject();
-		result.put("errCode", -1);
-		result.put("errMsg", "Unknown Error.");
+		Map<String, Object> result = initErrorResult(E_1);
 		
 		try {
 			JSONObject o = new JSONObject(URLDecoder.decode(json, "utf-8"));
@@ -108,7 +114,7 @@ public class LARWInforService {
 			wa.setWechatToken(o.getString("token"));
 			wa.setAccount(acc);
 			wa.setLiveagent(la);
-			wa.setLimitCount(Integer.parseInt(DefaultMsg.get("ORG_C_COUNT")));
+			wa.setLimitCount(Integer.parseInt(ORG_C_COUNT));
 			
 			this.waDao.save(wa);
 			
@@ -120,8 +126,8 @@ public class LARWInforService {
 			b.setButtonId(arr.getString(0));
 			b.setId(UUID.randomUUID().toString());
 			b.setIsDefault(true);
-			b.setDisplayInfo(DefaultMsg.get("NO_AGENTS_ALERT"));
-			b.setLimitCount(Integer.parseInt(DefaultMsg.get("BUTTON_C_COUNT")));
+			b.setDisplayInfo(NO_AGENTS_ALERT);
+			b.setLimitCount(Integer.parseInt(BUTTON_C_COUNT));
 			
 			this.bDao.save(b);
 			

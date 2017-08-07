@@ -4,7 +4,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Map;
 
-import org.clt.util.DefaultMsg;
+import static org.clt.util.DefaultMsg.initErrorResult;
+import static org.clt.util.DefaultMsg.getErrorResult;
+import static org.clt.util.DefaultMsg.BASE_URL;
+import static org.clt.util.DefaultMsg.O_CODE;
+import static org.clt.util.DefaultMsg.O_WS_CONFIRM;
+import static org.clt.util.DefaultMsg.O_UA_CONFIRM;
+import static org.clt.util.DefaultMsg.O_UP;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,22 +50,22 @@ public class SFDCOauth {
 	public @ResponseBody String WSGetCode(@RequestBody String json) {
 		
 		logger.debug("-----------------come in WSGetCode-----------------");
-		Map<String, Object> result = DefaultMsg.initErrorResult("E_1");
+		Map<String, Object> result = initErrorResult("E_1");
 		
 		try {
 			logger.debug("-- json:" + json);
 			String s = URLDecoder.decode(json, "UTF-8");
 			JSONObject o = new JSONObject(s.substring(0, s.length() - 1));
 			
-			String base_uri = DefaultMsg.get("BASE_URL").replace("{0}", o.getString("pre_domain"));
-			String path = DefaultMsg.get("O_CODE").replace("{0}", o.getString("code")).
+			String base_uri = BASE_URL.replace("{0}", o.getString("pre_domain"));
+			String path = O_CODE.replace("{0}", o.getString("code")).
 					replace("{1}", o.getString("client_id")).
 					replace("{2}", o.getString("client_secret")).
 					replace("{3}", o.getString("redirect_uri"));
 			String url = base_uri + path;
 			
 			String body = this.getUserConfirm(url, HttpMethod.POST).getBody().toString();
-			result = DefaultMsg.getErrorResult("E_0", body);
+			result = getErrorResult("E_0", body);
 		} catch(Exception ex) {
 			System.out.println("-- ex: " + ex.getMessage());
 		}
@@ -69,26 +76,26 @@ public class SFDCOauth {
 	@RequestMapping(value="/transfer", method=RequestMethod.POST, consumes="application/x-www-form-urlencoded;charset=UTF-8")
 	public @ResponseBody String transfer(@RequestBody String json) {
 		System.out.println("-- o: " + json);
-		Map<String, Object> result = DefaultMsg.initErrorResult("E_1");
+		Map<String, Object> result = initErrorResult("E_1");
 		
 		try {
 			String s = URLDecoder.decode(json, "UTF-8");
 			JSONObject o = new JSONObject(s.substring(0, s.length() - 1));
 		
-			String base_uri = DefaultMsg.get("BASE_URL").replace("{0}", o.getString("pre_domain"));
+			String base_uri = BASE_URL.replace("{0}", o.getString("pre_domain"));
 			String path = null;
 			String url = null;
 			
 			switch((String)(o.get("flow"))) {
 				case "0": 
-					path = DefaultMsg.get("O_WS_CONFIRM").replace("{0}", o.getString("client_id")).replace("{1}", o.getString("redirect_uri"));
+					path = O_WS_CONFIRM.replace("{0}", o.getString("client_id")).replace("{1}", o.getString("redirect_uri"));
 					url = base_uri + path;
-					result = DefaultMsg.getErrorResult("E_0", url);
+					result = getErrorResult("E_0", url);
 					break;
 				case "1": 
-					path = DefaultMsg.get("O_UA_CONFIRM").replace("{0}", o.getString("client_id")).replace("{1}", o.getString("redirect_uri"));
+					path = O_UA_CONFIRM.replace("{0}", o.getString("client_id")).replace("{1}", o.getString("redirect_uri"));
 					url = base_uri + path;
-					result = DefaultMsg.getErrorResult("E_0", url);
+					result = getErrorResult("E_0", url);
 					break;
 				case "2": 
 					String secritytoken = "";
@@ -97,13 +104,13 @@ public class SFDCOauth {
 					} catch(Exception ex) {
 						
 					}
-					path = DefaultMsg.get("O_UP").replace("{0}", o.getString("client_id")).
+					path = O_UP.replace("{0}", o.getString("client_id")).
 							replace("{1}", o.getString("client_secret")).
 							replace("{2}", o.getString("username")).
 							replace("{3}", o.getString("password") + secritytoken);
 					url = base_uri + path;
 					String body = this.getUserConfirm(url, HttpMethod.POST).getBody().toString();
-					result = DefaultMsg.getErrorResult("E_0", body);
+					result = getErrorResult("E_0", body);
 					break;
 				default: 
 					break;
