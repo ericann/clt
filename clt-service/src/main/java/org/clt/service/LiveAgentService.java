@@ -8,6 +8,18 @@ import java.util.UUID;
 import org.clt.repository.pojo.Button;
 import org.clt.repository.pojo.ChatMessage;
 import org.clt.repository.pojo.LiveAgent;
+
+import static org.clt.util.DefaultMsg.LA_CREATE_SESSION;
+import static org.clt.util.DefaultMsg.LA_CHASITORINIT;
+import static org.clt.util.DefaultMsg.LA_AVAILABILITY;
+import static org.clt.util.DefaultMsg.LA_CHATMESSAGE;
+import static org.clt.util.DefaultMsg.LA_MESSAGES;
+import static org.clt.util.DefaultMsg.LA_VISITORID;
+import static org.clt.util.DefaultMsg.LA_H_VERSION;
+import static org.clt.util.DefaultMsg.LA_H_AFFINITY;
+import static org.clt.util.DefaultMsg.LA_H_KEY;
+import static org.clt.util.DefaultMsg.LA_H_SEQUENCE;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +46,11 @@ public class LiveAgentService {
 	
 	public ChatMessage createSession(String openId, String buttonId) {
 		
-        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + "/System/SessionId";
+        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + LA_CREATE_SESSION;
         final HttpMethod METHOD = HttpMethod.GET;
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-LIVEAGENT-API-VERSION", "37");
-        headers.add("X-LIVEAGENT-AFFINITY", "null");
+        headers.add(LA_H_VERSION, "37");
+        headers.add(LA_H_AFFINITY, "null");
         
         String result = this.doCall(ENDPOINT, METHOD, new HttpEntity<String>(headers));
         JSONObject sessionObj = new JSONObject(result);
@@ -61,14 +73,14 @@ public class LiveAgentService {
     }
 	
     public void chasitorInit(ChatMessage cm, String openId, String buttonId) {
-        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + "/Chasitor/ChasitorInit";
+        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + LA_CHASITORINIT;
         final HttpMethod METHOD = HttpMethod.POST;
         JSONObject body = new JSONObject();
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-LIVEAGENT-API-VERSION", "37");
-        headers.add("X-LIVEAGENT-AFFINITY", cm.getAffinityToken());
-        headers.add("X-LIVEAGENT-SESSION-KEY", cm.getSessionKey());
-        headers.add("X-LIVEAGENT-SEQUENCE", "1");
+        headers.add(LA_H_VERSION, "37");
+        headers.add(LA_H_AFFINITY, cm.getAffinityToken());
+        headers.add(LA_H_KEY, cm.getSessionKey());
+        headers.add(LA_H_SEQUENCE, "1");
         
         body.put("organizationId", this.liveagent.getLiveAgentOrgId());
         body.put("deploymentId", this.liveagent.getLiveAgentDeploymentId());
@@ -92,7 +104,7 @@ public class LiveAgentService {
         final StringBuilder ENDPOINT = new StringBuilder(this.liveagent.getLiveAgentEndPoint());
         final HttpMethod METHOD = HttpMethod.GET;
         
-        ENDPOINT.append("/Visitor/Availability");
+        ENDPOINT.append(LA_AVAILABILITY);
         ENDPOINT.append("?org_id=");
         ENDPOINT.append(liveagent.getLiveAgentOrgId()); 
         ENDPOINT.append("&deployment_id=");
@@ -102,22 +114,22 @@ public class LiveAgentService {
         ENDPOINT.append("]");
         
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-LIVEAGENT-API-VERSION", "37");
+        headers.add(LA_H_VERSION, "37");
         
         return doCall(ENDPOINT.toString(), METHOD, new HttpEntity<String>(headers));
     }
 	
     public void chatMessage(ChatMessage cm, String text) {
 
-        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + "/Chasitor/ChatMessage";
+        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + LA_CHATMESSAGE;
         final HttpMethod METHOD = HttpMethod.POST;
         JSONObject body = new JSONObject();
         HttpHeaders headers = new HttpHeaders();
         //MediaType type = MediaType.parseMediaType("application/x-www-form-urlencoded; charset=UTF-8");
-        headers.add("X-LIVEAGENT-API-VERSION", "37");
-        headers.add("X-LIVEAGENT-AFFINITY", cm.getAffinityToken());
-        headers.add("X-LIVEAGENT-SESSION-KEY", cm.getSessionKey());
-        //headers.add("X-LIVEAGENT-SEQUENCE", String.valueOf(cm.getSequence() + 1));
+        headers.add(LA_H_VERSION, "37");
+        headers.add(LA_H_AFFINITY, cm.getAffinityToken());
+        headers.add(LA_H_KEY, cm.getSessionKey());
+        //headers.add(LA_H_SEQUENCE, String.valueOf(cm.getSequence() + 1));
 		//headers.setContentType(type);
 		
         body.put("text", text);
@@ -128,13 +140,13 @@ public class LiveAgentService {
     
     public String messages(ChatMessage cm) {
 	    
-    	final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + "/System/Messages";
+    	final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + LA_MESSAGES;
         final HttpMethod METHOD = HttpMethod.GET;
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-LIVEAGENT-API-VERSION", "37");
-        headers.add("X-LIVEAGENT-AFFINITY", cm.getAffinityToken());
-        headers.add("X-LIVEAGENT-SESSION-KEY", cm.getSessionKey());
+        headers.add(LA_H_VERSION, "37");
+        headers.add(LA_H_AFFINITY, cm.getAffinityToken());
+        headers.add(LA_H_KEY, cm.getSessionKey());
         //headers.setContentType(MediaType.parseMediaType("application/x-www-form-urlencoded; charset=UTF-8"));
         //headers.setAccept(Arrays.asList(MediaType.parseMediaType("application/x-www-form-urlencoded; charset=UTF-8")));
         
@@ -142,11 +154,11 @@ public class LiveAgentService {
 	}
     
     public String getVisitorId() {
-        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + "/Visitor/VisitorId" +
+        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + LA_VISITORID +
             "?org_id=" + this.liveagent.getLiveAgentOrgId() + "&deployment_id=" + this.liveagent.getLiveAgentDeploymentId();
         final HttpMethod METHOD = HttpMethod.GET;
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-LIVEAGENT-API-VERSION", "37");
+        headers.add(LA_H_VERSION, "37");
         
         return this.doCall(ENDPOINT, METHOD, new HttpEntity<String>(headers));
     }

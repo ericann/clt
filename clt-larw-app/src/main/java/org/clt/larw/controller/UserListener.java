@@ -3,7 +3,7 @@ package org.clt.larw.controller;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-import org.clt.service.LARWInforService;
+import org.clt.service.AccessService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -22,9 +22,9 @@ public class UserListener {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	private LARWInforService inforService;
+	private AccessService accessService;
 
-	@RequestMapping(value="/login/", method=RequestMethod.POST)
+	@RequestMapping(value="/login/", method=RequestMethod.POST, consumes="application/json")
 	public @ResponseBody String login(@RequestBody String json) {
 		
 		logger.debug("-----------------come in login-----------------");
@@ -32,7 +32,7 @@ public class UserListener {
 		String result = null;
 		try {
 			logger.debug("-- json:" + new JSONObject(URLDecoder.decode(json, "utf-8")));
-			result = this.inforService.addBasicConfigAndButton(json);
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -56,10 +56,7 @@ public class LARWInforService {
 	private WechatTokenService wtService;
 	
 	public String addAccAndCon(String json) throws JSONException, UnsupportedEncodingException {
-		JSONObject result = new JSONObject();
-		result.put("errCode", -1);
-		result.put("errMsg", "Unknown Error.");
-		
+		Map<String, Object> result = initErrorResult(E_1);
 		
 		JSONObject o = new JSONObject(URLDecoder.decode(json, "utf-8"));
 		

@@ -3,6 +3,9 @@ package org.clt.service;
 import java.util.List;
 
 import org.clt.repository.pojo.WechatAccount;
+
+import static org.clt.util.DefaultMsg.WC_ACCESSTOKEN;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +26,7 @@ public class WechatTokenService {
 	public String refreshSingle(String appId, String appSecret) {
 		String result = "Get Token Failed";
 		
-		StringBuilder Endpoint = new StringBuilder("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential");
-		Endpoint.append("&appid=");
-		Endpoint.append(appId);
-		Endpoint.append("&secret=");
-		Endpoint.append(appSecret);
+		String Endpoint = WC_ACCESSTOKEN.replace("{0}", appId).replace("{1}", appSecret);
 		ResponseEntity<String> res = http.exchange(Endpoint.toString(), HttpMethod.GET, null, String.class);
 		
 		try {
@@ -47,11 +46,7 @@ public class WechatTokenService {
 		
 		if(waL != null && waL.size() > 0) {
 			for(WechatAccount wa : waL) {
-				StringBuilder Endpoint = new StringBuilder("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential");
-				Endpoint.append("&appid=");
-				Endpoint.append(wa.getWechatAppId());
-				Endpoint.append("&secret=");
-				Endpoint.append(wa.getWechatAppSecret());
+				String Endpoint = WC_ACCESSTOKEN.replace("{0}", wa.getWechatAppId()).replace("{1}", wa.getWechatAppSecret());
 				ResponseEntity<String> res = http.exchange(Endpoint.toString(), HttpMethod.GET, null, String.class);
 				
 				System.out.println("---------------------WechatAccessToken Refresh---------------------");

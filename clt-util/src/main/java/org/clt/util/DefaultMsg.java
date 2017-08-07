@@ -47,6 +47,30 @@ public class DefaultMsg {
 	
 	public final static String BASE_URL = "https://{0}.salesforce.com/services/oauth2/";
 	
+	//SFDC Live Agent URL
+	public final static String LA_CREATE_SESSION = "/System/SessionId";
+	public final static String LA_CHASITORINIT = "/Chasitor/ChasitorInit";
+	public final static String LA_AVAILABILITY = "/Visitor/Availability";
+	public final static String LA_CHATMESSAGE = "/Chasitor/ChatMessage";
+	public final static String LA_MESSAGES = "/System/Messages";
+	public final static String LA_VISITORID = "/Visitor/VisitorId";
+	
+	//SFDC Live Agent Header
+	public final static String LA_H_VERSION = "X-LIVEAGENT-API-VERSION";
+	public final static String LA_H_AFFINITY = "X-LIVEAGENT-AFFINITY";
+	public final static String LA_H_KEY = "X-LIVEAGENT-SESSION-KEY";
+	public final static String LA_H_SEQUENCE = "X-LIVEAGENT-SEQUENCE";
+	
+	//Wechat API URL
+	public final static String WC_SENDMSG = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={0}";
+	public final static String WC_CREATEQR = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={0}";
+	public final static String WC_GETQRIMG = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={0}";
+	public final static String WC_ACCESSTOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={0}&secret={1}";
+	
+	//Wechat template
+	public final static String WC_T_TEXTMSG = "{\"touser\":\"\",\"msgtype\":\"text\",\"text\":{\"content\":\"\"}}";
+	public final static String WC_T_QRSHORTLIVE = "{\"expire_seconds\": {0}, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"redirect_uri\": {1}}}}";
+	
 	//Object Mapping
 	public final static String ACC = "Account";
 	public final static String CON = "Contact";
@@ -60,6 +84,9 @@ public class DefaultMsg {
 	
 	//Session Expire second
 	public final static String SESSION_EXPIRE = "7200";
+	
+	//Login QR Image
+	public final static String LOGIN_QR_EXPIRE = "120";
 	
 	public static String get(String name) {
 		String result = null;

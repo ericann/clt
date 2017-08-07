@@ -10,6 +10,14 @@ import java.util.Map;
 import org.clt.util.DigitalSignature;
 import org.clt.util.HttpCall;
 import org.clt.util.XML;
+
+import static org.clt.util.DefaultMsg.WC_SENDMSG;
+import static org.clt.util.DefaultMsg.WC_CREATEQR;
+import static org.clt.util.DefaultMsg.WC_GETQRIMG;
+import static org.clt.util.DefaultMsg.WC_T_TEXTMSG;
+import static org.clt.util.DefaultMsg.WC_T_QRSHORTLIVE;
+import static org.clt.util.DefaultMsg.LOGIN_QR_EXPIRE;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -27,7 +35,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class WechatService {
 
-	private final String textMsgTemp = "{\"touser\":\"\",\"msgtype\":\"text\",\"text\":{\"content\":\"\"}}";
 	private String wechatAccessToken;
 	
 	@Autowired
@@ -91,9 +98,9 @@ public class WechatService {
     
     public void sendTextMSG(String openId, String wechatAccount, String msg) {
         
-        final String ENDPOINT = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + wechatAccessToken;
+        final String ENDPOINT = WC_SENDMSG.replace("{0}", wechatAccessToken);
         final HttpMethod METHOD = HttpMethod.POST;
-        JSONObject body = new JSONObject(textMsgTemp);
+        JSONObject body = new JSONObject(WC_T_TEXTMSG);
         body.put("touser", openId);
         body.getJSONObject("text").put("content", msg);
         
@@ -109,19 +116,19 @@ public class WechatService {
     
     public String getQRTicked(String accessToken) {
         
-        final String ENDPOINT = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + accessToken;
-        final String bodyTemplate = "{\"expire_seconds\": {0}, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"redirect_uri\": {1}}}}";
-        String body = bodyTemplate.replace("{0}", "120").replace("{1}", null);
+        final String ENDPOINT = WC_CREATEQR.replace("{0}", accessToken);
+        String body = WC_T_QRSHORTLIVE.replace("{0}", LOGIN_QR_EXPIRE).replace("{1}", "null");
         
         ResponseEntity<String> res = HttpCall.post(ENDPOINT, null, body, String.class);
         JSONObject obj = new JSONObject(res.getBody());
+        System.out.println("-- obj: " + obj);
         String result = this.getQRImage(obj.getString("ticket"));
         return result;
     }
     
     private String getQRImage(String ticket) {
         
-        final String ENDPOINT = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + ticket;
+        final String ENDPOINT = WC_GETQRIMG.replace("{0}", ticket);
         ResponseEntity<String> res = HttpCall.get(ENDPOINT, null, String.class);
         return res.getBody();
     }
@@ -143,6 +150,7 @@ public class WechatService {
 		System.out.println(XML.parse(xml));
 		
 		WechatService ws = new WechatService();
-		ws.setWechatAccessToken("");
+		String image = ws.getQRTicked("hDdWmNGpI7dYKlXNORkPScjujicQTDEqOVoIxjS0KPxGGsePMy4jx38AZtYGHdh0pZX6skR2KK6qgoXYF-yJRBMl_4hyppCpZ7ND_7wn7lkhlL_tQJpIydV70n3danyeVQPaADAHCB");
+		System.out.println(image);
 	}
 }
