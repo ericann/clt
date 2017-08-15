@@ -62,6 +62,19 @@
 		    line-height: 40px;
 		}
 		
+		.title .s_fold, .default, .row_count {
+			display: inline-block;
+		}
+		
+		.title .row_count {
+			float: right;
+			margin-right: 10px;
+		}
+		
+		.title .s_fold {
+			margin-left: -20px;
+		}
+		
 		.content {
 			width: auto;
 			height: auto;
@@ -151,7 +164,11 @@
 	
 	<div class="section">
 		<div class="error_info">Invalid sex.</div>
-		<div class="title">Table List</div>
+		<div class="title">
+			<div class="s_fold"><button></button></div>
+			<div class="default">Table List</div>
+			<div class="row_count">3</div>
+		</div>
 		<div class="content">
 			<div class="t_header">
 				<div class="t_info">
