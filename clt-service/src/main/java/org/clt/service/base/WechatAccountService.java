@@ -13,7 +13,7 @@ public interface WechatAccountService {
 	Integer updateWechatAccessToken(String appId, String appSecret, String accessToken);
 
 	String findWechatAccessTokenByUseDefault(Boolean flag);
-	
+		
 	List<WechatAccount> findAllByRefreshByUs(Boolean flag);
 	
 	Integer updateWechatAccessToken(String wechatAccount, String accessToken);

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AccountServiceImpl extends GenericService<Account, String> implements AccountService {
+public class AccountServiceImpl extends GenericServiceImpl<Account, String> implements AccountService {
 	
 	@Autowired
 	public AccountServiceImpl(AccountDao accountDao) {

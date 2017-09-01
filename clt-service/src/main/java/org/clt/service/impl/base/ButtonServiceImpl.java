@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ButtonServiceImpl extends GenericService<Button, String> implements ButtonService {
+public class ButtonServiceImpl extends GenericServiceImpl<Button, String> implements ButtonService {
 	
 	@Autowired
 	public ButtonServiceImpl(ButtonDao buttonDao) {

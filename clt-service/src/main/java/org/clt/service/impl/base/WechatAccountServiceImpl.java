@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WechatAccountServiceImpl extends GenericService<WechatAccount, String> implements WechatAccountService {
+public class WechatAccountServiceImpl extends GenericServiceImpl<WechatAccount, String> implements WechatAccountService {
 	
 	private WechatAccountDao wechatAccountDao;
 	

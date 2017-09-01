@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LiveAgentServiceImpl extends GenericService<LiveAgent, String> implements LiveAgentService {
+public class LiveAgentServiceImpl extends GenericServiceImpl<LiveAgent, String> implements LiveAgentService {
 
 	@Autowired
 	public LiveAgentServiceImpl(LiveAgentDao genericDao) {

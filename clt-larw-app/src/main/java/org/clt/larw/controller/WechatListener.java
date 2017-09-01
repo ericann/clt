@@ -2,15 +2,18 @@ package org.clt.larw.controller;
 
 import java.util.Map;
 
+import org.clt.service.AccessService;
 import org.clt.service.BasicConfigService;
 import org.clt.service.LARWService;
 import org.clt.service.WechatEventService;
+import org.clt.service.WechatService;
 import org.clt.service.WechatTokenService;
 import org.clt.util.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +37,9 @@ public class WechatListener {
 	
 	@Autowired
 	private WechatEventService wechatEventService;
+	
+	@Autowired
+	private AccessService accessService;
 	
 	@RequestMapping(value="/msg/text", method=RequestMethod.GET)
 	public @ResponseBody String verification_v1(@RequestParam String signature,@RequestParam String timestamp,
@@ -105,4 +111,5 @@ public class WechatListener {
 		
 		return expect.equals(json) ? this.bcService.getAll() : error;
 	}
+	
 }

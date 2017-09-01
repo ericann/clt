@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ChatMessageServiceImpl extends GenericService<ChatMessage, String> implements ChatMessageService {
+public class ChatMessageServiceImpl extends GenericServiceImpl<ChatMessage, String> implements ChatMessageService {
 	
 	@Autowired
 	public ChatMessageServiceImpl(ChatMessageDao chatMessageDao) {

@@ -46,7 +46,7 @@ public class LiveAgentService {
 	
 	public ChatMessage createSession(String openId, String buttonId) {
 		
-        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + LA_CREATE_SESSION;
+        final String ENDPOINT = this.liveagent.getEndPoint() + LA_CREATE_SESSION;
         final HttpMethod METHOD = HttpMethod.GET;
         HttpHeaders headers = new HttpHeaders();
         headers.add(LA_H_VERSION, "37");
@@ -73,7 +73,7 @@ public class LiveAgentService {
     }
 	
     public void chasitorInit(ChatMessage cm, String openId, String buttonId) {
-        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + LA_CHASITORINIT;
+        final String ENDPOINT = this.liveagent.getEndPoint() + LA_CHASITORINIT;
         final HttpMethod METHOD = HttpMethod.POST;
         JSONObject body = new JSONObject();
         HttpHeaders headers = new HttpHeaders();
@@ -82,8 +82,8 @@ public class LiveAgentService {
         headers.add(LA_H_KEY, cm.getSessionKey());
         headers.add(LA_H_SEQUENCE, "1");
         
-        body.put("organizationId", this.liveagent.getLiveAgentOrgId());
-        body.put("deploymentId", this.liveagent.getLiveAgentDeploymentId());
+        body.put("organizationId", this.liveagent.getSfdc().getOrgId());
+        body.put("deploymentId", this.liveagent.getDeploymentId());
         body.put("buttonId", buttonId);
         body.put("sessionId", chatMessage.getSessionId());
         body.put("trackingId", "");
@@ -101,14 +101,14 @@ public class LiveAgentService {
     }
     
 	public String availability(String buttonId) {
-        final StringBuilder ENDPOINT = new StringBuilder(this.liveagent.getLiveAgentEndPoint());
+        final StringBuilder ENDPOINT = new StringBuilder(this.liveagent.getEndPoint());
         final HttpMethod METHOD = HttpMethod.GET;
         
         ENDPOINT.append(LA_AVAILABILITY);
         ENDPOINT.append("?org_id=");
-        ENDPOINT.append(liveagent.getLiveAgentOrgId()); 
+        ENDPOINT.append(liveagent.getSfdc().getOrgId()); 
         ENDPOINT.append("&deployment_id=");
-        ENDPOINT.append(liveagent.getLiveAgentDeploymentId());
+        ENDPOINT.append(liveagent.getDeploymentId());
         ENDPOINT.append("&Availability.ids=[");
         ENDPOINT.append(buttonId);
         ENDPOINT.append("]");
@@ -121,7 +121,7 @@ public class LiveAgentService {
 	
     public void chatMessage(ChatMessage cm, String text) {
 
-        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + LA_CHATMESSAGE;
+        final String ENDPOINT = this.liveagent.getEndPoint() + LA_CHATMESSAGE;
         final HttpMethod METHOD = HttpMethod.POST;
         JSONObject body = new JSONObject();
         HttpHeaders headers = new HttpHeaders();
@@ -140,7 +140,7 @@ public class LiveAgentService {
     
     public String messages(ChatMessage cm) {
 	    
-    	final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + LA_MESSAGES;
+    	final String ENDPOINT = this.liveagent.getEndPoint() + LA_MESSAGES;
         final HttpMethod METHOD = HttpMethod.GET;
 
         HttpHeaders headers = new HttpHeaders();
@@ -154,8 +154,8 @@ public class LiveAgentService {
 	}
     
     public String getVisitorId() {
-        final String ENDPOINT = this.liveagent.getLiveAgentEndPoint() + LA_VISITORID +
-            "?org_id=" + this.liveagent.getLiveAgentOrgId() + "&deployment_id=" + this.liveagent.getLiveAgentDeploymentId();
+        final String ENDPOINT = this.liveagent.getEndPoint() + LA_VISITORID +
+            "?org_id=" + this.liveagent.getSfdc().getOrgId() + "&deployment_id=" + this.liveagent.getDeploymentId();
         final HttpMethod METHOD = HttpMethod.GET;
         HttpHeaders headers = new HttpHeaders();
         headers.add(LA_H_VERSION, "37");

@@ -3,6 +3,7 @@ package org.clt.repository.pojo;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -29,6 +30,8 @@ public class WechatAccount implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateTime;
 
+	private Boolean useDefault;
+
 	private String wechatAccessToken;
 
 	private String wechatAccount;
@@ -38,8 +41,6 @@ public class WechatAccount implements Serializable {
 	private String wechatAppSecret;
 
 	private String wechatToken;
-	
-	private Boolean useDefault;
 
 	//bi-directional many-to-one association to Account
 	@ManyToOne
@@ -50,6 +51,14 @@ public class WechatAccount implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="laId")
 	private LiveAgent liveagent;
+
+	//bi-directional many-to-one association to WechatTicket
+	@OneToMany(mappedBy="wechataccount")
+	private List<WechatTicket> wechattickets;
+
+	//bi-directional many-to-one association to WechatUser
+	@OneToMany(mappedBy="wechataccount")
+	private List<WechatUser> wechatusers;
 
 	public WechatAccount() {
 	}
@@ -100,6 +109,14 @@ public class WechatAccount implements Serializable {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public Boolean getUseDefault() {
+		return this.useDefault;
+	}
+
+	public void setUseDefault(Boolean useDefault) {
+		this.useDefault = useDefault;
 	}
 
 	public String getWechatAccessToken() {
@@ -158,12 +175,48 @@ public class WechatAccount implements Serializable {
 		this.liveagent = liveagent;
 	}
 
-	public Boolean getUseDefault() {
-		return useDefault;
+	public List<WechatTicket> getWechattickets() {
+		return this.wechattickets;
 	}
 
-	public void setUseDefault(Boolean useDefault) {
-		this.useDefault = useDefault;
+	public void setWechattickets(List<WechatTicket> wechattickets) {
+		this.wechattickets = wechattickets;
 	}
-	
+
+	public WechatTicket addWechatticket(WechatTicket wechatticket) {
+		getWechattickets().add(wechatticket);
+		wechatticket.setWechataccount(this);
+
+		return wechatticket;
+	}
+
+	public WechatTicket removeWechatticket(WechatTicket wechatticket) {
+		getWechattickets().remove(wechatticket);
+		wechatticket.setWechataccount(null);
+
+		return wechatticket;
+	}
+
+	public List<WechatUser> getWechatusers() {
+		return this.wechatusers;
+	}
+
+	public void setWechatusers(List<WechatUser> wechatusers) {
+		this.wechatusers = wechatusers;
+	}
+
+	public WechatUser addWechatuser(WechatUser wechatuser) {
+		getWechatusers().add(wechatuser);
+		wechatuser.setWechataccount(this);
+
+		return wechatuser;
+	}
+
+	public WechatUser removeWechatuser(WechatUser wechatuser) {
+		getWechatusers().remove(wechatuser);
+		wechatuser.setWechataccount(null);
+
+		return wechatuser;
+	}
+
 }

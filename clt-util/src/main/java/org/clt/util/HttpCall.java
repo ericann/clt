@@ -72,7 +72,7 @@ public class HttpCall {
 		return get(getURL(url, params), null, null, String.class);
 	}
 	
-	public static <E> ResponseEntity<String> get(String url) {
+	public static ResponseEntity<String> get(String url) {
 		return get(url, null, null, String.class);
 	}
 	

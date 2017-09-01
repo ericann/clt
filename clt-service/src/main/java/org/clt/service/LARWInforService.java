@@ -2,6 +2,7 @@ package org.clt.service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ import org.clt.repository.pojo.Account;
 import org.clt.repository.pojo.Button;
 import org.clt.repository.pojo.Contact;
 import org.clt.repository.pojo.LiveAgent;
+import org.clt.repository.pojo.Sfdc;
 import org.clt.repository.pojo.WechatAccount;
 
 import static org.clt.util.DefaultMsg.initErrorResult;
@@ -56,33 +58,43 @@ public class LARWInforService {
 	private WechatTokenService wtService;
 	
 	public String addAccAndCon(String json) throws JSONException, UnsupportedEncodingException {
-		Map<String, Object> result = initErrorResult(E_1);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("code", 0);
+		result.put("msg", "success");
 		
-		JSONObject o = new JSONObject(URLDecoder.decode(json, "utf-8"));
-		
-		Account acc = new Account();
-		acc.setId(UUID.randomUUID().toString());
-		acc.setName(o.getString("companyname"));
-		
-		this.accDao.save(acc);
-		
-		Contact con = new Contact();
-		con.setAccount(acc);
-		con.setEmail(o.getString("email"));
-		con.setMobile(o.getString("mobile"));
-		con.setName(o.getString("yourname"));
-		con.setId(UUID.randomUUID().toString());
-		
-		this.conDao.save(con);
-		
-		result.put("errCode", 0);
-		result.put("errMsg", "success");
-		result.put("accId", acc.getId());
-		return result.toString();
+		try {
+			JSONObject o = new JSONObject(URLDecoder.decode(json, "utf-8"));
+			
+			Account acc = new Account();
+			acc.setId(UUID.randomUUID().toString());
+			acc.setName(o.getString("companyname"));
+			
+			this.accDao.save(acc);
+			
+			Contact con = new Contact();
+			con.setAccount(acc);
+			con.setEmail(o.getString("email"));
+			con.setMobile(o.getString("mobile"));
+			con.setName(o.getString("yourname"));
+			con.setId(UUID.randomUUID().toString());
+			
+			this.conDao.save(con);
+			
+			Map<String, String> data = new HashMap<String, String>();
+			data.put("conId", con.getId());
+			data.put("accId", acc.getId());
+			result.put("data", data);
+		} catch(Exception ex) {
+			result.put("code", 1);
+			result.put("msg", "failed");
+		}
+		return JSONObject.valueToString(result);
 	}
 	
 	public String addBasicConfigAndButton(String json) {
-		Map<String, Object> result = initErrorResult(E_1);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("code", 0);
+		result.put("msg", "success");
 		
 		try {
 			JSONObject o = new JSONObject(URLDecoder.decode(json, "utf-8"));
@@ -93,10 +105,14 @@ public class LARWInforService {
 					this.wtService.getByAppIdAndSecret(o.getString("appid"), o.getString("appsecret")) : null;
 
 			LiveAgent la = new LiveAgent();
+			Sfdc sfdc = new Sfdc();
+			sfdc.setOrgId(o.getString("organizationid"));
+			sfdc.setOrgId(UUID.randomUUID().toString());
+			
 			la.setId(UUID.randomUUID().toString());
-			la.setLiveAgentDeploymentId(o.getString("deploymentid"));
-			la.setLiveAgentEndPoint(o.getString("endpoint"));
-			la.setLiveAgentOrgId(o.getString("organizationid"));
+			la.setDeploymentId(o.getString("deploymentid"));
+			la.setEndPoint(o.getString("endpoint"));
+			la.setSfdc(sfdc);
 			la.setAccount(acc);
 			
 			this.laDao.save(la);

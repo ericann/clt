@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserAppServiceImpl extends GenericService<UserApp, String> implements UserAppService {
+public class UserAppServiceImpl extends GenericServiceImpl<UserApp, String> implements UserAppService {
 
 	@Autowired
 	public UserAppServiceImpl(UserAppDao genericDao) {

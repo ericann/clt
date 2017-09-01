@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ObjectPermissionServiceImpl extends GenericService<ObjectPermission, String> implements ObjectPermissionService {
+public class ObjectPermissionServiceImpl extends GenericServiceImpl<ObjectPermission, String> implements ObjectPermissionService {
 
 	@Autowired
 	public ObjectPermissionServiceImpl(ObjectPermissionDao genericDao) {

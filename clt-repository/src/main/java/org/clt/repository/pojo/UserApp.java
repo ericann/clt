@@ -20,6 +20,8 @@ public class UserApp implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
 
+	private String name;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateTime;
 
@@ -50,6 +52,14 @@ public class UserApp implements Serializable {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Date getUpdateTime() {

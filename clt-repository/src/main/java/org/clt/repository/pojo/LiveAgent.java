@@ -21,11 +21,9 @@ public class LiveAgent implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
 
-	private String liveAgentDeploymentId;
+	private String deploymentId;
 
-	private String liveAgentEndPoint;
-
-	private String liveAgentOrgId;
+	private String endPoint;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateTime;
@@ -42,6 +40,11 @@ public class LiveAgent implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="accountId")
 	private Account account;
+
+	//bi-directional many-to-one association to Sfdc
+	@ManyToOne
+	@JoinColumn(name="orgId")
+	private Sfdc sfdc;
 
 	//bi-directional many-to-one association to WechatAccount
 	@OneToMany(mappedBy="liveagent")
@@ -66,28 +69,20 @@ public class LiveAgent implements Serializable {
 		this.createTime = createTime;
 	}
 
-	public String getLiveAgentDeploymentId() {
-		return this.liveAgentDeploymentId;
+	public String getDeploymentId() {
+		return this.deploymentId;
 	}
 
-	public void setLiveAgentDeploymentId(String liveAgentDeploymentId) {
-		this.liveAgentDeploymentId = liveAgentDeploymentId;
+	public void setDeploymentId(String deploymentId) {
+		this.deploymentId = deploymentId;
 	}
 
-	public String getLiveAgentEndPoint() {
-		return this.liveAgentEndPoint;
+	public String getEndPoint() {
+		return this.endPoint;
 	}
 
-	public void setLiveAgentEndPoint(String liveAgentEndPoint) {
-		this.liveAgentEndPoint = liveAgentEndPoint;
-	}
-
-	public String getLiveAgentOrgId() {
-		return this.liveAgentOrgId;
-	}
-
-	public void setLiveAgentOrgId(String liveAgentOrgId) {
-		this.liveAgentOrgId = liveAgentOrgId;
+	public void setEndPoint(String endPoint) {
+		this.endPoint = endPoint;
 	}
 
 	public Date getUpdateTime() {
@@ -148,6 +143,14 @@ public class LiveAgent implements Serializable {
 
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	public Sfdc getSfdc() {
+		return this.sfdc;
+	}
+
+	public void setSfdc(Sfdc sfdc) {
+		this.sfdc = sfdc;
 	}
 
 	public List<WechatAccount> getWechataccounts() {

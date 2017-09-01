@@ -3,7 +3,7 @@ window.clt = window.clt || {};
 clt.default = {
 		
 	url: window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split("/")[1],
-	type: ["introduction", "account", "wechat", "liveagent", "confirm", "congratulations"],
+	type: ["introduction", "wechat", "liveagent", "confirm", "congratulations"],
 	introduction: {
 		title: "Introduction",
 		buttons: ["Next"],
@@ -19,36 +19,6 @@ clt.default = {
 		}]
 	},
 
-	account: {
-		title: "Your Infor.",
-		buttons: ["Back", "Next"],
-		fields: [{
-			label: "Company Name",
-			type: "input",
-			minlength: 7,
-			maxlength: -1,
-			readonly: false
-		}, {
-			label: "Your Name",
-			type: "input",
-			minlength: 2,
-			maxlength: -1,
-			readonly: false
-		}, {
-			label: "Mobile",
-			type: "input",
-			minlength: 11,
-			maxlength: 11,
-			readonly: false
-		}, {
-			label: "Email",
-			type: "input",
-			minlength: 6,
-			maxlength: -1,
-			readonly: false
-		}]
-	},
-	
 	wechat: {
 		title: "Wechat Infor.",
 		buttons: ["Back", "Next"],
@@ -226,7 +196,7 @@ clt.template = {
 	},
 
 	createDIV: function(label, text) {
-		var html = '<div name="{0}" id="{1}">{2}</div>';
+		var html = '<div class="f_value" name="{0}" id="{1}">{2}</div>';
 
 		//Replace name
 		html = html.replace("{0}", label.replace(" ", "").toLowerCase());
@@ -239,15 +209,15 @@ clt.template = {
 	},
 		
 	createInputDIV: function(field) {
-		var html = '<div class="inputDIV">' +
-						'<div class="form_label">' +
+		var html = '<div class="f_field">' +
+						'<div class="f_label">' +
 							'<label>{0}</label>' +
-						'</div><div class="content" >' +
+						'</div>' + 
+						'<div class="f_values">' +
 							'{1}' +
-							//'<input type="{5}" {4} name="{6}" required="true" id="{1}" value="{3}">' +
-							'<a href="{2}" target="_blank">help</a>' + 
+							'<div class="f_link"><a href="{2}" target="_blank">help</a></div>' + 
+							'<div class="f_help">{3}</div>' +
 						'</div>' +
-						'<div class="helptext">{3}</div>' +
 					'</div>',
 			name = field.label.replace(" ", "").toLowerCase();
 			text = clt.data[name] ? clt.data[name] : "",
@@ -279,7 +249,7 @@ clt.template = {
 	},
 
 	createButton: function(label) {
-		var html = '<div class="form_button" id={0}>{1}</div>';
+		var html = '<div class="f_button" id={0}>{1}</div>';
 		return html.replace("{0}", label.toLowerCase()).replace("{1}", label);
 	},
 
@@ -287,10 +257,11 @@ clt.template = {
 		//console.log(clt.default[step]);
 		var stepNode = clt.default[step];
 		var html = '<div class="section">' +
-						'<div class="error_title"></div>' +
+						'<div class="error_info"></div>' +
 						'<div class="title">{0}</div>' + 
-						'{1}' +
-						'<div class="form_action">{2}</div>' + 
+						'<div class="content">{1}' +
+						'</div>' + 
+						'<div class="f_action">{2}</div>' + 
 					'</div>';
 		html = html.replace("{0}", stepNode.title);
 		var content = '';
@@ -332,7 +303,7 @@ clt.action = {
 		if(clt.default.currentStep != 0) {
 			currentStepNo = clt.default.currentStep - 1;
 			currentStep = clt.default.type[currentStepNo];
-			var inputs = document.querySelectorAll(".inputDIV input");
+			var inputs = document.querySelectorAll(".f_values input");
 			for(var i = 0; i < inputs.length; i++) {
 				var name = inputs[i].id.replace(" ", "").toLowerCase(),
 					type = inputs[i].type,
@@ -350,20 +321,6 @@ clt.action = {
 			}
 		}
 		
-		//save account info
-		if(clt.default.type[clt.default.currentStep - 1] == "account") {
-			clt.action.doCall(clt.default.url + "/larwint/insert/acc_con",
-					JSON.stringify(clt.data),
-					function(result) {
-						var r = JSON.parse(result);
-						if(r.errCode == 0) {
-							clt.data.accId = r.accId;
-						} else {
-							console.debug("-- save Account infor error");
-						}
-				}, null);
-		}
-
 		clt.action.removeSection();
 		clt.action.changeSection();
 	},
@@ -580,7 +537,7 @@ clt.action = {
 			if(!(result.flag)) {
 
 				input.classList.add("error");
-				input.parentElement.parentElement.parentElement.firstElementChild.innerHTML = result.msg;
+				input.parentElement.parentElement.parentElement.parentElement.firstElementChild.innerHTML = result.msg;
 				break;
 			}
 		}

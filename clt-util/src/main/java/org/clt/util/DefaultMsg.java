@@ -66,7 +66,7 @@ public class DefaultMsg {
 	public final static String WC_CREATEQR = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={0}";
 	public final static String WC_GETQRIMG = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={0}";
 	public final static String WC_ACCESSTOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={0}&secret={1}";
-	
+	public final static String WC_QR_SHOW = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={ticked}";
 	//Wechat template
 	public final static String WC_T_TEXTMSG = "{\"touser\":\"\",\"msgtype\":\"text\",\"text\":{\"content\":\"\"}}";
 	public final static String WC_T_QRSHORTLIVE = "{\"expire_seconds\": {0}, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"redirect_uri\": {1}}}}";

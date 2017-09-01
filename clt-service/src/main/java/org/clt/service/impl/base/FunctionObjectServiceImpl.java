@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FunctionObjectServiceImpl extends GenericService<FunctionObject, String> implements FunctionObjectService {
+public class FunctionObjectServiceImpl extends GenericServiceImpl<FunctionObject, String> implements FunctionObjectService {
 
 	@Autowired
 	public FunctionObjectServiceImpl(FunctionObjectDao genericDao) {

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ConnectAppServiceImpl extends GenericService<ConnectApp, String> implements ConnectAppService {
+public class ConnectAppServiceImpl extends GenericServiceImpl<ConnectApp, String> implements ConnectAppService {
 	
 	@Autowired
 	public ConnectAppServiceImpl(ConnectAppDao connectAppDao) {

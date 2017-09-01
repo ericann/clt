@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FieldPermissionServiceImpl extends GenericService<FieldPermission, String> implements FieldPermissionService {
+public class FieldPermissionServiceImpl extends GenericServiceImpl<FieldPermission, String> implements FieldPermissionService {
 
 	@Autowired
 	public FieldPermissionServiceImpl(FieldPermissionDao genericDao) {

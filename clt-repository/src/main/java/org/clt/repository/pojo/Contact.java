@@ -50,6 +50,14 @@ public class Contact implements Serializable {
 	@OneToMany(mappedBy="contact")
 	private List<UserApp> userapps;
 
+	//bi-directional many-to-one association to WechatTicket
+	@OneToMany(mappedBy="contact")
+	private List<WechatTicket> wechattickets;
+
+	//bi-directional many-to-one association to WechatUser
+	@OneToMany(mappedBy="contact")
+	private List<WechatUser> wechatusers;
+
 	public Contact() {
 	}
 
@@ -169,6 +177,50 @@ public class Contact implements Serializable {
 		userapp.setContact(null);
 
 		return userapp;
+	}
+
+	public List<WechatTicket> getWechattickets() {
+		return this.wechattickets;
+	}
+
+	public void setWechattickets(List<WechatTicket> wechattickets) {
+		this.wechattickets = wechattickets;
+	}
+
+	public WechatTicket addWechatticket(WechatTicket wechatticket) {
+		getWechattickets().add(wechatticket);
+		wechatticket.setContact(this);
+
+		return wechatticket;
+	}
+
+	public WechatTicket removeWechatticket(WechatTicket wechatticket) {
+		getWechattickets().remove(wechatticket);
+		wechatticket.setContact(null);
+
+		return wechatticket;
+	}
+
+	public List<WechatUser> getWechatusers() {
+		return this.wechatusers;
+	}
+
+	public void setWechatusers(List<WechatUser> wechatusers) {
+		this.wechatusers = wechatusers;
+	}
+
+	public WechatUser addWechatuser(WechatUser wechatuser) {
+		getWechatusers().add(wechatuser);
+		wechatuser.setContact(this);
+
+		return wechatuser;
+	}
+
+	public WechatUser removeWechatuser(WechatUser wechatuser) {
+		getWechatusers().remove(wechatuser);
+		wechatuser.setContact(null);
+
+		return wechatuser;
 	}
 
 }

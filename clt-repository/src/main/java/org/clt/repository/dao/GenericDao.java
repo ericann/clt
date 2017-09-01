@@ -11,6 +11,4 @@ import org.springframework.data.repository.NoRepositoryBean;
 public interface GenericDao<E extends Serializable, PK extends Serializable> 
 	extends JpaRepository<E, PK>, JpaSpecificationExecutor<Object>{
 	
-	E findById(PK id);
-
 }

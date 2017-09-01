@@ -77,12 +77,12 @@ public class ObjectPermission implements Serializable {
 		this.del = del;
 	}
 
-	public Boolean getEdid() {
+	public Boolean getEdit() {
 		return this.edit;
 	}
 
-	public void setEdid(Boolean edid) {
-		this.edit = edid;
+	public void setEdit(Boolean edit) {
+		this.edit = edit;
 	}
 
 	public String getObject() {
