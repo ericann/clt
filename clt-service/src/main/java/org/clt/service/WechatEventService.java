@@ -2,10 +2,6 @@ package org.clt.service;
 
 import java.util.Map;
 
-import org.clt.repository.pojo.WechatAccount;
-import org.clt.repository.pojo.WechatUser;
-import org.clt.service.base.UserService;
-import org.clt.service.base.WechatUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +21,7 @@ public class WechatEventService {
 			case "unsubscribe" :
 				break;
 			case "subscribe" :
-				
+				this.scanEvent(msg.get("EventKey"), msg.get("Ticket"), msg.get("FromUserName"), msg.get("ToUserName"));
 				break;
 			case "scancode_push" :
 				//this.scanEvent(msg.get("EventKey"), msg.get("ScanResult"), msg.get("FromUserName"), msg.get("ToUserName"));
@@ -42,6 +38,9 @@ public class WechatEventService {
 	private void scanEvent(String eventKey, String ticket, String openId, String wechatAccount) {
 		logger.debug("-- scanEvent: " + eventKey);
 		switch(eventKey) {
+		
+			case "qrscene_10001": 
+				//与“10001”合并处理
 			case "10001":
 				this.userBindService.bindWechatUser(ticket, wechatAccount, openId);
 				break;
