@@ -38,7 +38,7 @@ public class Account implements Serializable {
 
 	//bi-directional many-to-one association to WechatAccount
 	@OneToMany(mappedBy="account")
-	private List<WechatAccount> wechataccounts;
+	private List<WechatAccount> wechatAccounts;
 
 	public Account() {
 	}
@@ -127,26 +127,26 @@ public class Account implements Serializable {
 		return liveagent;
 	}
 
-	public List<WechatAccount> getWechataccounts() {
-		return this.wechataccounts;
+	public List<WechatAccount> getWechatAccounts() {
+		return this.wechatAccounts;
 	}
 
-	public void setWechataccounts(List<WechatAccount> wechataccounts) {
-		this.wechataccounts = wechataccounts;
+	public void setWechatAccounts(List<WechatAccount> wechatAccounts) {
+		this.wechatAccounts = wechatAccounts;
 	}
 
-	public WechatAccount addWechataccount(WechatAccount wechataccount) {
-		getWechataccounts().add(wechataccount);
-		wechataccount.setAccount(this);
+	public WechatAccount addWechatAccount(WechatAccount wechatAccount) {
+		getWechatAccounts().add(wechatAccount);
+		wechatAccount.setAccount(this);
 
-		return wechataccount;
+		return wechatAccount;
 	}
 
-	public WechatAccount removeWechataccount(WechatAccount wechataccount) {
-		getWechataccounts().remove(wechataccount);
-		wechataccount.setAccount(null);
+	public WechatAccount removeWechatAccount(WechatAccount wechatAccount) {
+		getWechatAccounts().remove(wechatAccount);
+		wechatAccount.setAccount(null);
 
-		return wechataccount;
+		return wechatAccount;
 	}
 
 }

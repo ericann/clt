@@ -69,7 +69,7 @@ public class DefaultMsg {
 	public final static String WC_QR_SHOW = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={ticked}";
 	//Wechat template
 	public final static String WC_T_TEXTMSG = "{\"touser\":\"\",\"msgtype\":\"text\",\"text\":{\"content\":\"\"}}";
-	public final static String WC_T_QRSHORTLIVE = "{\"expire_seconds\": {0}, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"redirect_uri\": {1}}}}";
+	public final static String WC_T_QRSHORTLIVE = "{\"expire_seconds\": {0}, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_id\": {1}}}}";
 	
 	//Object Mapping
 	public final static String ACC = "Account";

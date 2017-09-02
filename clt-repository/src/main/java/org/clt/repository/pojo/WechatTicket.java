@@ -34,7 +34,7 @@ public class WechatTicket implements Serializable {
 
 	//bi-directional many-to-one association to WechatAccount
 	@ManyToOne
-	@JoinColumn(name="wechatAccount")
+	@JoinColumn(name="wechatAccount", referencedColumnName="wechatAccount")
 	private WechatAccount wechataccount;
 
 	//bi-directional many-to-one association to WechatUser

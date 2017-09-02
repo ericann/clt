@@ -68,7 +68,7 @@ public class WechatListener {
 	
 	@RequestMapping(value="/msg/", method=RequestMethod.POST, consumes="text/xml")
 	public @ResponseBody String msg(@RequestBody String xml) {
-		logger.debug("it");
+		logger.debug("-- WechatListener xml: " + xml);
 		final String MESSAGE = "success";
 		
 		Map<String, String> result = XML.parse(xml);

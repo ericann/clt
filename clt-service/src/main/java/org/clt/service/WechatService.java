@@ -119,7 +119,7 @@ public class WechatService {
     
     public String getQRTicket(String accessToken) {
         final String ENDPOINT = WC_CREATEQR.replace("{0}", accessToken);
-        String body = WC_T_QRSHORTLIVE.replace("{0}", LOGIN_QR_EXPIRE).replace("{1}", "null");
+        String body = WC_T_QRSHORTLIVE.replace("{0}", LOGIN_QR_EXPIRE).replace("{1}", "10001");
         
         ResponseEntity<String> res = HttpCall.post(ENDPOINT, null, body, String.class);
         JSONObject obj = new JSONObject(res.getBody());

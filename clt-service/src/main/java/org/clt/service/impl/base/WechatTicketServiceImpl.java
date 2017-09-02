@@ -19,8 +19,7 @@ public class WechatTicketServiceImpl extends GenericServiceImpl<WechatTicket, St
 
 	@Override
 	public WechatTicket findByTicket(String ticket) {
-		this.wechatTicketDao.findByTicket(ticket);
-		return null;
+		return this.wechatTicketDao.findByTicket(ticket);
 	}
 	
 

@@ -35,7 +35,7 @@
 	    <property name="jpaDialect" ref="jpaDialect"/>
 	    <property name="jpaProperties">
 	    	<props>
-	    		<prop key="hibernate.hbm2ddl.auto">update</prop>
+	    		<prop key="hibernate.hbm2ddl.auto">none</prop>
 			    <prop key="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop>
 			    <prop key="hibernate.format_sql">true</prop>
 		        <prop key="hibernate.show_sql">false</prop>

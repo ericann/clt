@@ -2,17 +2,22 @@ package org.clt.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.clt.repository.pojo.WechatAccount;
 import org.clt.repository.pojo.WechatTicket;
 import org.clt.repository.pojo.WechatUser;
 import org.clt.service.base.WechatTicketService;
 import org.clt.service.base.WechatUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserBindService {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private WechatUserService wechatUserService;
@@ -34,9 +39,10 @@ public class UserBindService {
 				wa.setWechatAccount(wechatAccount);
 				
 				wu = new WechatUser();
+				wu.setId(UUID.randomUUID().toString());
 				wu.setBindTicket(ticket);
 				wu.setOpenId(openId);
-				wu.setWechataccount(wa);
+				wu.setWechataccount(wt.getWechataccount());
 				wu.setContact(wt.getContact());
 				this.wechatUserService.save(wu);
 				

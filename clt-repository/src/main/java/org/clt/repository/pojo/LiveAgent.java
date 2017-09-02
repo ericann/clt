@@ -2,6 +2,9 @@ package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.ForeignKey;
+
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +46,7 @@ public class LiveAgent implements Serializable {
 
 	//bi-directional many-to-one association to Sfdc
 	@ManyToOne
-	@JoinColumn(name="orgId")
+	@JoinColumn(name="orgId", referencedColumnName="orgId")
 	private Sfdc sfdc;
 
 	//bi-directional many-to-one association to WechatAccount

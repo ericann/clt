@@ -3,6 +3,7 @@ package org.clt.repository.dao;
 import java.util.UUID;
 
 import org.clt.repository.pojo.WechatAccount;
+import org.clt.repository.pojo.WechatTicket;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class DaoTest {
 	@Autowired
 	private WechatAccountDao waDao;
 	
+	@Autowired
+	private WechatTicketDao wechatTicketDao;
+	
     @Test
     @Transactional
     public void testSave() {
@@ -29,6 +33,12 @@ public class DaoTest {
 			e.printStackTrace();
 		}
 		
+    }
+    
+    @Test
+    public void testWTQuery() {
+    	WechatTicket wt = this.wechatTicketDao.findByTicket("gQHj7zwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyRkpSV01pZHplRWkxQ0M4R05wMVAAAgQuSKpZAwR4AAAA");
+    	System.out.println("wt : "+ wt);
     }
     
     public static void main(String[] args) {
