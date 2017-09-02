@@ -9,4 +9,6 @@ public interface WechatUserService extends GenericService<WechatUser, String> {
 	WechatUser findByOpenId(String openId);
 
 	WechatUser findByConIdAndTicket(String conId, String ticket);
+	
+	WechatUser findByOpenIdAndWechatAccount(String openId, String wechatAccount);
 }

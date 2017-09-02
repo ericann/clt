@@ -44,6 +44,10 @@ public class WechatEventService {
 			case "10001":
 				this.userBindService.bindWechatUser(ticket, wechatAccount, openId);
 				break;
+			case "10002":
+				logger.debug("-- in case 10002");
+				this.userBindService.loginByWechat(ticket, wechatAccount, openId);
+				break;
 			default:
 		}
 	}

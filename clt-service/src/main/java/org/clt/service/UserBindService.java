@@ -57,4 +57,28 @@ public class UserBindService {
 		}
 		return result;
 	}
+	
+	public Map<String, Object> loginByWechat(String ticket, String wechatAccount, String openId) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("code", 0);
+		result.put("msg", "Login Success.");
+		logger.debug("-- in loginByWechat");
+		try {
+			WechatUser wu = this.wechatUserService.findByOpenIdAndWechatAccount(openId, wechatAccount);
+			WechatTicket wt = this.wechatTicketService.findByTicket(ticket);
+			
+			if(wt != null && wu != null) {
+				wt.setContact(wu.getContact());
+				wt.setWechatuser(wu);
+				
+				this.wechatTicketService.updateContactAndWUById(wt);
+			}
+		} catch(Exception ex) {
+			result.put("code", -1);
+			result.put("msg", "Login information is not correct.");
+			ex.printStackTrace();
+		}
+		
+		return result;
+	}
 }

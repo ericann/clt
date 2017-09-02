@@ -19,9 +19,8 @@ public class AccessPermissionsListener {
 	private AccessService accessService;
 	
 	@RequestMapping("/accesstoken/{ticket}")
-	public @ResponseBody String login(@PathParam("ticket") String ticket) {
-		//accessService.
-		return null;
+	public @ResponseBody String login(@PathVariable("ticket") String ticket) {
+		return this.accessService.loginByWechat(ticket);
 	}
 	
 	@RequestMapping(value="/accesstoken/{conId}/{ticket}", method=RequestMethod.POST)

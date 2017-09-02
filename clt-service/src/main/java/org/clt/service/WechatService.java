@@ -11,15 +11,12 @@ import org.clt.util.DigitalSignature;
 import org.clt.util.HttpCall;
 import org.clt.util.XML;
 
-import static org.clt.util.DefaultMsg.E_0;
-import static org.clt.util.DefaultMsg.WC_QR_SHOW;
 import static org.clt.util.DefaultMsg.WC_SENDMSG;
 import static org.clt.util.DefaultMsg.WC_CREATEQR;
 import static org.clt.util.DefaultMsg.WC_GETQRIMG;
 import static org.clt.util.DefaultMsg.WC_T_TEXTMSG;
 import static org.clt.util.DefaultMsg.WC_T_QRSHORTLIVE;
 import static org.clt.util.DefaultMsg.LOGIN_QR_EXPIRE;
-import static org.clt.util.DefaultMsg.getErrorResult;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -117,9 +114,10 @@ public class WechatService {
         logger.debug("------------Out WechatSerivce sendTextMSG-------------");
     }
     
-    public String getQRTicket(String accessToken) {
+    public String getQRTicket(String accessToken, String type) {
         final String ENDPOINT = WC_CREATEQR.replace("{0}", accessToken);
-        String body = WC_T_QRSHORTLIVE.replace("{0}", LOGIN_QR_EXPIRE).replace("{1}", "10001");
+        final String sceneId = type.equals("login") ? "10002" : "10001";
+        String body = WC_T_QRSHORTLIVE.replace("{0}", LOGIN_QR_EXPIRE).replace("{1}", sceneId);
         
         ResponseEntity<String> res = HttpCall.post(ENDPOINT, null, body, String.class);
         JSONObject obj = new JSONObject(res.getBody());
@@ -127,9 +125,9 @@ public class WechatService {
         return obj.getString("ticket");
     }
     
-    public String getQRInfoShort(String accessToken) {
+    public String getQRInfoShort(String accessToken, String type) {
     	Map<String, String> result = new HashMap<String, String>();
-    	String ticket = this.getQRTicket(accessToken);
+    	String ticket = this.getQRTicket(accessToken, type);
     	result.put("url", WC_GETQRIMG.replace("{0}", ticket));
     	result.put("ticket", ticket);
     	return JSONObject.valueToString(result);
@@ -159,7 +157,7 @@ public class WechatService {
 		System.out.println(XML.parse(xml));
 		
 		WechatService ws = new WechatService();
-		String image = ws.getQRTicket("hDdWmNGpI7dYKlXNORkPScjujicQTDEqOVoIxjS0KPxGGsePMy4jx38AZtYGHdh0pZX6skR2KK6qgoXYF-yJRBMl_4hyppCpZ7ND_7wn7lkhlL_tQJpIydV70n3danyeVQPaADAHCB");
-		System.out.println(image);
+		//String image = ws.getQRTicket("hDdWmNGpI7dYKlXNORkPScjujicQTDEqOVoIxjS0KPxGGsePMy4jx38AZtYGHdh0pZX6skR2KK6qgoXYF-yJRBMl_4hyppCpZ7ND_7wn7lkhlL_tQJpIydV70n3danyeVQPaADAHCB");
+		//System.out.println(image);
 	}
 }

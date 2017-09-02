@@ -26,6 +26,12 @@ public class WechatUserServiceImpl extends GenericServiceImpl<WechatUser, String
 	public WechatUser findByConIdAndTicket(String conId, String ticket) {
 		return this.wechatUserDao.findByContactIdAndBindTicket(conId, ticket);
 	}
+
+	@Override
+	public WechatUser findByOpenIdAndWechatAccount(String openId, String wechatAccount) {
+		// TODO Auto-generated method stub
+		return this.wechatUserDao.findByOpenIdAndWechataccount(openId, wechatAccount);
+	}
 	
 
 }

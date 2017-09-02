@@ -9,4 +9,6 @@ import org.springframework.stereotype.Service;
 public interface WechatTicketService extends GenericService<WechatTicket, String> {
 	
 	WechatTicket findByTicket(String ticket);
+
+	Integer updateContactAndWUById(WechatTicket wt);
 }

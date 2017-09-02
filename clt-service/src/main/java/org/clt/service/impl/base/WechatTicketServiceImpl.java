@@ -21,6 +21,13 @@ public class WechatTicketServiceImpl extends GenericServiceImpl<WechatTicket, St
 	public WechatTicket findByTicket(String ticket) {
 		return this.wechatTicketDao.findByTicket(ticket);
 	}
+
+	@Override
+	public Integer updateContactAndWUById(WechatTicket wt) {
+		return this.wechatTicketDao.updateContactAndWUById(wt.getContact().getId(),
+				wt.getWechatuser().getId(), wt.getId());
+		
+	}
 	
 
 }

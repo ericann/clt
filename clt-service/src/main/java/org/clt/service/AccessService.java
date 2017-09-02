@@ -12,12 +12,17 @@ import org.clt.service.base.UserService;
 import org.clt.service.base.WechatAccountService;
 import org.clt.service.base.WechatTicketService;
 import org.clt.service.base.WechatUserService;
+import org.clt.util.Token;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AccessService {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private UserService userService;
@@ -51,8 +56,10 @@ public class AccessService {
 	}
 	
 	public String getQRInfoShort(String conId) {
+		//后期整合
+		String type = conId == null ? "login" : "bind";
 		WechatAccount waDefault = this.wechatAccountService.findByUseDefault(true);
-		String qrInfoStr = this.wechatService.getQRInfoShort(waDefault.getWechatAccessToken());
+		String qrInfoStr = this.wechatService.getQRInfoShort(waDefault.getWechatAccessToken(), type);
 		//String qrInfoStr = this.wechatService.getQRInfoShort("2IpVUi59vEKqeSo41wEfh8h6uNiUXeMzuf_DN8wMr9NEpEOvNqawdd-hW-3b53Wjz4HNorRqzIGzTuyIEdOv18nC-WUr2-nYc7TdIhHi1ZAIFKeADAZWB");
 		try {
 			JSONObject qrInfo = new JSONObject(qrInfoStr);
@@ -63,14 +70,12 @@ public class AccessService {
 			wt.setTicket(ticket);
 			
 			wt.setWechataccount(waDefault);
+			wt.setType(type);
 			
 			if(conId != null) {
 				Contact con = new Contact();
 				con.setId(conId);
 				wt.setContact(con);
-				wt.setType("bind");
-			} else {
-				wt.setType("login");
 			}
 			
 			this.wechatTicketService.save(wt);
@@ -99,7 +104,7 @@ public class AccessService {
 			}
 			
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(3000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -111,6 +116,38 @@ public class AccessService {
 			result.put("msg", "Bind failed.");
 			
 			//delete wechatuser
+		}
+		
+		return result;
+	}
+	
+	public String loginByWechat(String ticket) {
+		
+		final Integer totalSeconds = 120;
+		Long lastTime = System.currentTimeMillis();
+		Long currentTime = lastTime;
+		String result = null;
+		logger.debug("-- loginByWechat ticket: " + ticket);
+		while(lastTime + totalSeconds * 1000 > currentTime) {
+			currentTime = System.currentTimeMillis();
+			WechatTicket wt = wechatTicketService.findByTicket(ticket);
+			logger.debug("-- loginByWechat wt: " + wt);
+			if(wt != null) {
+				logger.debug("-- loginByWechat wt: " + wt);
+				logger.debug("-- loginByWechat wt contact: " + wt.getContact());
+				logger.debug("-- loginByWechat wt wechatUser: " + wt.getWechatuser());
+				if(wt.getContact() != null && wt.getWechatuser() != null) {
+					result = Token.generateAccessToken(3600, wt.getContact().getId());
+					break;
+				}
+			}
+			
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		return result;
