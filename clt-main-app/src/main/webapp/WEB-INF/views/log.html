@@ -161,7 +161,30 @@
 		<div class="special">For All</div>
 		<div><button class="button"></button></div>
 	</div>
-
+	
+	<div class="section">
+		<div class="error_info">Invalid input.</div>
+		<div class="title">Release</div>
+		<div class="content">
+			<div class="f_field">
+				<div class="f_label">Account ID</div>
+				<div class="f_values">
+					<div class="f_value"><input /></div>
+					<div class="f_link">help</div>
+					<div class="f_help">click help go to the help page.</div>
+				</div>
+			</div>
+			<div class="f_field">
+				<div class="f_label">Agreement</div>
+				<div class="f_values">
+					<div class="f_value"><input type="checkbox" /></div>
+					<div class="f_link">help</div>
+					<div class="f_help">click help go to the help page.</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<script type="text/javascript">
 		window.clt = window.clt || {};
 
@@ -354,85 +377,7 @@
 		};
 
 		clt.action = {
-			next: function() {
-
-				var result = clt.action.validation();
-
-				if(!(result.flag)) {
-					return;
-				}
-
-				if(clt.default.type[clt.default.currentStep + 1]) {
-					clt.default.currentStep++;
-				} else {
-					clt.default.currentStep = 1;
-				}
-
-				if(clt.default.currentStep != 0) {
-					currentStepNo = clt.default.currentStep - 1;
-					currentStep = clt.default.type[currentStepNo];
-					var inputs = document.querySelectorAll(".f_value input");
-					for(var i = 0; i < inputs.length; i++) {
-						var name = inputs[i].id.replace(" ", "").toLowerCase(),
-							type = inputs[i].type,
-							v = type == "checkbox" ? inputs[i].checked : inputs[i].value;
-
-						if(clt.data[name] === undefined) {
-							continue;
-						}
-
-						if(name.indexOf("buttonid") != -1) {
-							clt.data.buttonid.push(v);
-						} else {
-							clt.data[name] = v;
-						}
-					}
-				}
-				
-				clt.action.removeSection();
-				clt.action.changeSection();
-			},
 			
-			refresh: function() {
-				document.getElementById("Scan QR").querySelector("img").src = clt.default.scanqr.fields[0].default;
-				clt.action.doCall(clt.default.url + "/security/getQR", null,
-						function(result) {
-							var r = JSON.parse(result);
-							document.getElementById("Scan QR").querySelector("img").src = r.url;
-							clt.action.doCall(clt.default.url + "/security/accesstoken/" + r.ticket, null,
-									function(result) {
-										alert("Login Success.");
-										window.location.href = "/index";
-							}, 
-							function(result) {
-								alert("Login Failed.");
-								console.log("--failed: " + result);
-							}, "POST", 120000);
-				}, null);
-			},
-
-			back: function() {
-				clt.default.currentStep--;
-				clt.action.removeSection();
-				clt.action.changeSection();
-			},
-			
-			doCall: function(url, data, success, error, type, timeout) {
-				var obj = {
-						url: url,
-						data: data,
-						success: success,
-						error: error,
-						timeout: timeout
-				};
-				
-				if(type && type.toLowerCase() == 'post') {
-					Ajax.post(obj);
-				} else {
-					Ajax.get(obj);
-				}
-			},
-
 			loading: function() {
 				//var html = '<div class="loading" id="loading"></div>';
 				var d = document.createElement("div");
@@ -487,91 +432,6 @@
 		                }
 		            }
 		        }
-			},
-			
-			checkWechatStatus: function(ticket) {
-				clt.action.doCall({
-					url: clt.default.url + "/wechat/bind/" + ticket
-				});
-			},
-
-			validation: function() {
-				var inputs = document.querySelectorAll(".content input"),
-
-					currentStep = clt.default.type[clt.default.currentStep],
-					fields = clt.default[currentStep].fields,
-
-					result = {flag: true, msg: ""},
-					
-					//临时跳过
-					rtH = document.getElementById("Refresh Type");
-					refreshCheckbox = rtH ? rtH.checked : undefined;
-					;
-					
-				for(var i = 0; i < fields.length; i++) {
-
-					var input = document.getElementById(fields[i].label);
-					if(!input || input.tagName == "DIV") {
-						continue;
-					}
-
-					input.classList.remove("error");
-
-					if(input.type == "checkbox" && fields[i].value) {
-						result = clt.action.checkRequired(input.checked, fields[i].value, fields[i].error);
-					}
-
-					if(input.type == "text") {
-						if(refreshCheckbox === false && (input.id == "App ID" || input.id == "App Secret")) {
-							continue;
-						}
-						
-						result = clt.action.checkLength(input.value, fields[i].minlength, fields[i].maxlength, fields[i].label);
-					}
-
-					if(!(result.flag)) {
-
-						input.classList.add("error");
-						input.parentElement.parentElement.parentElement.parentElement.parentElement.firstElementChild.innerHTML = result.msg;
-						break;
-					}
-				}
-
-				return result;
-			},
-
-			checkRequired: function(value, claim, error) {
-				var result = {flag: true, msg: ""};
-
-				if(value != claim) {
-					result.flag = false;
-					result.msg = error;
-				}
-
-				return result;
-			},
-
-			checkLength: function(text, min, max, label) {
-				var result = {flag: true, msg: ""};
-
-				if(min == -1 && max != -1) {
-					if(text.length > max) {
-						result.msg = "Field of " + label + " max length is " + max + ".";
-						result.flag = false;
-					}
-				} else if(max == -1 && min != -1) {
-					if(text.length < min) {
-						result.msg = "Field of " + label + " min length is " + min + ".";
-						result.flag = false;
-					}
-				} else if(max != -1 && min != -1) {
-					if(text.length < min || text.length > max) {
-						result.msg = "Field of " + label + " max length is " + max + ", min length is " + min + ".";
-						result.flag = false;
-					}
-				}
-
-				return result;
 			}
 		};
 
