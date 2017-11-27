@@ -106,16 +106,22 @@
 		}
 
 		.f_label .calendar label {
-			//padding: 0px 0px 0px 15px;
-			font-weight: bolder;
+			line-height: 12px;
+			font-weight: normal;
 			display: block;
 			text-align: center;
 			width: 50px;
+			font-size: 10px;
 		}
 
 		.f_label .calendar:first-child { 
 			padding: 15px 0px 0px 0px;
+		}
+
+		.f_label .calendar label:nth-child(2) { 
 			font-weight: bolder;
+			line-height: 14px;
+			font-size: 14px;
 		}
 
 		.f_value ul li {
@@ -199,7 +205,7 @@
 					label: {
 						img: "calendar",
 						split: " ",
-						default: "Nov 11"
+						default: "2017 Jan 01"
 					},
 					type: "div",
 					default: "CLT-LARW v2.0 Release go live.<ul><li>日志记录与更新推送（邮件与公众号）</li><li>注册相关信息管理与服务开放</li><li>更加稳定的客服系统（包含断线重连）</li><li>用户登录通过公众号二次认证</li><li>提供相关的API，用于与Salesforce的集成</li><li>提供相关的聊天记录（有时限）</li><li>提供可选智能客服以节约人工客服</li><li>可绑定多个多个公众号（1org连接多个公众号）</li></ul>"
@@ -207,7 +213,7 @@
 					label: {
 						img: "calendar",
 						split: " ",
-						default: "Jun 06"
+						default: "2016 Jun 06"
 					},
 					type: "div",
 					default: "CLT-LARW v1.0 Beta go live.<ul><li>推出Salesforce与Wechat连接功能</li><li>支持两种刷新Wechat access_token方式：自刷新与平台托管</li><li>录入操作视频</li><li>提供相关的介绍说明</li><li>提供Live Agent与Wechat配置说明</li></ul>"
