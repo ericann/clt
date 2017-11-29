@@ -172,11 +172,11 @@ public class LARWInforService {
 		result.put("errCode", "0");
 		result.put("errMsg", "success.");
 		
-		Account acc = null;
-		Contact con = null;
-		LiveAgent la = null;
-		WechatAccount wa = null;
-		Button b = null;
+//		Account acc = null;
+//		Contact con = null;
+//		LiveAgent la = null;
+//		WechatAccount wa = null;
+//		Button b = null;
 		
 		return result.toString();
 	}

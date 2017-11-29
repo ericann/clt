@@ -1,7 +1,7 @@
 package org.clt.util.inter.dao;
 
-import java.io.Serializable;
-import java.util.List;
+//import java.io.Serializable;
+//import java.util.List;
 
 public interface GenericDao {
 //import org.springframework.data.repository.Repository;

@@ -51,4 +51,11 @@
   	<param-name>webAppRootKey</param-name>
   	<param-value>main</param-value>
   </context-param>
-</web-app>
+  
+  <!-- 解决映射html -->
+  <!-- <servlet-mapping>
+	<servlet-name>jsp</servlet-name>
+	<url-pattern>*.html</url-pattern>
+  </servlet-mapping>
+  -->
+</web-app> 

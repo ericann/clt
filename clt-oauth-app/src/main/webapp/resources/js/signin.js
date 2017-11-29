@@ -5,7 +5,7 @@ clt.default = {
 	url: window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split("/")[1],
 	type: ["scanqr"],
 	scanqr: {
-		title: "Bind Wechat",
+		title: "Login",
 		buttons: [],
 		fields: [{
 			label: "Scan QR",

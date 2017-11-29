@@ -12,6 +12,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
@@ -52,10 +53,10 @@ public class Token {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static Map<String, String> parse(String token) {
-		Map<String, String> result = null;
+	public static Map<String, Object> parse(String token) {
+		Map<String, Object> result = null;
 	    try {
-	    	result = (Map<String, String>)parser().setSigningKey(KEY).parse(token).getBody();
+	    	result = (Map<String, Object>)parser().setSigningKey(KEY).parse(token).getBody();
 	    	//return body;
 	    } catch (JwtException ex) {
 	    
@@ -65,8 +66,14 @@ public class Token {
 	}
 	
 	public static void main(String[] args) {
-		String at = generateAccessToken(3600, "123");
+		String at = generateAccessToken(1000 * 60 * 60, "123");
+		Map<String, Object> result = parse(at);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		System.out.println(at);
-		System.out.println(parse(at));
+		System.out.println(result);
+		Integer iat = (Integer)result.get("iat");
+		Integer exp = (Integer)result.get("exp");
+		System.out.println(simpleDateFormat.format(new Date(iat)));
+		System.out.println(simpleDateFormat.format(new Date(exp)));
 	}
 }

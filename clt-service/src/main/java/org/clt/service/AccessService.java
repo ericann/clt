@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccessService {
 	
+	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
@@ -127,15 +128,13 @@ public class AccessService {
 		Long lastTime = System.currentTimeMillis();
 		Long currentTime = lastTime;
 		String result = null;
-		logger.debug("-- loginByWechat ticket: " + ticket);
+		
 		while(lastTime + totalSeconds * 1000 > currentTime) {
 			currentTime = System.currentTimeMillis();
 			WechatTicket wt = wechatTicketService.findByTicket(ticket);
-			logger.debug("-- loginByWechat wt: " + wt);
+			
 			if(wt != null) {
-				logger.debug("-- loginByWechat wt: " + wt);
-				logger.debug("-- loginByWechat wt contact: " + wt.getContact());
-				logger.debug("-- loginByWechat wt wechatUser: " + wt.getWechatuser());
+				
 				if(wt.getContact() != null && wt.getWechatuser() != null) {
 					result = Token.generateAccessToken(3600, wt.getContact().getId());
 					break;

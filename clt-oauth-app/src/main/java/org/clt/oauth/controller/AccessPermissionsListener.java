@@ -1,7 +1,5 @@
 package org.clt.oauth.controller;
 
-import javax.websocket.server.PathParam;
-
 import org.clt.service.AccessService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
