@@ -1,0 +1,120 @@
+div .t_title {
+	border-bottom: 1px solid #e7e7eb;
+	padding: 0 0 0;
+	margin: 0 50px;
+	line-height: 40px;
+	font-size: 16px;
+}
+
+div .t_title span {
+	float: right;
+	padding-right: 10px;
+}
+
+.section {
+	//margin: 10px 50px;
+	text-align: left;
+	overflow: scroll;
+}
+
+div .section div label, input, select {
+	width: auto;
+}
+
+div .error_msg {
+	color: #F08080;
+	text-align: center;
+	height: 20px;
+}
+
+.section .t_title {
+	//width: 28%;
+	//display: inline-block;
+	text-align: left;
+	//padding-left: 10%;
+    vertical-align: top;
+}
+
+.section .t_content {
+	//width: 58%;
+	margin: 5px 60px;
+	display: inline-table;
+	text-align: left;
+	overflow-x: scroll;
+}
+
+.section .t_content .t_info {
+	width: 98%;
+	margin: 1%;
+	//overflow-x: auto;
+	display: table-row;
+	//align: center;
+}
+
+.section .t_content .t_info .t_detail {
+	width: auto;
+	//margin: 0px 5px;
+	padding: 5px;
+	//overflow-x: scroll;
+	display: table-cell;
+	//align: center;
+}
+
+.section .t_content table {
+	width: 100%;
+	margin: 5px 60px;
+	//display: inline-block;
+	//align: center;
+}
+
+.section .t_content .t_cell {
+	
+	margin: 5px 0;
+	text-align: left;
+}
+
+.section .t_content .t_cell label {
+	width: 50%;
+	margin: 5px 0;
+	text-align: left;
+}
+
+div .inputDIV .content span,a {
+	font-size: 12px;
+	margin: 3px;
+	vertical-align: bottom;
+	display: inline-block;
+	text-align: center;
+	color: #a3a3a3;
+}
+
+div .inputDIV .content img {
+	margin: 3px;
+	vertical-align: bottom;
+	display: inline-block;
+	text-align: center;
+}
+
+div .inputDIV .helptext {
+	//display: inline-block;
+	text-align: left;
+	color: #a3a3a3;
+	margin-left: 38%;
+}
+
+div .t_action {
+	text-align: center;
+}
+
+div .t_action .t_button {
+	text-align: center;
+	width: auto;
+	min-width: 80px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	border-radius: 3px;
+	background: rgb(190, 190, 190);
+	display: inline-block;
+	margin: 10px;
+}
