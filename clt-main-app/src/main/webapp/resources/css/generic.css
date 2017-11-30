@@ -7,8 +7,54 @@ body {
     font-size: 14px;
     word-wrap: inherit;
     word-spacing: inherit;
-    overflow: hidden;
+    overflow: auto;
     -moz-user-select: none;
+}
+
+@keyframes leftIn {
+	0% {
+		left: -200px;
+		opacity: 0;
+	}
+	100% {
+		left: 0px;
+		opacity: 1;
+	}
+	/*0% {
+	    opacity: 0;
+	    transform: translate3d(-200px, 0, 0);
+	}
+	60% {
+	    opacity: 1;
+	    transform: translate3d(25px, 0, 0);
+	}
+	75% {
+	    transform: translate3d(-10px, 0, 0);
+	}
+	90% {
+	    transform: translate3d(5px, 0, 0);
+	}
+	100% {
+	    transform: none;
+	}*/
+}
+
+@keyframes leftOut {
+	0% {
+		left: 0px;
+		opacity: 1;
+	}
+	100% {
+		left: -200px;
+		opacity: 0;
+	}
+}
+
+@keyframes rock {
+	0% {left: 0px;}
+	25% {left: -1%}
+	75% {left: 1%}
+	100% {left: 0px;}
 }
 
 .head {
@@ -17,15 +63,39 @@ body {
 	height: 50px;
 }
 
-.prompt {
+.head .top_menu {
+	height: 32px;
+    margin: 6px 0px 6px 6px;
+    min-width: 32px;
+    padding: 6px;
+    width: 32px;
+	background: none;
+	border: none;
+	position: relative;
+	cursor: pointer;
+	background-image: url(../images/icon_menu_white.svg);
+	background-position: center;
+	background-repeat: no-repeat;
+	outline: none;
+}
+
+.head .top_menu:active {
+	top: 1px;
+}
+
+.head .top_menu:host + div[class=menu] {
+	display: block;
+}
+
+.head .prompt {
 	color: white;
 	font-size: 150%;
-	margin-left: 50px;
+	margin-left: 0px;
 	line-height: 50px;
 	display: inline-block;
 }
 
-.special {
+.head .special {
 	color: white;
 	font-size: 89%;
 	line-height: 50px;
@@ -43,7 +113,26 @@ body {
     box-shadow: 3px 2px 4px 0px darkgrey;
 }
 
-.error_info {
+.menu {
+	background: white;
+	width: auto;
+    height: calc(100% - 70px);
+    padding: 10px 2% 10px 2%;
+    box-shadow: 3px 2px 4px 0px darkgrey;
+    position: absolute;
+    top: 50px;
+    //left: -300px;
+    display: none;
+    
+    animation-name: leftIn;
+    animation-duration: 1s;
+    animation-timing-function: initial;
+    /*animation-name: leftIn;
+    animation-duration: 1s;
+    animation-timing-function: initial;*/
+}
+
+.menu .error_info, .section .error_info {
 	color: #F08080;
     text-align: center;
     height: 20px;
@@ -52,8 +141,8 @@ body {
 .title {
 	font-size: 123%;
 	border-bottom: 1px solid #e7e7eb;
-    padding: 0 0 0;
-    margin: 0 50px;
+    padding: 0 50px;
+    margin: 0;
     line-height: 40px;
 }
 
@@ -70,14 +159,15 @@ body {
 	margin-left: -20px;
 }
 
-.content {
-	width: auto;
-	height: auto;
-	margin: 10px 55px;
+.section, .menu .t_content {
 	text-align: left;
 	word-break: keep-all;
     white-space: nowrap;
-    overflow-x: auto;
+
+    margin: 5px 60px;
+	display: inline-table;
+	text-align: left;
+	overflow-x: scroll;
 }
 
 .f_field {
@@ -126,11 +216,11 @@ body {
 
 }
 
-div .f_action {
+div .t_action, .f_action {
 	text-align: center;
 }
 
-div .f_action .f_button {
+div .t_action .t_button, .f_action .f_button {
 	text-align: center;
 	width: auto;
 	min-width: 80px;
@@ -141,4 +231,13 @@ div .f_action .f_button {
 	background: rgb(190, 190, 190);
 	display: inline-block;
 	margin: 10px;
+	cursor: pointer;
+}
+
+div .f_action .f_button:active {
+	top: 1px;
+}
+
+div .t_action .t_button:active {
+	top: 1px;
 }
