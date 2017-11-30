@@ -16,6 +16,10 @@ public abstract class GenericServiceImpl<E extends Serializable, PK extends Seri
 		this.genericDao = genericDao;
 	}
 	
+	public List<E> findAllByContactId(String conId) {
+		return this.genericDao.findAllByContactId(conId);
+	}
+	
 	public E findById(PK id) {
 		return null;
 	}

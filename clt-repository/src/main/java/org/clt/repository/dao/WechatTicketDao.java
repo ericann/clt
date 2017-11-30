@@ -1,5 +1,8 @@
 package org.clt.repository.dao;
 
+import java.util.List;
+
+import org.clt.repository.pojo.FunctionPermission;
 import org.clt.repository.pojo.WechatTicket;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +20,7 @@ public interface WechatTicketDao extends GenericDao<WechatTicket, String> {
 	@Transactional
 	Integer updateContactAndWUById(@Param("conId") String conId, @Param("wuId") String wuId, @Param("id") String id);
 	
+	@Override
+	@Query("SELECT fp FROM WechatTicket fp WHERE fp.id=:conId")
+	List<WechatTicket> findAllByContactId(@Param("conId") String conId);
 }

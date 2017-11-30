@@ -1,5 +1,7 @@
 package org.clt.oauth.controller;
 
+import java.util.UUID;
+
 import org.clt.service.AccessService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +37,10 @@ public class AccessPermissionsListener {
 	@RequestMapping(value="/getQR", method=RequestMethod.GET)
 	public @ResponseBody String getQRImg() {
 		return this.accessService.getQRInfoShort(null);
+	}
+	
+	@RequestMapping(value="/getUUID", method=RequestMethod.GET)
+	public @ResponseBody String getUUID() {
+		return UUID.randomUUID().toString();
 	}
 }

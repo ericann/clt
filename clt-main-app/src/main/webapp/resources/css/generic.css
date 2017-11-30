@@ -67,7 +67,7 @@ body {
 	height: 32px;
     margin: 6px 0px 6px 6px;
     min-width: 32px;
-    padding: 6px;
+    padding: 8px;
     width: 32px;
 	background: none;
 	border: none;
@@ -122,7 +122,7 @@ body {
     position: absolute;
     top: 50px;
     //left: -300px;
-    display: none;
+    //display: none;
     
     animation-name: leftIn;
     animation-duration: 1s;

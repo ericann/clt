@@ -2,6 +2,7 @@ package org.clt.repository.dao;
 
 import java.util.List;
 
+import org.clt.repository.pojo.UserApp;
 import org.clt.repository.pojo.WechatAccount;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -51,4 +52,8 @@ public interface WechatAccountDao extends GenericDao<WechatAccount, String> {
 	
 	@Query("SELECT wa.wechatAccessToken FROM WechatAccount wa WHERE wa.useDefault=:useDefault")
 	public String findWechatAccessTokenByUseDefault(@Param("useDefault") Boolean useDefault);
+	
+	@Override
+	@Query("SELECT wa FROM WechatAccount wa WHERE wa.account.id=(SELECT con.account.id FROM Contact con WHERE con.id=:conId)")
+	List<WechatAccount> findAllByContactId(@Param("conId") String conId);
 }

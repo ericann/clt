@@ -3,7 +3,7 @@ package org.clt.repository.pojo;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -31,12 +31,12 @@ public class ConnectApp implements Serializable {
 	private Date updateTime;
 
 	//bi-directional many-to-one association to Scope
-	@OneToMany(mappedBy="connectapp")
-	private List<Scope> scopes;
+	@OneToMany(mappedBy="connectApp")
+	private Set<Scope> scopes;
 
 	//bi-directional many-to-one association to UserApp
-	@OneToMany(mappedBy="connectapp")
-	private List<UserApp> userapps;
+	@OneToMany(mappedBy="connectApp")
+	private Set<UserApp> userapps;
 
 	public ConnectApp() {
 	}
@@ -89,48 +89,48 @@ public class ConnectApp implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public List<Scope> getScopes() {
+	public Set<Scope> getScopes() {
 		return this.scopes;
 	}
 
-	public void setScopes(List<Scope> scopes) {
+	public void setScopes(Set<Scope> scopes) {
 		this.scopes = scopes;
 	}
 
 	public Scope addScope(Scope scope) {
 		getScopes().add(scope);
-		scope.setConnectapp(this);
+		scope.setConnectApp(this);
 
 		return scope;
 	}
 
 	public Scope removeScope(Scope scope) {
 		getScopes().remove(scope);
-		scope.setConnectapp(null);
+		scope.setConnectApp(null);
 
 		return scope;
 	}
 
-	public List<UserApp> getUserapps() {
+	public Set<UserApp> getUserapps() {
 		return this.userapps;
 	}
 
-	public void setUserapps(List<UserApp> userapps) {
+	public void setUserapps(Set<UserApp> userapps) {
 		this.userapps = userapps;
 	}
 
-	public UserApp addUserapp(UserApp userapp) {
-		getUserapps().add(userapp);
-		userapp.setConnectapp(this);
+	public UserApp addUserApp(UserApp userApp) {
+		getUserapps().add(userApp);
+		userApp.setConnectApp(this);
 
-		return userapp;
+		return userApp;
 	}
 
-	public UserApp removeUserapp(UserApp userapp) {
-		getUserapps().remove(userapp);
-		userapp.setConnectapp(null);
+	public UserApp removeUserApp(UserApp userApp) {
+		getUserapps().remove(userApp);
+		userApp.setConnectApp(null);
 
-		return userapp;
+		return userApp;
 	}
 
 }

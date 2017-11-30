@@ -3,7 +3,7 @@ package org.clt.repository.pojo;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -17,6 +17,8 @@ public class ObjectPermission implements Serializable {
 
 	@Id
 	private String id;
+	
+	private String objectName;
 
 	private Boolean add;
 
@@ -36,11 +38,11 @@ public class ObjectPermission implements Serializable {
 
 	//bi-directional many-to-one association to FieldPermission
 	@OneToMany(mappedBy="objectpermission")
-	private List<FieldPermission> fieldpermissions;
+	private Set<FieldPermission> fieldpermissions;
 
 	//bi-directional many-to-one association to FunctionObject
 	@OneToMany(mappedBy="objectpermission")
-	private List<FunctionObject> functionobjects;
+	private Set<FunctionObject> functionobjects;
 
 	public ObjectPermission() {
 	}
@@ -51,6 +53,14 @@ public class ObjectPermission implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getObjectName() {
+		return objectName;
+	}
+
+	public void setObjectName(String objectName) {
+		this.objectName = objectName;
 	}
 
 	public Boolean getAdd() {
@@ -109,11 +119,11 @@ public class ObjectPermission implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public List<FieldPermission> getFieldpermissions() {
+	public Set<FieldPermission> getFieldpermissions() {
 		return this.fieldpermissions;
 	}
 
-	public void setFieldpermissions(List<FieldPermission> fieldpermissions) {
+	public void setFieldpermissions(Set<FieldPermission> fieldpermissions) {
 		this.fieldpermissions = fieldpermissions;
 	}
 
@@ -131,11 +141,11 @@ public class ObjectPermission implements Serializable {
 		return fieldpermission;
 	}
 
-	public List<FunctionObject> getFunctionobjects() {
+	public Set<FunctionObject> getFunctionobjects() {
 		return this.functionobjects;
 	}
 
-	public void setFunctionobjects(List<FunctionObject> functionobjects) {
+	public void setFunctionobjects(Set<FunctionObject> functionobjects) {
 		this.functionobjects = functionobjects;
 	}
 

@@ -90,8 +90,10 @@ public class AccessService {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("code", 0);
 		result.put("msg", "Bind Successd.");
+		Integer flag = -1;
 		
 		WechatUser wu = null;
+		WechatTicket wt = null;
 		
 		final Integer totalSeconds = 120;
 		Long lastTime = System.currentTimeMillis();
@@ -100,7 +102,14 @@ public class AccessService {
 		while(lastTime + totalSeconds * 1000 > currentTime) {
 			currentTime = System.currentTimeMillis();
 			wu = this.wechatUserService.findByConIdAndTicket(conId, ticket);
+			wt = this.wechatTicketService.findByTicket(ticket);
 			if(wu != null) {
+				flag = 0;
+				break;
+			}
+			
+			if(wt.getWechatuser() != null) {
+				flag = 1;
 				break;
 			}
 			
@@ -112,11 +121,21 @@ public class AccessService {
 			}
 		}
 		
-		if(wu == null) {
-			result.put("code", 1);
-			result.put("msg", "Bind failed.");
-			
-			//delete wechatuser
+		switch(flag) {
+			case 0:
+				Map<String, Object> infor = new HashMap<String, Object>();
+				infor.put("conId", wu.getContact().getId());
+				infor.put("wcId", wu.getId());
+				String token = Token.generateAccessToken(3600, infor.toString());
+				result.put("access_token", token);
+				break;
+			case 1:
+				result.put("code", flag);
+				result.put("msg", "This wechat user has already been bind the others. ");
+				break;
+			default: 
+				result.put("code", flag);
+				result.put("msg", "Bind failed.");
 		}
 		
 		return result;

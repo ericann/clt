@@ -2,7 +2,7 @@ package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -34,7 +34,7 @@ public class Sfdc implements Serializable {
 
 	//bi-directional many-to-one association to LiveAgent
 	@OneToMany(mappedBy="sfdc")
-	private List<LiveAgent> liveagents;
+	private Set<LiveAgent> liveagents;
 
 	public Sfdc() {
 	}
@@ -103,11 +103,11 @@ public class Sfdc implements Serializable {
 		this.username = username;
 	}
 
-	public List<LiveAgent> getLiveagents() {
+	public Set<LiveAgent> getLiveagents() {
 		return this.liveagents;
 	}
 
-	public void setLiveagents(List<LiveAgent> liveagents) {
+	public void setLiveagents(Set<LiveAgent> liveagents) {
 		this.liveagents = liveagents;
 	}
 

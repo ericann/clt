@@ -89,6 +89,19 @@ clt.template = {
     
         return html;
     },
+    
+    createHref: function(label, href) {
+    	var html = '<a name="{0}" id="{1}" href="#">{2}</a>';
+        
+        //Replace name
+        html = html.replace("{0}", label.replace(" ", "").toLowerCase());
+        //Replace id
+        html = html.replace("{1}", label);
+        //Replace id
+        html = html.replace("{2}", text);
+    
+        return html;
+    },
         
     createContent: function(field) {
         var html = '<div class="f_field">' +
@@ -113,6 +126,9 @@ clt.template = {
                 break;
             case "div":
                 content = this.createDIV(field.label, field.default);
+                break;
+            case "a":
+                content = this.createHref(field.label, field.default);
                 break;
             default:
                 content = this.createInput(field, text);
@@ -185,7 +201,7 @@ clt.template = {
             fields[i] = {
                 label: i + "",
                 default: objs[keys[i]].title,
-                type: "div",
+                type: "a",
             }
         }
 
@@ -523,5 +539,5 @@ clt.test = function() {
 
 clt.init = function() {
     clt.action.selectChange();
-    clt.action.checkHttps();
+    //clt.action.checkHttps();
 }

@@ -45,7 +45,8 @@ public class WechatListener {
 	public @ResponseBody String verification_v1(@RequestParam String signature,@RequestParam String timestamp,
 			@RequestParam String nonce, @RequestParam String echostr) {
 		
-		return this.verification(signature, timestamp, nonce, echostr);
+		return echostr;
+		//return this.verification(signature, timestamp, nonce, echostr);
 	}
 	
 	@RequestMapping(value="/msg/text", method=RequestMethod.POST, consumes="text/xml")

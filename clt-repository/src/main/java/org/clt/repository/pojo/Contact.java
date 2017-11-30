@@ -2,8 +2,11 @@ package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -48,15 +51,15 @@ public class Contact implements Serializable {
 
 	//bi-directional many-to-one association to UserApp
 	@OneToMany(mappedBy="contact")
-	private List<UserApp> userapps;
+	private Set<UserApp> userapps;
 
 	//bi-directional many-to-one association to WechatTicket
 	@OneToMany(mappedBy="contact")
-	private List<WechatTicket> wechattickets;
+	private Set<WechatTicket> wechattickets;
 
 	//bi-directional many-to-one association to WechatUser
 	@OneToMany(mappedBy="contact")
-	private List<WechatUser> wechatusers;
+	private Set<WechatUser> wechatusers;
 
 	public Contact() {
 	}
@@ -157,11 +160,11 @@ public class Contact implements Serializable {
 		this.account = account;
 	}
 
-	public List<UserApp> getUserapps() {
+	public Set<UserApp> getUserapps() {
 		return this.userapps;
 	}
 
-	public void setUserapps(List<UserApp> userapps) {
+	public void setUserapps(Set<UserApp> userapps) {
 		this.userapps = userapps;
 	}
 
@@ -179,11 +182,11 @@ public class Contact implements Serializable {
 		return userapp;
 	}
 
-	public List<WechatTicket> getWechattickets() {
+	public Set<WechatTicket> getWechattickets() {
 		return this.wechattickets;
 	}
 
-	public void setWechattickets(List<WechatTicket> wechattickets) {
+	public void setWechattickets(Set<WechatTicket> wechattickets) {
 		this.wechattickets = wechattickets;
 	}
 
@@ -201,11 +204,11 @@ public class Contact implements Serializable {
 		return wechatticket;
 	}
 
-	public List<WechatUser> getWechatusers() {
+	public Set<WechatUser> getWechatusers() {
 		return this.wechatusers;
 	}
 
-	public void setWechatusers(List<WechatUser> wechatusers) {
+	public void setWechatusers(Set<WechatUser> wechatusers) {
 		this.wechatusers = wechatusers;
 	}
 

@@ -26,9 +26,9 @@ public class Scope implements Serializable {
 	private Date updateTime;
 
 	//bi-directional many-to-one association to ConnectApp
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name="appId")
-	private ConnectApp connectapp;
+	private ConnectApp connectApp;
 
 	//bi-directional many-to-one association to FunctionPermission
 	@ManyToOne
@@ -70,12 +70,12 @@ public class Scope implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public ConnectApp getConnectapp() {
-		return this.connectapp;
+	public ConnectApp getConnectApp() {
+		return this.connectApp;
 	}
 
-	public void setConnectapp(ConnectApp connectapp) {
-		this.connectapp = connectapp;
+	public void setConnectApp(ConnectApp connectApp) {
+		this.connectApp = connectApp;
 	}
 
 	public FunctionPermission getFunctionpermission() {

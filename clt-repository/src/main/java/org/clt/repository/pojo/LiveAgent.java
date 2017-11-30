@@ -6,7 +6,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.ForeignKey;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -33,11 +33,11 @@ public class LiveAgent implements Serializable {
 
 	//bi-directional many-to-one association to Button
 	@OneToMany(mappedBy="liveagent")
-	private List<Button> buttons;
+	private Set<Button> buttons;
 
 	//bi-directional many-to-one association to ChatMessage
 	@OneToMany(mappedBy="liveagent")
-	private List<ChatMessage> chatmessages;
+	private Set<ChatMessage> chatmessages;
 
 	//bi-directional many-to-one association to Account
 	@ManyToOne
@@ -51,7 +51,7 @@ public class LiveAgent implements Serializable {
 
 	//bi-directional many-to-one association to WechatAccount
 	@OneToMany(mappedBy="liveagent")
-	private List<WechatAccount> wechataccounts;
+	private Set<WechatAccount> wechataccounts;
 
 	public LiveAgent() {
 	}
@@ -96,11 +96,11 @@ public class LiveAgent implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public List<Button> getButtons() {
+	public Set<Button> getButtons() {
 		return this.buttons;
 	}
 
-	public void setButtons(List<Button> buttons) {
+	public void setButtons(Set<Button> buttons) {
 		this.buttons = buttons;
 	}
 
@@ -118,11 +118,11 @@ public class LiveAgent implements Serializable {
 		return button;
 	}
 
-	public List<ChatMessage> getChatmessages() {
+	public Set<ChatMessage> getChatmessages() {
 		return this.chatmessages;
 	}
 
-	public void setChatmessages(List<ChatMessage> chatmessages) {
+	public void setChatmessages(Set<ChatMessage> chatmessages) {
 		this.chatmessages = chatmessages;
 	}
 
@@ -156,11 +156,11 @@ public class LiveAgent implements Serializable {
 		this.sfdc = sfdc;
 	}
 
-	public List<WechatAccount> getWechataccounts() {
+	public Set<WechatAccount> getWechataccounts() {
 		return this.wechataccounts;
 	}
 
-	public void setWechataccounts(List<WechatAccount> wechataccounts) {
+	public void setWechataccounts(Set<WechatAccount> wechataccounts) {
 		this.wechataccounts = wechataccounts;
 	}
 

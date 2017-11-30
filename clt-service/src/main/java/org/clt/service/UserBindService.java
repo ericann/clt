@@ -47,6 +47,13 @@ public class UserBindService {
 				this.wechatUserService.save(wu);
 				
 			} else {
+				
+				logger.debug("-- wt:" + wt);
+				logger.debug("-- wu:" + wu);
+				
+				wt.setWechatuser(wu);
+				wt.setContact(wu.getContact());
+				this.wechatTicketService.updateContactAndWUById(wt);
 				result.put("msg", "The user has already bind success.");
 			}
 			

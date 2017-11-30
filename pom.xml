@@ -15,7 +15,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.4.2.RELEASE</version>
+		<version>1.4.4.RELEASE</version>
 		<relativePath></relativePath>
 	</parent>
 	
@@ -112,6 +112,7 @@
 		<module>clt-util</module>
 		<module>clt-sfdc</module>
 		<module>clt-oauth-app</module>
+		<module>clt-data-app</module>
 		<module>clt-main-app</module>
 	</modules>
 </project>

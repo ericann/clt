@@ -3,7 +3,7 @@ package org.clt.repository.pojo;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -16,13 +16,15 @@ public class Account implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Basic(fetch=FetchType.EAGER)
 	private String id;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
 
 	private Boolean master;
-
+	
+	@Basic(fetch=FetchType.EAGER)
 	private String name;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -30,15 +32,15 @@ public class Account implements Serializable {
 
 	//bi-directional many-to-one association to Contact
 	@OneToMany(mappedBy="account")
-	private List<Contact> contacts;
+	private Set<Contact> contacts;
 
 	//bi-directional many-to-one association to LiveAgent
 	@OneToMany(mappedBy="account")
-	private List<LiveAgent> liveagents;
+	private Set<LiveAgent> liveagents;
 
 	//bi-directional many-to-one association to WechatAccount
 	@OneToMany(mappedBy="account")
-	private List<WechatAccount> wechatAccounts;
+	private Set<WechatAccount> wechatAccounts;
 
 	public Account() {
 	}
@@ -83,11 +85,11 @@ public class Account implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public List<Contact> getContacts() {
+	public Set<Contact> getContacts() {
 		return this.contacts;
 	}
 
-	public void setContacts(List<Contact> contacts) {
+	public void setContacts(Set<Contact> contacts) {
 		this.contacts = contacts;
 	}
 
@@ -105,11 +107,11 @@ public class Account implements Serializable {
 		return contact;
 	}
 
-	public List<LiveAgent> getLiveagents() {
+	public Set<LiveAgent> getLiveagents() {
 		return this.liveagents;
 	}
 
-	public void setLiveagents(List<LiveAgent> liveagents) {
+	public void setLiveagents(Set<LiveAgent> liveagents) {
 		this.liveagents = liveagents;
 	}
 
@@ -127,11 +129,11 @@ public class Account implements Serializable {
 		return liveagent;
 	}
 
-	public List<WechatAccount> getWechatAccounts() {
+	public Set<WechatAccount> getWechatAccounts() {
 		return this.wechatAccounts;
 	}
 
-	public void setWechatAccounts(List<WechatAccount> wechatAccounts) {
+	public void setWechatAccounts(Set<WechatAccount> wechatAccounts) {
 		this.wechatAccounts = wechatAccounts;
 	}
 

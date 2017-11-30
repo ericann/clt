@@ -2,6 +2,7 @@ package org.clt.larw.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.Map;
 
 import static org.clt.util.DefaultMsg.initErrorResult;
@@ -12,6 +13,8 @@ import static org.clt.util.DefaultMsg.O_WS_CONFIRM;
 import static org.clt.util.DefaultMsg.O_UA_CONFIRM;
 import static org.clt.util.DefaultMsg.O_UP;
 
+import org.clt.repository.pojo.ConnectApp;
+import org.clt.service.PermissionService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,6 +34,9 @@ import org.springframework.web.client.RestTemplate;
 public class SFDCOauth {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	private PermissionService permissionService;
 	
 	@Autowired
 	private RestTemplate http;

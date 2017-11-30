@@ -1,7 +1,5 @@
 package org.clt.service.base;
 
-import java.util.List;
-
 import org.clt.repository.pojo.WechatTicket;
 import org.springframework.stereotype.Service;
 

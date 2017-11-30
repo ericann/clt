@@ -6,7 +6,7 @@ import org.clt.repository.pojo.WechatAccount;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface WechatAccountService {
+public interface WechatAccountService extends GenericService<WechatAccount, String> {
 	
 	WechatAccount findByUseDefault(Boolean flag);
 	

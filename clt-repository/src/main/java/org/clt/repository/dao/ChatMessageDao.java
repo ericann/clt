@@ -1,5 +1,8 @@
 package org.clt.repository.dao;
 
+import java.util.List;
+
+import org.clt.repository.pojo.Button;
 import org.clt.repository.pojo.ChatMessage;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +25,8 @@ public interface ChatMessageDao extends GenericDao<ChatMessage, String> {
 	
 	//@Query("SELECT count(Id) FROM ChatMessage cm WHERE cm.buttonId=:buttonId")
 	//public Integer findCountByOrgId(@Param("buttonId") String buttonId);
+	
+	@Override
+	@Query("SELECT cm FROM ChatMessage cm WHERE cm.liveagent.account.id=(SELECT con.account.id FROM Contact con WHERE con.id=:conId)")
+	List<ChatMessage> findAllByContactId(@Param("conId") String conId);
 }

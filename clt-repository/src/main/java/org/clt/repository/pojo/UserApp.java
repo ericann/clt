@@ -26,9 +26,9 @@ public class UserApp implements Serializable {
 	private Date updateTime;
 
 	//bi-directional many-to-one association to ConnectApp
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name="connectAppId")
-	private ConnectApp connectapp;
+	private ConnectApp connectApp;
 
 	//bi-directional many-to-one association to Contact
 	@ManyToOne
@@ -71,11 +71,11 @@ public class UserApp implements Serializable {
 	}
 
 	public ConnectApp getConnectapp() {
-		return this.connectapp;
+		return this.connectApp;
 	}
 
-	public void setConnectapp(ConnectApp connectapp) {
-		this.connectapp = connectapp;
+	public void setConnectApp(ConnectApp connectApp) {
+		this.connectApp = connectApp;
 	}
 
 	public Contact getContact() {

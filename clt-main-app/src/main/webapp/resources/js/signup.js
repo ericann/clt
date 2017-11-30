@@ -249,8 +249,9 @@ clt.action = {
 					document.getElementById("Scan QR").querySelector("img").src = r.url;
 					clt.action.doCall(clt.default.url + "/security/accesstoken/" + clt.data.conId + "/" + r.ticket, null,
 							function(result) {
-								alert("Bind Success.");
-								window.location.href = "/index";
+								alert(JSON.parse(result).msg);
+								console.log("success: " + JSON.stringify(result));
+								//window.location.href = "/index";
 					}, 
 					function(result) {
 						alert("Bind Failed.");

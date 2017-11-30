@@ -3,11 +3,16 @@ package org.clt.service.base;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public interface GenericService<E extends Serializable, PK extends Serializable> {
 	
-	E findById(PK id);
+	E findById(String id);
 	
 	List<E> findAll();
 	
 	E save(E e);
+	
+	List<E> findAllByContactId(String conId);
 }

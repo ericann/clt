@@ -9,10 +9,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountServiceImpl extends GenericServiceImpl<Account, String> implements AccountService {
 	
+	private AccountDao accountDao;
+	
 	@Autowired
 	public AccountServiceImpl(AccountDao accountDao) {
 		super(accountDao);
 		// TODO Auto-generated constructor stub
+		this.accountDao = accountDao;
 	}
 	
 }
