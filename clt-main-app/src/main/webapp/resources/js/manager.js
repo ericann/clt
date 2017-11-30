@@ -1,14 +1,25 @@
 window.clt = window.clt || {};
 
 clt.default = {
-	bc: {
-		accId: null,
-		conId: null,
-		base_url: window.location.protocol + "//" + window.location.host + "/clt"
-	},
+
+	base_url: window.location.protocol + "//" + window.location.host + "/clt",
 	objects: {
-		
-	},
+        welcome: {
+            title: "Welcome",
+            buttons: []
+        },
+        sfdc: {
+            title: "Sfdc",
+            buttons: []
+        },
+        wechat: {
+            title: "Wechat",
+            buttons: []
+        }   
+    },
+
+    type: ["login", "welcome", "sfdc", "wechat"],
+    current: 0,
 	
 	field: function() {
 		return {
@@ -27,114 +38,166 @@ clt.default = {
 	}
 };
 
+clt.data = {};
+
 clt.template = {
     
     createInput: function(field, text) {
-        var html = '<input type="{0}" {1} name="{2}" required="true" id="{3}" {5}="{4}">';
+        var html = '<input type="{type}" {readonly} name="{name}" required="true" id="{id}" {key}="{value}">';
         
-        html = html.replace("{0}", field.type);
+        html = html.replace("{type}", field.type);
         
-        html = html.replace("{1}", field.readonly ? 'readonly="readonly"' : "");
+        html = html.replace("{readonly}", field.readonly ? 'readonly="readonly"' : "");
         
-        html = html.replace("{2}", field.label.replace(" ", "").toLowerCase());
+        html = html.replace("{name}", field.label.replace(" ", "").toLowerCase());
 
-        html = html.replace("{3}", field.label);
+        html = html.replace("{id}", field.label);
 
-        html = html.replace("{4}", text);
+        html = html.replace("{value}", text);
 
         if(field.type == "checkbox" && text) {
-            html = html.replace("{5}", "checked");
+            html = html.replace("{key}", "checked");
         } else {
-            html = html.replace("{5}", "value");
+            html = html.replace("{key}", "value");
         }
 
         return html;
     },
-
-    createDIV: function(label, text) {
-        var html = '<div name="{0}" id="{1}">{2}</div>';
+    
+    createImage: function(label, src) {
+        var html = '<div name="{0}" id="{1}"><img src="{2}"></img></div>';
 
         //Replace name
         html = html.replace("{0}", label.replace(" ", "").toLowerCase());
         //Replace id
         html = html.replace("{1}", label);
         //Replace id
+        html = html.replace("{2}", src);
+
+        return html;
+    },
+       
+    createDIV: function(label, text) {
+        var html = '<div name="{0}" id="{1}">{2}</div>';
+    
+        //Replace name
+        html = html.replace("{0}", label.replace(" ", "").toLowerCase());
+        //Replace id
+        html = html.replace("{1}", label);
+        //Replace id
         html = html.replace("{2}", text);
-
+    
         return html;
     },
         
-    createContent: function(fields) {
-
-        var html = '';
-        	info = '<div class="t_info" id="{id}">' + 
-						'{details}' + 
-					'</div>',
-        	detail = '<div class="t_detail" name="{name}">{value}</div>',
-        	content = '';
-        	//keys = Object.keys(fields);
-        
-        for(var i = 0; i < fields.length; i++) {
-        	content += detail.replace("{name}", fields[i].label).replace("{value}", fields[i].label);
+    createContent: function(field) {
+        var html = '<div class="f_field">' +
+                        '<div class="f_label">' +
+                            '<label>{label}</label>' +
+                        '</div>' +
+                        '<div class="f_values" >' +
+                            '<div class="f_value">{content}</div>' +
+                            '<div class="f_link"><a href="{href}" target="_blank">help</a></div>' + 
+                            '<div class="f_help">{helptext}</div>' +
+                        '</div>' +
+                    '</div>',
+            name = field.label.replace(" ", "").toLowerCase();
+            text = clt.data[name] || field.default || "",
+            help = field.help || "",
+            content = "";
+    
+        switch(field.type) {
+            
+            case "img":
+                content = this.createImage(field.label, field.default);
+                break;
+            case "div":
+                content = this.createDIV(field.label, field.default);
+                break;
+            default:
+                content = this.createInput(field, text);
         }
-        html += info.replace("{details}", content);
-        content = '';
-        
-        for(var i = 0; i < fields.length; i++) {
-//        	var keys = Object.keys(fields);
-//        	for(var k in fields[i]) {
-//        		content += detail.replace("{name}", fields[i].label).replace("{value}", fields[i].default);
-//        	}
-        	//待优化
-        	if(fields[i].label.indexOf("id") != -1 || fields[i].label.indexOf("Id") != -1) {
-        		content += detail.replace("{name}", fields[i].label).replace("{value}", "<a href='#'>" + fields[i].default + "</a>");
-        	} else {
-        		content += detail.replace("{name}", fields[i].label).replace("{value}", fields[i].default);
-        	}
-        	
+    
+        html = html.replace("{label}", field.label);
+    
+        html = html.replace("{content}", content);
+    
+        if(field.link) {
+            html = html.replace("{href}", field.link);
+        } else {
+            html = html.replace('<a href="{href}" target="_blank">help</a>', "");
         }
+    
+        html = html.replace("{helptext}", help);
         
-        html += info.replace("{details}", content);
-    	content = '';
-    	
         return html;
     },
-
+    
     createButton: function(label) {
         var html = '<div class="f_button" id={0}>{1}</div>';
-        return html.replace("{0}", label.toLowerCase()).replace("{1}", label);
+        html = html.replace("{0}", label.toLowerCase()).replace("{1}", label);
+        return html;
     },
-
+    
     createSection: function(obj) {
-        var html = '<div class="section">' + 
-						'<div class="error_msg"></div>' + 
-						'<div class="t_title">{title}<span>{count}</span></div>' + 
-						'<div class="t_content">' + 
-							'{info}' +
-						'</div>' + 
-						'<div class="t_action">{action}</div>' + 
-					'</div>';
         
-        html = html.replace("{title}", obj.title || "").replace("{count}", obj.fields.length || "");
+        var html = '<div class="section">' +
+                        '<div class="error_info"></div>' +
+                        '<div class="title">{0}</div>' + 
+                        '<div class="content">' + 
+                            '{1}' +
+                        '</div>' +
+                        '<div class="f_action">{2}</div>' + 
+                    '</div>';
+        html = html.replace("{0}", obj.title || "");
         var content = '';
         var buttons = '';
-        
-        //for(var i = 0; i < obj.fields.length; i++) {
-        	
-            //var field = obj.fields[i];
-            content += this.createContent(obj.fields);
-        //}
-
+    
+        for(var i = 0; i < obj.fields.length; i++) {
+            var field = obj.fields[i];
+            content += this.createContent(field);
+        }
+    
         for(var i = 0; i < obj.buttons.length; i++) {
             buttons += this.createButton(obj.buttons[i]);
         }
         
-        html = html.replace("{info}", content).replace("{action}", buttons);
+        html = html.replace("{1}", content).replace("{2}", buttons);
         return clt.action.parseToDom(html);
     },
     
     createSections: function(obj) {
     	
+    },
+
+    createTopMenus: function(objs) {
+        var html = '<div class="menu">' + 
+                        '<div class="error_msg"></div>' + 
+                        '<div class="t_title">{title}</div>' + 
+                        '<div class="t_content">' + 
+                            '{info}' +
+                        '</div>' + 
+                        //'<div class="t_action">{action}</div>' + 
+                    '</div>';
+        var fields = [];
+        var keys = Object.keys(objs);
+        for(var i = 0; i < keys.length; i++) {
+            fields[i] = {
+                label: i + "",
+                default: objs[keys[i]].title,
+                type: "div",
+            }
+        }
+
+        html = html.replace("{title}", "Menu");
+        var content = '';
+    
+        for(var i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            content += this.createContent(field);
+        }
+        html = html.replace("{info}", content);
+        return clt.action.parseToDom(html);
     }
 };
 
@@ -449,8 +512,8 @@ clt.action = {
 };
 
 clt.test = function() {
-	var json = '{"data":{"button":{"buttonId":"5737F000000Xb4a","displayInfo":"There are currently no agents online, try again later pls.","bid":"ec3f3ea6-7a24-44bf-8009-0e7bd9e88b48"},"basicConfig":{"wechatAccount":"gh_ffdefb93090b","endPoint":"https://d.la1-c1-ukb.salesforceliveagent.com/chat/rest/","bcId":"beae81d8-4956-47d1-9de7-15bb8e79127d","createTime":"2017-06-05 13:33:32.0","deploymentId":"5727F000000Xcpk","appId":"wx085888a3e559f8ac","appSecret":"KnZtN9mX0TEe","orgId":"00D7F000000qSxk"},"contact":{"contactId":"8b847d45-50cd-457c-840f-a14942f7fd7b","companyName":"Eric","mobile":"15210063460","email":"yxeysy@126.com"},"account":{"accountId":"690d3fc3-a44b-4887-a21d-17f848e849bd","companyName":"Collection"}},"errCode":"0","errMsg":"success."}';
-	clt.default.objects = clt.action.changeDataTest(JSON.parse(json));
+	//var json = '{"data":{"button":{"buttonId":"5737F000000Xb4a","displayInfo":"There are currently no agents online, try again later pls.","bid":"ec3f3ea6-7a24-44bf-8009-0e7bd9e88b48"},"basicConfig":{"wechatAccount":"gh_ffdefb93090b","endPoint":"https://d.la1-c1-ukb.salesforceliveagent.com/chat/rest/","bcId":"beae81d8-4956-47d1-9de7-15bb8e79127d","createTime":"2017-06-05 13:33:32.0","deploymentId":"5727F000000Xcpk","appId":"wx085888a3e559f8ac","appSecret":"KnZtN9mX0TEe","orgId":"00D7F000000qSxk"},"contact":{"contactId":"8b847d45-50cd-457c-840f-a14942f7fd7b","companyName":"Eric","mobile":"15210063460","email":"yxeysy@126.com"},"account":{"accountId":"690d3fc3-a44b-4887-a21d-17f848e849bd","companyName":"Collection"}},"errCode":"0","errMsg":"success."}';
+	//clt.default.objects = clt.action.changeDataTest(JSON.parse(json));
 	//var body = document.body;
 	var keys = Object.keys(clt.default.objects);
 	for(var i = 0; i < keys.length; i++) {
