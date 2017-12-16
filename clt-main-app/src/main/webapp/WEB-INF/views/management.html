@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../resources/css/generic.css" type="text/css" />
+
+	<script type="text/javascript" src="../resources/js/manage.js"></script>
+	<script type="text/javascript" src="../resources/js/Ajax.js"></script>
+</head>
+<body>
+	<div class="head">
+		<button class="top_menu"></button>
+		<!-- <div class="menu"></div> -->
+		<div class="prompt">CLT Management</div>
+		<div class="special">For All</div>
+	</div>
+	
+	
+	
+	<script>
+		clt.init();
+		Ajax.get({url:"http://localhost:8080/clt/test/getMenus/1?conId=61118512-daaa-431f-8595-f9bbb21a1179&name=managment", type: "POST", success: function(result) {
+			var menu = JSON.parse(result);
+			var obj = {};
+			for(var i = 0; i < menu.length; i++) {
+				console.log("menu[i] : "+ JSON.stringify(menu[i]));
+				obj[menu[i].m_id] = {
+						title: menu[i].m_name,
+						type: "a"
+				}
+				clt.test.data = menu;
+			}
+			
+			var h = clt.template.createTopMenus(obj);
+			document.body.appendChild(h);
+			h.style.display = "none";
+			
+			document.getElementsByClassName("top_menu")[0].addEventListener("click", function() {document.getElementsByClassName("menu")[0].style.display = "block"}, false);
+			
+			var a = document.getElementsByClassName("menu")[0].getElementsByClassName("f_value");
+			for(var i = 0; i < a.length; i++) {
+				a[i].getElementsByTagName("a")[0].addEventListener("click", function(e) {
+					e = e || e.target;
+					console.log("a click: " + e.target);
+					
+					var objs = [];
+					for(var i = 0; i < menu.length; i++) {
+						if(e.target.innerText != menu[i].m_name) {
+							continue;
+						}
+						var obj = {
+							title: menu[i].op_name,
+							fields: [],
+							buttons: []
+						};
+						objs.push(obj);
+						document.body.appendChild(clt.template.createSection(obj));
+					}
+					document.getElementsByClassName("menu")[0].style.display = "none";
+				}, false);
+				
+			}
+		}});
+	</script>
+</body>
+</html>
