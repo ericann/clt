@@ -19,47 +19,156 @@
 	<script>
 		clt.init();
 		Ajax.get({url:"http://localhost:8080/clt/test/getMenus/1?conId=61118512-daaa-431f-8595-f9bbb21a1179&name=managment", type: "POST", success: function(result) {
-			var menu = JSON.parse(result);
-			var obj = {};
-			for(var i = 0; i < menu.length; i++) {
-				console.log("menu[i] : "+ JSON.stringify(menu[i]));
-				obj[menu[i].m_id] = {
-						title: menu[i].m_name,
-						type: "a"
+			console.log("menu[i] : "+ JSON.stringify(result));
+			//var menu = JSON.parse(result);
+			//clt.test.data = result;
+			var profile = convertMenu(JSON.parse(result));
+			clt.profile = profile;
+			var objs = {
+				title: "Menu",
+				buttons: [],
+				fields: [],
+				classname: "menu",
+			};
+			var keys = Object.keys(profile.menu);
+			for(var i = 0; i < keys.length; i++) {
+				
+				var obj = {};
+				obj = {
+					label: "$",
+					type: "a",
+					default: keys[i]
 				}
-				clt.test.data = menu;
+				objs.fields.push(obj);
 			}
 			
-			var h = clt.template.createTopMenus(obj);
-			document.body.appendChild(h);
-			h.style.display = "none";
+			var h = clt.template.createSection(objs);
+			//for(var i = 0; i < h.length; i++) {
+				h.style.display = "none";
+				document.body.appendChild(h);
+				
+			//}
 			
 			document.getElementsByClassName("top_menu")[0].addEventListener("click", function() {document.getElementsByClassName("menu")[0].style.display = "block"}, false);
 			
-			var a = document.getElementsByClassName("menu")[0].getElementsByClassName("f_value");
+			
+			var a = document.getElementsByClassName("menu")[0].getElementsByClassName("f_values");
 			for(var i = 0; i < a.length; i++) {
 				a[i].getElementsByTagName("a")[0].addEventListener("click", function(e) {
 					e = e || e.target;
 					console.log("a click: " + e.target);
 					
-					var objs = [];
-					for(var i = 0; i < menu.length; i++) {
-						if(e.target.innerText != menu[i].m_name) {
-							continue;
-						}
+					var sections = document.getElementsByClassName("section");
+					for(var i = sections.length - 1; i >= 0; i--) {
+						document.body.removeChild(sections[i]);
+					}
+					
+					var objs = clt.profile.menu[e.target.innerText].objects;
+					var keys = Object.keys(objs);
+					for(var i = 0; i < keys.length; i++) {
+						
 						var obj = {
-							title: menu[i].op_name,
-							fields: [],
-							buttons: []
+							title: keys[i],
+							fields: [{
+								label: "waiting",
+								type: "img",
+								default: "http://localhost:8080/clt/resources/images/loading.gif",
+								//click: showListService
+								defaultAction: showListService
+							}],
+							buttons: [],
+							style: "t"
 						};
-						objs.push(obj);
+						//objs.push(obj);
 						document.body.appendChild(clt.template.createSection(obj));
 					}
+					
 					document.getElementsByClassName("menu")[0].style.display = "none";
 				}, false);
 				
 			}
 		}});
+		
+		function convertMenu(menuStr) {
+			var menu = (typeof menuStr === "string" ? JSON.parse(menuStr) : menuStr);
+			
+			var profile = {};
+			for(var i = 0; i < menu.length; i++) {
+				profile["uaId"] = menu[i]["uaId"];
+				profile["caId"] = menu[i]["caId"];
+				
+				profile["menu"] = profile["menu"] ? profile["menu"] : {};
+			
+				if(!profile["menu"][menu[i]["m_name"]]) {
+					profile["menu"][menu[i]["m_name"]] = {};
+					profile["menu"][menu[i]["m_name"]]["id"] = menu[i]["m_id"];
+					profile["menu"][menu[i]["m_name"]]["name"] = menu[i]["m_name"];
+				}
+				
+				if(!profile["menu"][menu[i]["m_name"]]["objects"]) {
+					console.log("-- objects is null");
+					profile["menu"][menu[i]["m_name"]]["objects"] = {};
+				}
+				
+				profile["menu"][menu[i]["m_name"]]["objects"][menu[i]["op_name"]] = menu[i]["opId"];
+			
+			}
+			
+			return profile;
+		}
+		
+		function showListService(e) {
+			e = e || e.target;
+			var parent = e.parentElement.parentElement.parentElement.parentElement.parentElement;//.children;
+			var content_ = parent.getElementsByClassName("content")[0];
+			var objectName = parent.getElementsByClassName("default")[0].innerHTML;
+			console.log(objectName + " is loading...");
+			
+			
+			Ajax.get({
+				url:"http://localhost:8080/clt/data-api/61118512-daaa-431f-8595-f9bbb21a1179/" + objectName + "/", 
+				type: "POST", 
+				success: function(result) {
+					console.log("loading rest resource data/" + content_ + ": " + result);
+					
+					var objs = JSON.parse(result);
+					
+					var keys = Object.keys(objs[0]);
+					var fields = [];
+					var rowHeader = [];
+					var rowBody = [];
+					for(var i = 0; i < keys.length; i++) {
+						var o = {
+							label: keys[i],
+							default: keys[i],
+							type: "div",
+							isHeader: true
+						};
+						rowHeader.push(o);
+					}
+					fields.push(rowHeader);
+					
+					for(var i = 0; i < objs.length; i++) {
+						for(var j = 0; j < keys.length; j++) {
+							var o = {
+								label: keys[j],
+								default: objs[i][keys[j]],
+								type: typeof objs[i][keys[j]] === "object" ? "a" : "div"
+							};
+							rowBody.push(o);
+						}
+						fields.push(rowBody);
+					}
+					
+					var content = clt.template.createContent(fields, "t");
+					var content_ = parent.getElementsByClassName("content")[0];
+					content_.innerHTML = "";
+					for(var i = 0; i < content.length; i++) {
+						content_.appendChild(content[i]);
+					}
+				}
+			});
+		}
 	</script>
 </body>
 </html>

@@ -41,6 +41,11 @@ clt.default = {
 clt.data = {};
 
 clt.template = {
+    default: {
+    	classname: "section",
+    	style: "f",
+    	styles: ["f", "t"]
+    },
     
     createInput: function(field, text) {
         var html = '<input type="{type}" {readonly} name="{name}" required="true" id="{id}" {key}="{value}">';
@@ -61,11 +66,11 @@ clt.template = {
             html = html.replace("{key}", "value");
         }
 
-        return html;
+        return this.parseToDom(html);
     },
     
     createImage: function(label, src) {
-        var html = '<div name="{0}" id="{1}"><img src="{2}"></img></div>';
+        var html = '<div name="{0}" id="{1}"><img src="{2}" onload="showListService(this)"></img></div>';
 
         //Replace name
         html = html.replace("{0}", label.replace(" ", "").toLowerCase());
@@ -74,7 +79,7 @@ clt.template = {
         //Replace id
         html = html.replace("{2}", src);
 
-        return html;
+        return this.parseToDom(html);
     },
        
     createDIV: function(label, text) {
@@ -87,56 +92,58 @@ clt.template = {
         //Replace id
         html = html.replace("{2}", text);
     
-        return html;
+        return this.parseToDom(html);
     },
     
-    createHref: function(label, href) {
-    	var html = '<a name="{0}" id="{1}" href="#">{2}</a>';
+    createHref: function(label, text) {
+    	var html = '<a name="{0}" id="{1}" href="#" >{3}</a>';
         
         //Replace name
         html = html.replace("{0}", label.replace(" ", "").toLowerCase());
         //Replace id
         html = html.replace("{1}", label);
         //Replace id
-        html = html.replace("{2}", text);
+        html = html.replace("{3}", text);
     
-        return html;
+        return this.parseToDom(html);
+    },
+    
+    createShowTypeService: function(field) {
+    	var content = "";
+    	
+    	switch(field.type) {
+        
+	        case "img":
+	            content = this.createImage(field.label, field.default);
+	            break;
+	        case "div":
+	            content = this.createDIV(field.label, field.default);
+	            break;
+	        case "a":
+	            content = this.createHref(field.label, field.default);
+	            break;
+	        default:
+	            content = this.createInput(field, text);
+	    }
+    	
+    	return content;
     },
         
-    createContent: function(field) {
+    createField: function(field) {
         var html = '<div class="f_field">' +
-                        '<div class="f_label">' +
-                            '<label>{label}</label>' +
-                        '</div>' +
-                        '<div class="f_values" >' +
-                            '<div class="f_value">{content}</div>' +
-                            '<div class="f_link"><a href="{href}" target="_blank">help</a></div>' + 
-                            '<div class="f_help">{helptext}</div>' +
-                        '</div>' +
-                    '</div>',
+                    '<div class="f_label">' +
+                        '<label>{label}</label>' +
+                    '</div>' +
+                    '<div class="f_values" >' +
+                        '<div class="f_value">{content}</div>' +
+                        '<div class="f_link"><a href="{href}" target="_blank">help</a></div>' + 
+                        '<div class="f_help">{helptext}</div>' +
+                    '</div>' +
+                '</div>',
             name = field.label.replace(" ", "").toLowerCase();
-            text = clt.data[name] || field.default || "",
+            text = field.default || "",
             help = field.help || "",
-            content = "";
-    
-        switch(field.type) {
-            
-            case "img":
-                content = this.createImage(field.label, field.default);
-                break;
-            case "div":
-                content = this.createDIV(field.label, field.default);
-                break;
-            case "a":
-                content = this.createHref(field.label, field.default);
-                break;
-            default:
-                content = this.createInput(field, text);
-        }
-    
-        html = html.replace("{label}", field.label);
-    
-        html = html.replace("{content}", content);
+            content = this.createShowTypeService(field);
     
         if(field.link) {
             html = html.replace("{href}", field.link);
@@ -145,7 +152,88 @@ clt.template = {
         }
     
         html = html.replace("{helptext}", help);
+    
+        html = html.replace("{label}", field.label);
+        var htmlDom = this.parseToDom(html)[0],
+            f_valueD = htmlDom.getElementsByClassName("f_values")[0];
         
+        f_valueD.innerHTML = "";
+        f_valueD.appendChild(content[0]);
+        //html = html.replace("{content}", content);
+    
+        return htmlDom;
+    },
+    
+    createRows: function(fields) {
+    	
+        var isHeaderH = '<div class="t_header"></div>',
+        	isBodyH = '<div class="t_body"></div>',
+        	html = [],
+        	info = '<div class="t_info" id="{id}">' + 
+						'{details}' + 
+					'</div>',
+        	detail = '<div class="t_row" name="{name}">{value}</div>',
+        	contentHeader = [],
+        	contentBody = [];
+        
+        for(var i = 0; i < fields.length; i++) {
+        	for(var j = 0; j < fields[i].length; j++) {
+
+	        	var detailD = this.parseToDom(detail.replace("{name}", fields[i][j].label))[0];
+	        		detailD.innerText = "";
+	        		detailD.appendChild(this.createShowTypeService(fields[i][j])[0]);
+	        	if(fields[i][j].isHeader) {
+	        		contentHeader.push(detailD);
+	        	} else {
+	        		contentBody.push(detailD);
+	        	}
+        	}
+        }
+        
+        var t_info_h = null;
+        var t_info_b = null;
+        
+        if(contentHeader.length != 0) {
+        	t_info_h = this.parseToDom(info)[0];
+        	t_info_h.innerHTML = "";
+        	
+	        for(var i = 0; i < contentHeader.length; i++) {
+	        	t_info_h.appendChild(contentHeader[i]);
+	        }
+	        
+	        html.push(t_info_h);
+        }
+        
+        if(contentBody.length != 0) {
+	        for(var i = 0; i < contentBody.length; i++) {
+	        	t_info_b = this.parseToDom(info)[0];
+	            t_info_b.innerHTML = "";
+	            
+	            for(var j = 0; j < contentBody.length; j++) {
+	            	t_info_b.appendChild(contentBody[j]);
+	            }
+	            html.push(t_info_b);
+	        }
+        }
+        
+        return html;
+    },
+
+    createContent: function(fields, style) {
+
+        var html = [];
+
+        if(!fields) {
+            return html;
+        }
+        if(style && style != this.default.style) {
+	        html = this.createRows(fields);
+        } else {
+        	for(var i = 0; i < fields.length; i++) {
+	            var field = fields[i];
+	            html.push(this.createField(field));
+	        }
+        }
         return html;
     },
     
@@ -154,32 +242,58 @@ clt.template = {
         html = html.replace("{0}", label.toLowerCase()).replace("{1}", label);
         return html;
     },
+
+    createButtons: function(buttons) {
+        
+    },
     
     createSection: function(obj) {
-        
-        var html = '<div class="section">' +
+    	
+    	obj.style = !obj.style || obj.style == this.default.style ? this.default.style : "t";
+    	
+    	var fTitleContent = '{title}',
+    	
+        	tTitleContent = '<div class="s_fold"><button></button></div>' +
+    						'<div class="default">{title}</div>' +
+    						'<div class="row_count">{count}</div>',
+    						
+    		html = '<div class="{classname}">' +
                         '<div class="error_info"></div>' +
-                        '<div class="title">{0}</div>' + 
+                        '<div class="title">' +
+                        (obj.style == "f" ? fTitleContent : tTitleContent) +
+                        '</div>' + 
                         '<div class="content">' + 
-                            '{1}' +
+                            '{content}' +
                         '</div>' +
-                        '<div class="f_action">{2}</div>' + 
+                        '<div class="{pre}_action">{buttons}</div>' + 
                     '</div>';
-        html = html.replace("{0}", obj.title || "");
-        var content = '';
+    	html = html.replace("{pre}", obj.style);
+        html = html.replace("{classname}", obj.classname || this.default.classname);
+        html = html.replace("{classname}", obj.style || this.default.style);
+        html = html.replace("{title}", obj.title || "");
+        html = html.replace("{count}", obj.count || "");
+        
+        var contents = this.createContent(obj.fields, obj.style || this.default.style);
         var buttons = '';
-    
-        for(var i = 0; i < obj.fields.length; i++) {
-            var field = obj.fields[i];
-            content += this.createContent(field);
-        }
     
         for(var i = 0; i < obj.buttons.length; i++) {
             buttons += this.createButton(obj.buttons[i]);
         }
         
-        html = html.replace("{1}", content).replace("{2}", buttons);
-        return clt.action.parseToDom(html);
+        html = html.replace("{buttons}", buttons);
+        var section = clt.action.parseToDom(html),
+        	content = section.getElementsByClassName("content")[0];
+        content.innerHTML = "";
+        
+        if(Object.prototype.toString.call(contents) === "[object HTMLDivElement]") {
+        	content.appendChild(contents);
+        
+        } else {
+	        for(var i = 0; i < contents.length; i++) {
+	        	content.appendChild(contents[i]);
+	        }
+        }
+        return section;
     },
     
     createSections: function(obj) {
@@ -213,8 +327,15 @@ clt.template = {
             content += this.createContent(field);
         }
         html = html.replace("{info}", content);
-        return clt.action.parseToDom(html);
+        return this.parseToDom(html);
+    },
+
+    parseToDom: function(html) {
+        var d = document.createElement("div");
+        d.innerHTML = html;
+        return d.children;
     }
+
 };
 
 clt.action = {

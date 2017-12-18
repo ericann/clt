@@ -7,7 +7,8 @@ body {
     font-size: 14px;
     word-wrap: inherit;
     word-spacing: inherit;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     -moz-user-select: none;
 }
 
@@ -108,7 +109,7 @@ body {
 	border-radius: 10px;
 	width: 86%;
     height: auto;
-    margin: 10px 5% 10px 5%;
+    margin: 20px 5% 20px 5%;
     padding: 10px 2% 10px 2%;
     box-shadow: 3px 2px 4px 0px darkgrey;
 }
@@ -159,7 +160,7 @@ body {
 	margin-left: -20px;
 }
 
-.section, .menu .t_content {
+.section .t_content, .menu .t_content {
 	text-align: left;
 	word-break: keep-all;
     white-space: nowrap;
@@ -168,6 +169,16 @@ body {
 	display: inline-table;
 	text-align: left;
 	overflow-x: scroll;
+}
+
+.content {
+	width: auto;
+	height: auto;
+	margin: 10px 55px;
+	text-align: left;
+	word-break: keep-all;
+    white-space: nowrap;
+    overflow-x: auto;
 }
 
 .f_field {
@@ -182,6 +193,7 @@ body {
 	width: 28%;
 	padding-left: 10%;
 	vertical-align: top;
+    white-space: nowrap;
 }
 
 .f_help {
