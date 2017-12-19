@@ -19,74 +19,8 @@
 	<script>
 		clt.init();
 		Ajax.get({url:"http://localhost:8080/clt/test/getMenus/1?conId=61118512-daaa-431f-8595-f9bbb21a1179&name=managment", type: "POST", success: function(result) {
-			console.log("menu[i] : "+ JSON.stringify(result));
-			//var menu = JSON.parse(result);
-			//clt.test.data = result;
 			var profile = convertMenu(JSON.parse(result));
-			clt.profile = profile;
-			var objs = {
-				title: "Menu",
-				buttons: [],
-				fields: [],
-				classname: "menu",
-			};
-			var keys = Object.keys(profile.menu);
-			for(var i = 0; i < keys.length; i++) {
-				
-				var obj = {};
-				obj = {
-					label: "$",
-					type: "a",
-					default: keys[i]
-				}
-				objs.fields.push(obj);
-			}
-			
-			var h = clt.template.createSection(objs);
-			//for(var i = 0; i < h.length; i++) {
-				h.style.display = "none";
-				document.body.appendChild(h);
-				
-			//}
-			
-			document.getElementsByClassName("top_menu")[0].addEventListener("click", function() {document.getElementsByClassName("menu")[0].style.display = "block"}, false);
-			
-			
-			var a = document.getElementsByClassName("menu")[0].getElementsByClassName("f_values");
-			for(var i = 0; i < a.length; i++) {
-				a[i].getElementsByTagName("a")[0].addEventListener("click", function(e) {
-					e = e || e.target;
-					console.log("a click: " + e.target);
-					
-					var sections = document.getElementsByClassName("section");
-					for(var i = sections.length - 1; i >= 0; i--) {
-						document.body.removeChild(sections[i]);
-					}
-					
-					var objs = clt.profile.menu[e.target.innerText].objects;
-					var keys = Object.keys(objs);
-					for(var i = 0; i < keys.length; i++) {
-						
-						var obj = {
-							title: keys[i],
-							fields: [{
-								label: "waiting",
-								type: "img",
-								default: "http://localhost:8080/clt/resources/images/loading.gif",
-								//click: showListService
-								defaultAction: showListService
-							}],
-							buttons: [],
-							style: "t"
-						};
-						//objs.push(obj);
-						document.body.appendChild(clt.template.createSection(obj));
-					}
-					
-					document.getElementsByClassName("menu")[0].style.display = "none";
-				}, false);
-				
-			}
+			showMenu(profile);
 		}});
 		
 		function convertMenu(menuStr) {
@@ -110,65 +44,221 @@
 					profile["menu"][menu[i]["m_name"]]["objects"] = {};
 				}
 				
-				profile["menu"][menu[i]["m_name"]]["objects"][menu[i]["op_name"]] = menu[i]["opId"];
-			
+				if(menu[i]["op_name"]) {
+					profile["menu"][menu[i]["m_name"]]["objects"][menu[i]["op_name"]] = menu[i]["opId"];
+				}
+				
 			}
 			
-			return profile;
+			return defaultMenuData(profile);
+		}
+		
+		function showMenu(data) {
+			clt.data.profile = data;
+			
+			var objs = {
+				title: "Menu",
+				buttons: [],
+				fields: [],
+				classname: "menu",
+			};
+			
+			var keys = Object.keys(data.menu);
+			
+			for(var i = 0; i < keys.length; i++) {
+				
+				var obj = {};
+				obj = {
+					label: "$",
+					type: "a",
+					default: keys[i]
+				}
+				objs.fields.push(obj);
+			}
+			
+			var h = clt.template.createSection(objs);
+			h.style.display = "none";
+			document.body.appendChild(h);
+			document.getElementsByClassName("top_menu")[0].addEventListener(
+					"click", 
+					function() {
+						document.getElementsByClassName("menu")[0].style.display = "block";
+					}, 
+					false);		
+			menuItemEvent();
+		}
+		
+		function menuItemEvent() {
+			var a = document.getElementsByClassName("menu")[0].getElementsByClassName("f_values");
+			for(var i = 0; i < a.length; i++) {
+				a[i].getElementsByTagName("a")[0].addEventListener("click", function(e) {
+					e = e || e.target;
+					
+					var sections = document.getElementsByClassName("section");
+					for(var i = sections.length - 1; i >= 0; i--) {
+						document.body.removeChild(sections[i]);
+					}
+					
+					var objs = clt.data.profile.menu[e.target.innerText].objects;
+					var keys = Object.keys(objs);
+					for(var i = 0; i < keys.length; i++) {
+						
+						var obj = {
+							title: keys[i],
+							fields: [{
+								label: "waiting",
+								type: "img",
+								default: "http://localhost:8080/clt/resources/images/loading.gif",
+								defaultAction: showListService
+							}],
+							buttons: [],
+							style: "f"
+						};
+
+						document.body.appendChild(clt.template.createSection(obj));
+					}
+					
+					document.getElementsByClassName("menu")[0].style.display = "none";
+				}, false);
+				
+			}
 		}
 		
 		function showListService(e) {
 			e = e || e.target;
-			var parent = e.parentElement.parentElement.parentElement.parentElement.parentElement;//.children;
+			var parent = e.parentElement.parentElement.parentElement.parentElement.parentElement;
 			var content_ = parent.getElementsByClassName("content")[0];
 			var objectName = parent.getElementsByClassName("default")[0].innerHTML;
-			console.log(objectName + " is loading...");
 			
+			if((clt.data[objectName] && clt.data[objectName].length)) {
+				updateShowList(parent, clt.data[objectName]);
+			} else if (Object.prototype.toString.call(clt.data[objectName]) === "[object Object]") {
+				showFormService(parent, clt.data[objectName]);
+			} else {
 			
-			Ajax.get({
-				url:"http://localhost:8080/clt/data-api/61118512-daaa-431f-8595-f9bbb21a1179/" + objectName + "/", 
-				type: "POST", 
-				success: function(result) {
-					console.log("loading rest resource data/" + content_ + ": " + result);
-					
-					var objs = JSON.parse(result);
-					
-					var keys = Object.keys(objs[0]);
-					var fields = [];
-					var rowHeader = [];
-					var rowBody = [];
-					for(var i = 0; i < keys.length; i++) {
-						var o = {
-							label: keys[i],
-							default: keys[i],
-							type: "div",
-							isHeader: true
-						};
-						rowHeader.push(o);
+				Ajax.get({
+					url:"http://localhost:8080/clt/data-api/61118512-daaa-431f-8595-f9bbb21a1179/" + objectName + "/", 
+					type: "POST", 
+					success: function(result) {
+						var objs = JSON.parse(result);
+						updateShowList(parent, objs, objectName);
 					}
-					fields.push(rowHeader);
-					
-					for(var i = 0; i < objs.length; i++) {
-						for(var j = 0; j < keys.length; j++) {
-							var o = {
-								label: keys[j],
-								default: objs[i][keys[j]],
-								type: typeof objs[i][keys[j]] === "object" ? "a" : "div"
-							};
-							rowBody.push(o);
-						}
-						fields.push(rowBody);
-					}
-					
-					var content = clt.template.createContent(fields, "t");
-					var content_ = parent.getElementsByClassName("content")[0];
-					content_.innerHTML = "";
-					for(var i = 0; i < content.length; i++) {
-						content_.appendChild(content[i]);
-					}
-				}
-			});
+				});
+			}
 		}
+		
+		//need override
+		function showFormService(parent, data) {
+			var fields = data.length ? createAllRows(data) : defaultNoData(data);
+				content = clt.template.createContent(fields, "f"),
+	            content_ = parent.getElementsByClassName("content")[0],
+	            content_.innerHTML = "";
+	        
+	        for(var i = 0; i < content.length; i++) {
+	            content_.appendChild(content[i]);
+	        }
+		}
+		
+		//List object
+        function updateShowList(parent, data, objectName) {
+            
+            clt.data[objectName] = data;    
+            parent.getElementsByClassName("row_count")[0].innerHTML = data.length;
+            
+            var fields = data.length ? createAllRows(data) : defaultNoData();
+                
+                content = clt.template.createContent(fields, data.length ? "t" : "f"),
+                content_ = parent.getElementsByClassName("content")[0],
+                content_.innerHTML = "";
+            
+            for(var i = 0; i < content.length; i++) {
+                content_.appendChild(content[i]);
+            }
+        }
+        
+        //single object
+        function createObjectHeader(headers, data) {
+            var rowHeader = [];
+            
+            for(var i = 0; i < headers.length; i++) {
+            	//暂时不对1:n 做显示
+            	if(typeof data[headers[i]] === "object") {
+            		continue;
+            	}
+            	
+                var o = {
+                    label: headers[i],
+                    default: headers[i],
+                    type: "div",
+                    isHeader: true
+                };
+                rowHeader.push(o);
+            }
+            
+            return rowHeader;
+        }
+        
+        //single object
+        function createObjectRows(data, keys) {
+            var fields = [];
+            
+            for(var i = 0; i < data.length; i++) {
+                var rowBody = [];
+                for(var j = 0; j < keys.length; j++) {
+                	//暂时不对1:n 做显示
+                	if(typeof data[i][keys[j]] === "object") {
+                		continue;
+                	}
+                	
+                    var o = {
+                        label: keys[j],
+                        default: data[i][keys[j]],
+                        type: typeof data[i][keys[j]] === "object" ? "a" : "div",
+                        display: typeof data[i][keys[j]] === "object" ? "a" : "div"
+                    };
+                    rowBody.push(o);
+                }
+                fields.push(rowBody);
+            }
+            
+            return fields;
+        }
+        
+        function createAllRows(data) {
+        	var keys = Object.keys(data[0]),
+        		fields = [createObjectHeader(keys, data[0])],
+        		rowBody_ = createObjectRows(data, keys);
+        	
+        	for(var i = 0; i < rowBody_.length; i++) {
+        		fields.push(rowBody_[i]);
+        	}
+        	
+        	return fields;
+        }
+        
+        function defaultNoData(data) {
+        	var obj = {
+        		label: "reminder",
+        		default: "Here is no data or you have no permissions.",
+        		type: "div"
+        	}
+        	
+        	return [data ? data : obj];
+        }
+        
+        function defaultMenuData(profile) {
+        	profile.menu.Managment.objects = {
+        		"Management": null		
+        	};
+        	
+        	clt.data.Management = {
+        		label : "Welcome",
+        		default : "Welcome to CLT v2.0 Management!",
+        		type: "div"
+        	}
+        	
+        	return profile;
+        }
 	</script>
 </body>
 </html>

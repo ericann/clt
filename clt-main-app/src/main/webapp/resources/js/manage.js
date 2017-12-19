@@ -2,8 +2,8 @@ window.clt = window.clt || {};
 
 clt.default = {
 
-	base_url: window.location.protocol + "//" + window.location.host + "/clt",
-	objects: {
+    base_url: window.location.protocol + "//" + window.location.host + "/clt",
+    objects: {
         welcome: {
             title: "Welcome",
             buttons: []
@@ -20,31 +20,31 @@ clt.default = {
 
     type: ["login", "welcome", "sfdc", "wechat"],
     current: 0,
-	
-	field: function() {
-		return {
-			label: null,
-			default: null,
-			type: null
-		}
-	},
-	
-	object: function() {
-		return {
-			title: null,
-			buttons: [],
-			fields: []
-		}
-	}
+    
+    field: function() {
+        return {
+            label: null,
+            default: null,
+            type: null
+        }
+    },
+    
+    object: function() {
+        return {
+            title: null,
+            buttons: [],
+            fields: []
+        }
+    }
 };
 
 clt.data = {};
 
 clt.template = {
     default: {
-    	classname: "section",
-    	style: "f",
-    	styles: ["f", "t"]
+        classname: "section",
+        style: "f",
+        styles: ["f", "t"]
     },
     
     createInput: function(field, text) {
@@ -96,7 +96,7 @@ clt.template = {
     },
     
     createHref: function(label, text) {
-    	var html = '<a name="{0}" id="{1}" href="#" >{3}</a>';
+        var html = '<a name="{0}" id="{1}" href="#" >{3}</a>';
         
         //Replace name
         html = html.replace("{0}", label.replace(" ", "").toLowerCase());
@@ -109,24 +109,24 @@ clt.template = {
     },
     
     createShowTypeService: function(field) {
-    	var content = "";
-    	
-    	switch(field.type) {
+        var content = "";
         
-	        case "img":
-	            content = this.createImage(field.label, field.default);
-	            break;
-	        case "div":
-	            content = this.createDIV(field.label, field.default);
-	            break;
-	        case "a":
-	            content = this.createHref(field.label, field.default);
-	            break;
-	        default:
-	            content = this.createInput(field, text);
-	    }
-    	
-    	return content;
+        switch(field.type) {
+        
+            case "img":
+                content = this.createImage(field.label, field.default);
+                break;
+            case "div":
+                content = this.createDIV(field.label, field.default);
+                break;
+            case "a":
+                content = this.createHref(field.label, field.default);
+                break;
+            default:
+                content = this.createInput(field, text);
+        }
+        
+        return content;
     },
         
     createField: function(field) {
@@ -165,55 +165,63 @@ clt.template = {
     },
     
     createRows: function(fields) {
-    	
-        var isHeaderH = '<div class="t_header"></div>',
-        	isBodyH = '<div class="t_body"></div>',
-        	html = [],
-        	info = '<div class="t_info" id="{id}">' + 
-						'{details}' + 
-					'</div>',
-        	detail = '<div class="t_row" name="{name}">{value}</div>',
-        	contentHeader = [],
-        	contentBody = [];
+        
+        var headerH = '<div class="t_header"></div>',
+            bodyH = '<div class="t_body"></div>',
+            html = [],
+            info = '<div class="t_info" id="{id}">' + 
+                        '{details}' + 
+                    '</div>',
+            detail = '<div class="t_row" name="{name}">{value}</div>',
+            contentHeader = [],
+            contentBody = [];
         
         for(var i = 0; i < fields.length; i++) {
-        	for(var j = 0; j < fields[i].length; j++) {
+            var row = [];
+            for(var j = 0; j < fields[i].length; j++) {
 
-	        	var detailD = this.parseToDom(detail.replace("{name}", fields[i][j].label))[0];
-	        		detailD.innerText = "";
-	        		detailD.appendChild(this.createShowTypeService(fields[i][j])[0]);
-	        	if(fields[i][j].isHeader) {
-	        		contentHeader.push(detailD);
-	        	} else {
-	        		contentBody.push(detailD);
-	        	}
-        	}
+                var detailD = this.parseToDom(detail.replace("{name}", fields[i][j].label))[0];
+                    detailD.innerText = "";
+                    detailD.appendChild(this.createShowTypeService(fields[i][j])[0]);
+                if(fields[i][j].isHeader) {
+                    contentHeader.push(detailD);
+                } else {
+                    row.push(detailD);
+                }
+            }
+            
+            if(row.length) {
+                contentBody.push(row);
+            }
         }
         
         var t_info_h = null;
         var t_info_b = null;
         
         if(contentHeader.length != 0) {
-        	t_info_h = this.parseToDom(info)[0];
-        	t_info_h.innerHTML = "";
-        	
-	        for(var i = 0; i < contentHeader.length; i++) {
-	        	t_info_h.appendChild(contentHeader[i]);
-	        }
-	        
-	        html.push(t_info_h);
+            t_info_h = this.parseToDom(info)[0];
+            t_info_h.innerHTML = "";
+            
+            for(var i = 0; i < contentHeader.length; i++) {
+                t_info_h.appendChild(contentHeader[i]);
+            }
+            header = this.parseToDom(headerH)[0];
+            header.appendChild(t_info_h);
+            html.push(header);
         }
         
         if(contentBody.length != 0) {
-	        for(var i = 0; i < contentBody.length; i++) {
-	        	t_info_b = this.parseToDom(info)[0];
-	            t_info_b.innerHTML = "";
-	            
-	            for(var j = 0; j < contentBody.length; j++) {
-	            	t_info_b.appendChild(contentBody[j]);
-	            }
-	            html.push(t_info_b);
-	        }
+            for(var i = 0; i < contentBody.length; i++) {
+                t_info_b = this.parseToDom(info)[0];
+                t_info_b.innerHTML = "";
+                
+                for(var j = 0; j < contentBody[i].length; j++) {
+                    t_info_b.appendChild(contentBody[i][j]);
+                }
+                body = this.parseToDom(bodyH)[0];
+                body.appendChild(t_info_b);
+                html.push(body);
+            }
         }
         
         return html;
@@ -227,12 +235,12 @@ clt.template = {
             return html;
         }
         if(style && style != this.default.style) {
-	        html = this.createRows(fields);
+            html = this.createRows(fields);
         } else {
-        	for(var i = 0; i < fields.length; i++) {
-	            var field = fields[i];
-	            html.push(this.createField(field));
-	        }
+            for(var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                html.push(this.createField(field));
+            }
         }
         return html;
     },
@@ -248,16 +256,17 @@ clt.template = {
     },
     
     createSection: function(obj) {
-    	
-    	obj.style = !obj.style || obj.style == this.default.style ? this.default.style : "t";
-    	
-    	var fTitleContent = '{title}',
-    	
-        	tTitleContent = '<div class="s_fold"><button></button></div>' +
-    						'<div class="default">{title}</div>' +
-    						'<div class="row_count">{count}</div>',
-    						
-    		html = '<div class="{classname}">' +
+        
+        obj.style = !obj.style || obj.style == this.default.style ? this.default.style : "t";
+        
+        var fTitleContent = '<div class="default">{title}</div>' +
+        					'<div class="row_count">{count}</div>',
+        
+            tTitleContent = '<div class="s_fold"><button></button></div>' +
+                            '<div class="default">{title}</div>' +
+                            '<div class="row_count">{count}</div>',
+                            
+            html = '<div class="{classname}">' +
                         '<div class="error_info"></div>' +
                         '<div class="title">' +
                         (obj.style == "f" ? fTitleContent : tTitleContent) +
@@ -267,7 +276,7 @@ clt.template = {
                         '</div>' +
                         '<div class="{pre}_action">{buttons}</div>' + 
                     '</div>';
-    	html = html.replace("{pre}", obj.style);
+        html = html.replace("{pre}", obj.style);
         html = html.replace("{classname}", obj.classname || this.default.classname);
         html = html.replace("{classname}", obj.style || this.default.style);
         html = html.replace("{title}", obj.title || "");
@@ -282,22 +291,22 @@ clt.template = {
         
         html = html.replace("{buttons}", buttons);
         var section = clt.action.parseToDom(html),
-        	content = section.getElementsByClassName("content")[0];
+            content = section.getElementsByClassName("content")[0];
         content.innerHTML = "";
         
         if(Object.prototype.toString.call(contents) === "[object HTMLDivElement]") {
-        	content.appendChild(contents);
+            content.appendChild(contents);
         
         } else {
-	        for(var i = 0; i < contents.length; i++) {
-	        	content.appendChild(contents[i]);
-	        }
+            for(var i = 0; i < contents.length; i++) {
+                content.appendChild(contents[i]);
+            }
         }
         return section;
     },
     
     createSections: function(obj) {
-    	
+        
     },
 
     createTopMenus: function(objs) {
@@ -339,65 +348,7 @@ clt.template = {
 };
 
 clt.action = {
-	
-	//Single
-	changeDataTest: function(data) {
-		data = data.data;
-		
-		var obj = {},
-			objKeys = Object.keys(data);
-		
-		for(var i = 0; i < objKeys.length; i++) {
-			obj[objKeys[i]] = new clt.default.object();
-			var o = obj[objKeys[i]];
-			o.title = objKeys[i];
-			o.buttons.push("Edit");
-			
-			for(var k in data[objKeys[i]]) {
-				var field = new clt.default.field();
-				field.label = k;
-				field.type = "div";
-				field.default = data[objKeys[i]][k];
-				o.fields.push(field);
-			}
-		}
-		
-		return obj;
-	},
-
-    selectChange: function() {
-        var select = document.getElementById("type");
-        if(select) {
-        	clt.data.flow = select.value;
-        	 
-            select.addEventListener("change", function(e) {
-            	e = e.currentTarget;
-                clt.data.flow = e.value;
-                clt.action.resetCurrentStep();
-            }, false);
-        }
-        
-        var orgSelect = document.getElementById("org");
-        if(orgSelect) {
-            clt.default.orgType = orgSelect.value;
-        
-            orgSelect.addEventListener("change", function(e) {
-                e = e.currentTarget;
-                clt.data.pre_domain = e.value;
-            }, false);
-        }
-        
-        var clear = document.getElementById("clear");
-        if(clear) {
-        	clt.default.clear = clear.checked;
-        	
-        	clear.addEventListener("change", function(e) {
-                e = e.currentTarget;
-                clt.default.clear = e.checked;
-            }, false);
-        }
-    },
-
+    
     resetCurrentStep: function() {
         var select = document.getElementById("type");
         if(select) {
@@ -426,165 +377,17 @@ clt.action = {
             clt.data[f.label] = d.value;
         }
     },
-
-    start: function() {
-        clt.action.save();
-
-        var obj = {
-            url: clt.default.url + "/sfdc/transfer",
-            data: JSON.stringify(clt.data),
-            success: success,
-            error: error
-        }; 
-        
-        Ajax.post(obj);
-        clt.action.loading();
-        
-        //for test
-        //success("{\"errCode\":\"0\",\"errMsg\":\"success\",\"data\":\"http://localhost:8080/test/pages/register.html?code=aPrxshT49BthlzK4hSxVxdOoLwofyAyRI0wRotM2BTeCicAbUDaUS5.F3gCumhJK.pALQd24nw%3D%3D\"}");
-        //success("{\"errCode\":\"0\",\"errMsg\":\"success\",\"data\":\"http://localhost:8080/test/pages/register.html#access_token=00D7F000000refy%21AQcAQKeMJw7VFP49zfJTohk5nwrjZwzPq0XE2f4VX5GOPomSt0M2OFhOPZ.qr1a2Z_6yubey9ST2KW97kYGbQ8QmkynQt0Rp&instance_url=https%3A%2F%2Fap5.salesforce.com&id=https%3A%2F%2Flogin.salesforce.com%2Fid%2F00D7F000000refyUAA%2F0057F000000ZGu0QAG&issued_at=1497841367151&signature=YSKiv9NR%2Fh3oEV9SJK8%2By7%2Bj4YH8H3FQ9Tw2DAIHyT0%3D&scope=id+api+web+full+chatter_api+visualforce+openid+custom_permissions+wave_api+eclair_api&token_type=Bearer\"}");
-
-        function success(result) {
-            //console.debug("Ajax post success");
-            //console.debug(result);
-            
-            result = JSON.parse(result);
-            if(parseInt(result.errCode) === 0) {
-            	
-            	switch(clt.data.flow) {
-            		case "0":
-            			clt.default.popWindow = window.open(result.data);
-                        var flow = clt.data.flow;
-                        clt.default.interval = setInterval("clt.action.closeWindow(" + flow + ",'" + clt.data.pre_domain + "')",50);
-            			break;
-            		case "1":
-            			clt.default.popWindow = window.open(result.data);
-            			var flow = clt.data.flow;
-                        clt.default.interval = setInterval("clt.action.closeWindow(" + flow + ")",50);
-            			break;
-            		case "2":
-            			var d = clt.template.createResultSection(result.data);
-            			document.body.appendChild(d);
-            			clt.action.clearDomById("loading");
-            			//console.debug(result.data);
-            			break;
-            		default:
-            			clt.action.clearDomById("loading");
-            			//console.debug(result.data);
-            			//break;
-            	}
-            } else {
-            	var error = document.getElementsByClassName("error_title");
-	            error[0].innerHTML = result.errMsg ? result.errMsg : clt.default.error;
-            	clt.action.clearDomById("loading");
-            }
-        }
-
-        function error(result) {
-            clt.action.clearDomById("loading");
-            var error = document.getElementsByClassName("error_title");
-            error[0].innerHTML = result.errMsg ? result.errMsg : clt.default.error;
-        }
-    },
-    
-    closeWindow: function(flow, pre_domain) {
-    	
-    	try {  
-    		console.debug("location: " + clt.default.popWindow.location.href);
-    		var data = clt.default.popWindow.location.href;
-    		
-    		if(data === "about:blank") {
-    			return;
-    		}
-    		
-    		clt.default.popWindow.close();
-			window.clearInterval(clt.default.interval);
-			
-    		if(flow == "0") {
-    			var code = data.split("=")[1];
-    			var req_data = {
-    				code: code,
-    				redirect_uri: clt.data.redirect_uri,
-    				client_id: clt.data.client_id,
-    				client_secret: clt.data.client_secret,
-    				pre_domain: pre_domain
-    			}
-    			var obj = {
-    		            url: clt.default.url + "/sfdc/oauth/ws",
-    		            data: JSON.stringify(req_data),
-    		            success: success,
-    		            error: error
-		        }; 
-		        Ajax.post(obj);
-
-		        function success(result) {
-		            console.debug("Ajax post success");
-		            console.debug(result);
-		            result = JSON.parse(result);
-		            if(parseInt(result.errCode) === 0) {
-		            	clt.action.setResultSection(result.data);
-		            	clt.action.clearDomById("loading");
-		            } else {
-		            	var error = document.getElementsByClassName("error_title");
-		            	error[0].innerHTML = result.errMsg ? result.errMsg : clt.default.error;
-		            }
-		            clt.action.clearDomById("loading");
-		        }
-
-		        function error(result) {
-		            clt.action.clearDomById("loading");
-		            var error = document.getElementsByClassName("error_title");
-		            error[0].innerHTML = result.errMsg ? result.errMsg : clt.default.error;
-		        }
-    		} else {
-    			var fields = clt.action.getFields_UA(data);
-    			clt.action.setResultSection(fields);
-    			clt.action.clearDomById("loading");
-    		}
-    	} catch (e) {    
-    	
-    	} 
-    },
-    
-    getFields_UA(data) {
-    	var fields = {};
-		var originS = data.split("#")[1];
-		var arr = originS.split("&");
-		for(var i = 0; i < arr.length; i++) {
-			
-			var o = arr[i].split("=");
-			var label = o.shift();
-			var value = null;
-			if(o.length > 2) {
-				value = o.join("=");
-			} else {
-				value = o.shift();
-			}
-			fields[label] = decodeURIComponent(value);
-		}
-		
-		return fields;
-    },
-    
-    setResultSection(json) {
-    	if(typeof json != "string") {
-    		json = JSON.stringify(json);
-    	}
-    	
-    	var d = clt.template.createResultSection(json);
-		document.body.appendChild(d);
-    },
     
     reset: function() {
         for(var f in clt.data) {
-        	if(f == "flow") continue;
+            if(f == "flow") continue;
             clt.data[f] = null;
         }
     },
     
     setData: function(currentStep) {
-    	//clt.data.url = clt.default.url.replace("{0}", clt.default.orgType) + clt.default[currentStep].url;
-    	clt.data.pre_domain = clt.default.orgType;
+        //clt.data.url = clt.default.url.replace("{0}", clt.default.orgType) + clt.default[currentStep].url;
+        clt.data.pre_domain = clt.default.orgType;
     },
     
     loading: function() {
@@ -622,7 +425,7 @@ clt.action = {
         clt.action.removeSection();
         //可扩展功能，tab切换清除数据
         if(clt.default.clear) {
-        	clt.action.reset();
+            clt.action.reset();
         }
         
         var currentStep = clt.default.type[clt.default.currentStep];
@@ -648,17 +451,6 @@ clt.action = {
     }
 };
 
-clt.test = function() {
-	//var json = '{"data":{"button":{"buttonId":"5737F000000Xb4a","displayInfo":"There are currently no agents online, try again later pls.","bid":"ec3f3ea6-7a24-44bf-8009-0e7bd9e88b48"},"basicConfig":{"wechatAccount":"gh_ffdefb93090b","endPoint":"https://d.la1-c1-ukb.salesforceliveagent.com/chat/rest/","bcId":"beae81d8-4956-47d1-9de7-15bb8e79127d","createTime":"2017-06-05 13:33:32.0","deploymentId":"5727F000000Xcpk","appId":"wx085888a3e559f8ac","appSecret":"KnZtN9mX0TEe","orgId":"00D7F000000qSxk"},"contact":{"contactId":"8b847d45-50cd-457c-840f-a14942f7fd7b","companyName":"Eric","mobile":"15210063460","email":"yxeysy@126.com"},"account":{"accountId":"690d3fc3-a44b-4887-a21d-17f848e849bd","companyName":"Collection"}},"errCode":"0","errMsg":"success."}';
-	//clt.default.objects = clt.action.changeDataTest(JSON.parse(json));
-	//var body = document.body;
-	var keys = Object.keys(clt.default.objects);
-	for(var i = 0; i < keys.length; i++) {
-		document.body.appendChild(clt.template.createSection(clt.default.objects[keys[i]]));
-	}
-}
-
 clt.init = function() {
-    clt.action.selectChange();
-    //clt.action.checkHttps();
+
 }

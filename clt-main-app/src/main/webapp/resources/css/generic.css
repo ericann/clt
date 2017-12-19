@@ -218,9 +218,18 @@ body {
 }
 
 .t_row {
-	border-bottom: 1px solid #e7e7eb;
+	//border-bottom: 1px solid #e7e7eb;
 	//display: block;
 	width: 100px;
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.t_row div {
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 //settings and so on
