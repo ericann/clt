@@ -193,6 +193,10 @@ body {
     overflow-x: inherit;
 }
 
+.section .plate .content {
+    white-space: inherit;
+}
+
 .f_field {
 	margin-bottom: 3px;
 }
