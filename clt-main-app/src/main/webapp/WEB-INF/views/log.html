@@ -1,170 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<style type="text/css">
-		body {
-			background: #f4f5f9;
-		    width: 100%;
-		    height: 100%;
-		    margin: 0px;
-		    padding: 0px;
-		    font-size: 14px;
-		    word-wrap: inherit;
-		    word-spacing: inherit;
-		    overflow: hidden;
-		    -moz-user-select: none;
-		}
-		
-		.head {
-			width: 100%;
-			background-color: black;
-			height: 50px;
-		}
-		
-		.prompt {
-			color: white;
-			font-size: 150%;
-			margin-left: 50px;
-    		line-height: 50px;
-    		display: inline-block;
-		}
-		
-		.special {
-			color: white;
-			font-size: 89%;
-    		line-height: 50px;
-    		display: inline-block;
-    		height: 200px;
-		}
-	
-		.section {
-			background: white;
-			border-radius: 10px;
-			width: 86%;
-		    height: auto;
-		    margin: 10px 5% 10px 5%;
-		    padding: 10px 2% 10px 2%;
-		    box-shadow: 3px 2px 4px 0px darkgrey;
-		}
-		
-		.error_info {
-			color: #F08080;
-		    text-align: center;
-		    height: 20px;
-		}
-		
-		.title {
-			font-size: 123%;
-			border-bottom: 1px solid #e7e7eb;
-		    padding: 0 0 0;
-		    margin: 0 50px;
-		    line-height: 40px;
-		}
-		
-		.title .s_fold, .default, .row_count {
-			display: inline-block;
-		}
-		
-		.title .row_count {
-			float: right;
-			margin-right: 10px;
-		}
-		
-		.title .s_fold {
-			margin-left: -20px;
-		}
-		
-		.content {
-			width: auto;
-			height: auto;
-			margin: 10px 55px;
-			text-align: left;
-			word-break: keep-all;
-		    white-space: nowrap;
-		    overflow-x: auto;
-		}
-
-		.f_field {
-			margin-bottom: 3px;
-		}
-		
-		.f_label, .f_values, .f_value, .f_link, .t_row {
-			display: inline-block;
-		}
-		
-		.f_label {
-			width: 28%;
-			padding-left: 10%;
-			vertical-align: top;
-		}
-
-		.f_label .calendar {
-			background: url(time.png);
-			height: 50px;
-			background-size: 50px;
-			background-repeat: no-repeat;
-		}
-
-		.f_label .calendar label {
-			line-height: 12px;
-			font-weight: normal;
-			display: block;
-			text-align: center;
-			width: 50px;
-			font-size: 10px;
-		}
-
-		.f_label .calendar:first-child { 
-			padding: 15px 0px 0px 0px;
-		}
-
-		.f_label .calendar label:nth-child(2) { 
-			font-weight: bolder;
-			line-height: 14px;
-			font-size: 14px;
-		}
-
-		.f_value ul li {
-			line-height: 30px;
-		}
-
-		.f_help {
-			color: #a3a3a3;
-			font-size: 90%;
-		}
-		
-		.t_header, .t_body {
-			width: 100%;
-		}
-		
-		.t_info {
-			display: block;
-			width: 100%;
-			border-bottom: 1px solid #e7e7eb;
-			line-height: 30px;
-			//float: right;
-		}
-		
-		.t_body .t_info:hover {
-			background-color: lavender;
-		}
-		
-		.t_row {
-			border-bottom: 1px solid #e7e7eb;
-			//display: block;
-			width: 100px;
-		}
-		
-		//settings and so on
-		.button {
-		
-		}
-	</style>
+	<link rel="stylesheet" href="../resources/css/generic.css" type="text/css" />
 </head>
 <body onselectstart="return false">
 	<div class="head">
+		<div class="icon_buttons"></div>
 		<div class="prompt">CLT Log</div>
-		<div class="special">For All</div>
+		<div class="special">v2.0</div>
 		<div><button class="button"></button></div>
 	</div>
 	
@@ -416,7 +259,7 @@
 			changeSection: function() {
 				
 				clt.action.removeSection();
-		        //可扩展功能，tab切换清除数据
+		        //閸欘垱澧跨仦鏇炲閼虫枻绱漷ab閸掑洦宕插〒鍛存珟閺佺増宓�
 		        if(clt.default.clear) {
 		        	clt.action.reset();
 		        }

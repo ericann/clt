@@ -8,10 +8,10 @@
 </head>
 <body>
 	<div class="head">
-		<button class="top_menu"></button>
+		<div class="icon_buttons"><button class="top_menu"></button></div>
 		<!-- <div class="menu"></div> -->
 		<div class="prompt">CLT Management</div>
-		<div class="special">For All</div>
+		<div class="special">v2.0</div>
 	</div>
 	
 	
@@ -121,6 +121,9 @@
 					document.getElementsByClassName("menu")[0].style.display = "none";
 				}, false);
 				
+				if(a[i].getElementsByTagName("a")[0].innerText == "Management") {
+					a[i].getElementsByTagName("a")[0].click();
+				}
 			}
 		}
 		
@@ -247,7 +250,7 @@
         }
         
         function defaultMenuData(profile) {
-        	profile.menu.Managment.objects = {
+        	profile.menu.Management.objects = {
         		"Management": null		
         	};
         	

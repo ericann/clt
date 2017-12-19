@@ -8,27 +8,30 @@
 	<script type="text/javascript" src="../resources/js/Ajax.js"></script>
 </head>
 <body>
-<div class="prompt">SFDC Oauth2.0<span> For developer, test, demo</span></div>
-<div class="support">Support Infor. <a href="mailto:yxeysy@126.com">Contact Email</a> <a href="tel:15210063460">Contact Phone 15210063460</a> Name: Eric</div>
-<div class="flowSelect">
-    <div class="title">OAuth2.0 authentication flow</div>
-    <select id="type">
-        <option value="-1">--None--</option>
-        <option value="0">Web Server</option>
-        <option value="1">User Agent</option>
-        <option value="2">Username Password</option>
-        <option value="3">Refresh Token</option>
-    </select>
-    <select id="org">
-        <option value="login">Production/Developer</option>
-        <option value="test">Sandbox</option>
-    </select>
-    <!-- Clear 
-    <input type="checkbox" id="clear"/> -->
-</div>
-<!-- <div id="test"></div> -->
-<script>
-    document.onload = clt.init();
-</script>
+	<div class="head">
+		<div class="icon_buttons"></div>
+		<div class="prompt">SFDC Oauth2.0</div>
+		<div class="special">v2.0</div>
+	</div>
+	<div class="flowSelect">
+	    <div class="title">OAuth2.0 authentication flow</div>
+	    <select id="type">
+	        <option value="-1">--None--</option>
+	        <option value="0">Web Server</option>
+	        <option value="1">User Agent</option>
+	        <option value="2">Username Password</option>
+	        <option value="3">Refresh Token</option>
+	    </select>
+	    <select id="org">
+	        <option value="login">Production/Developer</option>
+	        <option value="test">Sandbox</option>
+	    </select>
+	    <!-- Clear 
+	    <input type="checkbox" id="clear"/> -->
+	</div>
+	
+	<script>
+	    document.onload = clt.init();
+	</script>
 </body>
 </html>

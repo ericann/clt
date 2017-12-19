@@ -1,7 +1,5 @@
 package org.clt.data.controller;
 
-import java.util.List;
-
 import org.clt.repository.pojo.Contact;
 import org.clt.service.base.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
