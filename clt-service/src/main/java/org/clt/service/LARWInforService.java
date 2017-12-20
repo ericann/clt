@@ -18,12 +18,9 @@ import org.clt.repository.pojo.LiveAgent;
 import org.clt.repository.pojo.Sfdc;
 import org.clt.repository.pojo.WechatAccount;
 
-import static org.clt.util.DefaultMsg.initErrorResult;
-import static org.clt.util.DefaultMsg.getErrorResult;
 import static org.clt.util.DefaultMsg.NO_AGENTS_ALERT;
 import static org.clt.util.DefaultMsg.ORG_C_COUNT;
 import static org.clt.util.DefaultMsg.BUTTON_C_COUNT;
-import static org.clt.util.DefaultMsg.E_1;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +34,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LARWInforService {
 	
+	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired

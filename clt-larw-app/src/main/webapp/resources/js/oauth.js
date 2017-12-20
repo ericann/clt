@@ -504,5 +504,5 @@ clt.action = {
 
 clt.init = function() {
     clt.action.selectChange();
-    clt.action.checkHttps();
+    //clt.action.checkHttps();
 }

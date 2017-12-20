@@ -3,7 +3,7 @@ package org.clt.repository.pojo;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 
 /**
@@ -38,11 +38,11 @@ public class ObjectPermission implements Serializable {
 
 	//bi-directional many-to-one association to FieldPermission
 	@OneToMany(mappedBy="objectpermission")
-	private Set<FieldPermission> fieldpermissions;
+	private List<FieldPermission> fieldpermissions;
 
 	//bi-directional many-to-one association to FunctionObject
 	@OneToMany(mappedBy="objectpermission")
-	private Set<FunctionObject> functionobjects;
+	private List<FunctionObject> functionobjects;
 
 	public ObjectPermission() {
 	}
@@ -119,11 +119,11 @@ public class ObjectPermission implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public Set<FieldPermission> getFieldpermissions() {
+	public List<FieldPermission> getFieldpermissions() {
 		return this.fieldpermissions;
 	}
 
-	public void setFieldpermissions(Set<FieldPermission> fieldpermissions) {
+	public void setFieldpermissions(List<FieldPermission> fieldpermissions) {
 		this.fieldpermissions = fieldpermissions;
 	}
 
@@ -141,11 +141,11 @@ public class ObjectPermission implements Serializable {
 		return fieldpermission;
 	}
 
-	public Set<FunctionObject> getFunctionobjects() {
+	public List<FunctionObject> getFunctionobjects() {
 		return this.functionobjects;
 	}
 
-	public void setFunctionobjects(Set<FunctionObject> functionobjects) {
+	public void setFunctionobjects(List<FunctionObject> functionobjects) {
 		this.functionobjects = functionobjects;
 	}
 

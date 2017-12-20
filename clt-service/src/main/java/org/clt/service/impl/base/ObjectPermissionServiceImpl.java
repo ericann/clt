@@ -1,6 +1,5 @@
 package org.clt.service.impl.base;
 
-import org.clt.repository.dao.GenericDao;
 import org.clt.repository.dao.ObjectPermissionDao;
 import org.clt.repository.pojo.ObjectPermission;
 import org.clt.service.base.ObjectPermissionService;

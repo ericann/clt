@@ -1,7 +1,6 @@
 package org.clt.service.impl.base;
 
 import org.clt.repository.dao.ContactDao;
-import org.clt.repository.dao.GenericDao;
 import org.clt.repository.pojo.Contact;
 import org.clt.service.base.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.clt.repository.pojo.ConnectApp;
-import org.clt.repository.pojo.Scope;
-import org.clt.repository.pojo.UserApp;
 import org.clt.service.base.ConnectAppService;
 import org.clt.service.base.ScopeService;
 import org.clt.service.base.UserAppService;
@@ -26,6 +24,7 @@ public class TestService {
 	@Autowired
 	private UserAppService userAppService;
 	
+	@SuppressWarnings("unused")
 	@Autowired
 	private ScopeService scopeService;
 	

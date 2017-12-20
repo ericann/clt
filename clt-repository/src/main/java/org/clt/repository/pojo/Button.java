@@ -3,7 +3,7 @@ package org.clt.repository.pojo;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 
 /**
@@ -39,7 +39,7 @@ public class Button implements Serializable {
 
 	//bi-directional many-to-one association to ChatMessage
 	@OneToMany(mappedBy="button")
-	private Set<ChatMessage> chatmessages;
+	private List<ChatMessage> chatmessages;
 
 	public Button() {
 	}
@@ -108,11 +108,11 @@ public class Button implements Serializable {
 		this.liveagent = liveagent;
 	}
 
-	public Set<ChatMessage> getChatmessages() {
+	public List<ChatMessage> getChatmessages() {
 		return this.chatmessages;
 	}
 
-	public void setChatmessages(Set<ChatMessage> chatmessages) {
+	public void setChatmessages(List<ChatMessage> chatmessages) {
 		this.chatmessages = chatmessages;
 	}
 

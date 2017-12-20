@@ -156,7 +156,7 @@ public class WechatService {
 		
 		System.out.println(XML.parse(xml));
 		
-		WechatService ws = new WechatService();
+		//WechatService ws = new WechatService();
 		//String image = ws.getQRTicket("hDdWmNGpI7dYKlXNORkPScjujicQTDEqOVoIxjS0KPxGGsePMy4jx38AZtYGHdh0pZX6skR2KK6qgoXYF-yJRBMl_4hyppCpZ7ND_7wn7lkhlL_tQJpIydV70n3danyeVQPaADAHCB");
 		//System.out.println(image);
 	}

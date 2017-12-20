@@ -24,7 +24,7 @@ public class FieldPermission implements Serializable {
 
 	private Boolean del;
 
-	private Boolean edid;
+	private Boolean edit;
 
 	private String field;
 
@@ -73,12 +73,12 @@ public class FieldPermission implements Serializable {
 		this.del = del;
 	}
 
-	public Boolean getEdid() {
-		return this.edid;
+	public Boolean getEdit() {
+		return this.edit;
 	}
 
-	public void setEdid(Boolean edid) {
-		this.edid = edid;
+	public void setEdit(Boolean edit) {
+		this.edit = edit;
 	}
 
 	public String getField() {

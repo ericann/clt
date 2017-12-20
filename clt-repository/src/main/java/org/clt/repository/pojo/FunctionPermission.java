@@ -3,7 +3,7 @@ package org.clt.repository.pojo;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 
 /**
@@ -30,11 +30,11 @@ public class FunctionPermission implements Serializable {
 
 	//bi-directional many-to-one association to FunctionObject
 	@OneToMany(mappedBy="functionpermission")
-	private Set<FunctionObject> functionobjects;
+	private List<FunctionObject> functionobjects;
 
 	//bi-directional many-to-one association to Scope
 	@OneToMany(mappedBy="functionpermission")
-	private Set<Scope> scopes;
+	private List<Scope> scopes;
 
 	public FunctionPermission() {
 	}
@@ -79,11 +79,11 @@ public class FunctionPermission implements Serializable {
 		this.url = url;
 	}
 
-	public Set<FunctionObject> getFunctionobjects() {
+	public List<FunctionObject> getFunctionobjects() {
 		return this.functionobjects;
 	}
 
-	public void setFunctionobjects(Set<FunctionObject> functionobjects) {
+	public void setFunctionobjects(List<FunctionObject> functionobjects) {
 		this.functionobjects = functionobjects;
 	}
 
@@ -101,11 +101,11 @@ public class FunctionPermission implements Serializable {
 		return functionobject;
 	}
 
-	public Set<Scope> getScopes() {
+	public List<Scope> getScopes() {
 		return this.scopes;
 	}
 
-	public void setScopes(Set<Scope> scopes) {
+	public void setScopes(List<Scope> scopes) {
 		this.scopes = scopes;
 	}
 

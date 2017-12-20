@@ -3,7 +3,7 @@ package org.clt.repository.pojo;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 
 /**
@@ -54,11 +54,11 @@ public class WechatAccount implements Serializable {
 
 	//bi-directional many-to-one association to WechatTicket
 	@OneToMany(mappedBy="wechataccount")
-	private Set<WechatTicket> wechattickets;
+	private List<WechatTicket> wechattickets;
 
 	//bi-directional many-to-one association to WechatUser
 	@OneToMany(mappedBy="wechataccount")
-	private Set<WechatUser> wechatusers;
+	private List<WechatUser> wechatusers;
 
 	public WechatAccount() {
 	}
@@ -175,11 +175,11 @@ public class WechatAccount implements Serializable {
 		this.liveagent = liveagent;
 	}
 
-	public Set<WechatTicket> getWechattickets() {
+	public List<WechatTicket> getWechattickets() {
 		return this.wechattickets;
 	}
 
-	public void setWechattickets(Set<WechatTicket> wechattickets) {
+	public void setWechattickets(List<WechatTicket> wechattickets) {
 		this.wechattickets = wechattickets;
 	}
 
@@ -197,11 +197,11 @@ public class WechatAccount implements Serializable {
 		return wechatticket;
 	}
 
-	public Set<WechatUser> getWechatusers() {
+	public List<WechatUser> getWechatusers() {
 		return this.wechatusers;
 	}
 
-	public void setWechatusers(Set<WechatUser> wechatusers) {
+	public void setWechatusers(List<WechatUser> wechatusers) {
 		this.wechatusers = wechatusers;
 	}
 

@@ -3,7 +3,7 @@ package org.clt.repository.pojo;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 
 /**
@@ -32,11 +32,11 @@ public class ConnectApp implements Serializable {
 
 	//bi-directional many-to-one association to Scope
 	@OneToMany(mappedBy="connectApp")
-	private Set<Scope> scopes;
+	private List<Scope> scopes;
 
 	//bi-directional many-to-one association to UserApp
 	@OneToMany(mappedBy="connectApp")
-	private Set<UserApp> userapps;
+	private List<UserApp> userapps;
 
 	public ConnectApp() {
 	}
@@ -89,11 +89,11 @@ public class ConnectApp implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public Set<Scope> getScopes() {
+	public List<Scope> getScopes() {
 		return this.scopes;
 	}
 
-	public void setScopes(Set<Scope> scopes) {
+	public void setScopes(List<Scope> scopes) {
 		this.scopes = scopes;
 	}
 
@@ -111,11 +111,11 @@ public class ConnectApp implements Serializable {
 		return scope;
 	}
 
-	public Set<UserApp> getUserapps() {
+	public List<UserApp> getUserapps() {
 		return this.userapps;
 	}
 
-	public void setUserapps(Set<UserApp> userapps) {
+	public void setUserapps(List<UserApp> userapps) {
 		this.userapps = userapps;
 	}
 

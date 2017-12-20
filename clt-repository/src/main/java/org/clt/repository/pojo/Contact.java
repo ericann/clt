@@ -6,7 +6,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 
 /**
@@ -51,15 +51,15 @@ public class Contact implements Serializable {
 
 	//bi-directional many-to-one association to UserApp
 	@OneToMany(mappedBy="contact")
-	private Set<UserApp> userapps;
+	private List<UserApp> userapps;
 
 	//bi-directional many-to-one association to WechatTicket
 	@OneToMany(mappedBy="contact")
-	private Set<WechatTicket> wechattickets;
+	private List<WechatTicket> wechattickets;
 
 	//bi-directional many-to-one association to WechatUser
 	@OneToMany(mappedBy="contact")
-	private Set<WechatUser> wechatusers;
+	private List<WechatUser> wechatusers;
 
 	public Contact() {
 	}
@@ -160,11 +160,11 @@ public class Contact implements Serializable {
 		this.account = account;
 	}
 
-	public Set<UserApp> getUserapps() {
+	public List<UserApp> getUserapps() {
 		return this.userapps;
 	}
 
-	public void setUserapps(Set<UserApp> userapps) {
+	public void setUserapps(List<UserApp> userapps) {
 		this.userapps = userapps;
 	}
 
@@ -182,11 +182,11 @@ public class Contact implements Serializable {
 		return userapp;
 	}
 
-	public Set<WechatTicket> getWechattickets() {
+	public List<WechatTicket> getWechattickets() {
 		return this.wechattickets;
 	}
 
-	public void setWechattickets(Set<WechatTicket> wechattickets) {
+	public void setWechattickets(List<WechatTicket> wechattickets) {
 		this.wechattickets = wechattickets;
 	}
 
@@ -204,11 +204,11 @@ public class Contact implements Serializable {
 		return wechatticket;
 	}
 
-	public Set<WechatUser> getWechatusers() {
+	public List<WechatUser> getWechatusers() {
 		return this.wechatusers;
 	}
 
-	public void setWechatusers(Set<WechatUser> wechatusers) {
+	public void setWechatusers(List<WechatUser> wechatusers) {
 		this.wechatusers = wechatusers;
 	}
 

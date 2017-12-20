@@ -3,7 +3,7 @@ package org.clt.repository.pojo;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 
 /**
@@ -32,15 +32,15 @@ public class Account implements Serializable {
 
 	//bi-directional many-to-one association to Contact
 	@OneToMany(mappedBy="account")
-	private Set<Contact> contacts;
+	private List<Contact> contacts;
 
 	//bi-directional many-to-one association to LiveAgent
 	@OneToMany(mappedBy="account")
-	private Set<LiveAgent> liveagents;
+	private List<LiveAgent> liveagents;
 
 	//bi-directional many-to-one association to WechatAccount
 	@OneToMany(mappedBy="account")
-	private Set<WechatAccount> wechatAccounts;
+	private List<WechatAccount> wechatAccounts;
 
 	public Account() {
 	}
@@ -85,11 +85,11 @@ public class Account implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public Set<Contact> getContacts() {
+	public List<Contact> getContacts() {
 		return this.contacts;
 	}
 
-	public void setContacts(Set<Contact> contacts) {
+	public void setContacts(List<Contact> contacts) {
 		this.contacts = contacts;
 	}
 
@@ -107,11 +107,11 @@ public class Account implements Serializable {
 		return contact;
 	}
 
-	public Set<LiveAgent> getLiveagents() {
+	public List<LiveAgent> getLiveagents() {
 		return this.liveagents;
 	}
 
-	public void setLiveagents(Set<LiveAgent> liveagents) {
+	public void setLiveagents(List<LiveAgent> liveagents) {
 		this.liveagents = liveagents;
 	}
 
@@ -129,11 +129,11 @@ public class Account implements Serializable {
 		return liveagent;
 	}
 
-	public Set<WechatAccount> getWechatAccounts() {
+	public List<WechatAccount> getWechatAccounts() {
 		return this.wechatAccounts;
 	}
 
-	public void setWechatAccounts(Set<WechatAccount> wechatAccounts) {
+	public void setWechatAccounts(List<WechatAccount> wechatAccounts) {
 		this.wechatAccounts = wechatAccounts;
 	}
 

@@ -25,6 +25,7 @@ public class AccessService {
 	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	@SuppressWarnings("unused")
 	@Autowired
 	private UserService userService;
 	

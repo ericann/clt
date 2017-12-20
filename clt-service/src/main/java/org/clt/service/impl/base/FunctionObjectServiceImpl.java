@@ -1,7 +1,6 @@
 package org.clt.service.impl.base;
 
 import org.clt.repository.dao.FunctionObjectDao;
-import org.clt.repository.dao.GenericDao;
 import org.clt.repository.pojo.FunctionObject;
 import org.clt.service.base.FunctionObjectService;
 import org.springframework.beans.factory.annotation.Autowired;

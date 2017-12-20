@@ -1,6 +1,5 @@
 package org.clt.service.impl.base;
 
-import org.clt.repository.dao.GenericDao;
 import org.clt.repository.dao.LiveAgentDao;
 import org.clt.repository.pojo.LiveAgent;
 import org.clt.service.base.LiveAgentService;
