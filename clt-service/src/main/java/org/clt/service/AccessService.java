@@ -1,6 +1,7 @@
 package org.clt.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -8,10 +9,11 @@ import org.clt.repository.pojo.Contact;
 import org.clt.repository.pojo.WechatAccount;
 import org.clt.repository.pojo.WechatTicket;
 import org.clt.repository.pojo.WechatUser;
-import org.clt.service.base.UserService;
+import org.clt.service.base.UserAppService;
 import org.clt.service.base.WechatAccountService;
 import org.clt.service.base.WechatTicketService;
 import org.clt.service.base.WechatUserService;
+import org.clt.service.metadata.CreateObjectMetadataService;
 import org.clt.util.Token;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -27,7 +29,7 @@ public class AccessService {
 	
 	@SuppressWarnings("unused")
 	@Autowired
-	private UserService userService;
+	private UserAppService userAppService;
 	
 	@Autowired
 	private WechatAccountService wechatAccountService;
@@ -40,6 +42,9 @@ public class AccessService {
 	
 	@Autowired
 	private WechatUserService wechatUserService;
+	
+	@Autowired
+	private CreateObjectMetadataService metadataService;
 	
 	public Map<String, String> getPermissions() {
 		return null;
@@ -170,5 +175,18 @@ public class AccessService {
 		}
 		
 		return result;
+	}
+	
+	public String getAccessToken(String conId) {
+		List<Map<String, Object>> access = this.userAppService.findByContactId(conId);
+		
+		Map<String, Object> accessSort = this.metadataService.convertAccess(access);
+		System.out.println("access: " + new JSONObject(accessSort).toString());
+		String access_token = Token.generateAccessToken(3600, new JSONObject(accessSort).toString());
+		return access_token;
+	}
+	
+	public String getAccessTokenInfo(String access) {
+		return new JSONObject(Token.parse(access)).toString();
 	}
 }

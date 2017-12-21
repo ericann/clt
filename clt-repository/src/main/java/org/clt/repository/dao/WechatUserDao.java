@@ -2,9 +2,7 @@ package org.clt.repository.dao;
 
 import java.util.List;
 
-import org.clt.repository.pojo.WechatAccount;
 import org.clt.repository.pojo.WechatUser;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

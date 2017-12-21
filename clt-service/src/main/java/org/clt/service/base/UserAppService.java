@@ -10,4 +10,6 @@ import org.springframework.stereotype.Service;
 public interface UserAppService extends GenericService<UserApp, String> {
 	
 	List<Map<String, Object>> findByContactIdAndName(String conId, String name);
+	
+	List<Map<String, Object>> findByContactId(String conId);
 }

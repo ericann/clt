@@ -11,4 +11,7 @@ public interface FieldPermissionDao extends GenericDao<FieldPermission, String> 
 	@Override
 	@Query("SELECT fp FROM FieldPermission fp WHERE fp.id=:conId")
 	List<FieldPermission> findAllByContactId(@Param("conId") String conId);
+	
+	@Query("SELECT fp FROM FieldPermission fp WHERE fp.objectpermission.id=:opId")
+	List<FieldPermission> findAllByOpId(@Param("opId") String opId);
 }

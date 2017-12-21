@@ -1,9 +1,11 @@
-package org.clt.util.metadata;
+package org.clt.service.metadata;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class Object {
+	
+	private String title;
 	
 	/**
 	 * fields of current page
@@ -13,7 +15,15 @@ public class Object {
 	/**
 	 * actions of current object
 	 */
-	private Set<String> buttons = new LinkedHashSet<String>();
+	private Set<Action> buttons = new LinkedHashSet<Action>();
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	public Set<Field> getFields() {
 		return fields;
@@ -23,15 +33,15 @@ public class Object {
 		this.fields = fields;
 	}
 
-	public Set<String> getButtons() {
+	public Set<Action> getButtons() {
 		return buttons;
 	}
 
-	public void setButtons(Set<String> buttons) {
+	public void setButtons(Set<Action> buttons) {
 		this.buttons = buttons;
 	} 
 	
-	public Set<String> addButton(String button) {
+	public Set<Action> addButton(Action button) {
 		this.buttons.add(button);
 		return this.buttons;
 	}

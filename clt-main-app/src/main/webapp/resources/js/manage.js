@@ -40,6 +40,8 @@ clt.default = {
 
 clt.data = {};
 
+clt.metadata = {};
+
 clt.template = {
     default: {
         classname: "section",

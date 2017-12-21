@@ -6,14 +6,12 @@ import org.clt.service.AccessService;
 import org.clt.service.BasicConfigService;
 import org.clt.service.LARWService;
 import org.clt.service.WechatEventService;
-import org.clt.service.WechatService;
 import org.clt.service.WechatTokenService;
 import org.clt.util.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,6 +36,7 @@ public class WechatListener {
 	@Autowired
 	private WechatEventService wechatEventService;
 	
+	@SuppressWarnings("unused")
 	@Autowired
 	private AccessService accessService;
 	
@@ -45,8 +44,8 @@ public class WechatListener {
 	public @ResponseBody String verification_v1(@RequestParam String signature,@RequestParam String timestamp,
 			@RequestParam String nonce, @RequestParam String echostr) {
 		
-		return echostr;
-		//return this.verification(signature, timestamp, nonce, echostr);
+		//return echostr;
+		return this.verification(signature, timestamp, nonce, echostr);
 	}
 	
 	@RequestMapping(value="/msg/text", method=RequestMethod.POST, consumes="text/xml")

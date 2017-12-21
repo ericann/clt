@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -42,5 +43,16 @@ public class AccessPermissionsListener {
 	@RequestMapping(value="/getUUID", method=RequestMethod.GET)
 	public @ResponseBody String getUUID() {
 		return UUID.randomUUID().toString();
+	}
+	
+	@RequestMapping(value="/getUUIDs/{count}", method=RequestMethod.GET)
+	public @ResponseBody String getUUIDs(@RequestParam("count") String count) {
+		String[] uuids = new String[] {};
+		for(Integer i = 0; i < Integer.valueOf(count); i++) {
+			String uuid = UUID.randomUUID().toString();
+			uuids[i] = uuid;
+		}
+		
+		return uuids.toString();
 	}
 }

@@ -46,6 +46,16 @@
 				
 				if(menu[i]["op_name"]) {
 					profile["menu"][menu[i]["m_name"]]["objects"][menu[i]["op_name"]] = menu[i]["opId"];
+					Ajax.get({
+						url: "http://localhost:8080/clt/metadata-api/FieldPermission/" + menu[i]["opId"] + "/all", 
+						type: "GET", 
+						success: function(result) {
+							var metas = JSON.parse(result);
+							if(metas["objectName"]) {
+								clt.metadata[metas["objectName"]] = metas;
+							}
+						}
+					});
 				}
 				
 			}

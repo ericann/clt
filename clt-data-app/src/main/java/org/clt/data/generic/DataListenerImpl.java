@@ -1,4 +1,4 @@
-package org.clt.data.controller;
+package org.clt.data.generic;
 
 import java.io.Serializable;
 
@@ -17,6 +17,7 @@ public abstract class DataListenerImpl<T extends Serializable, PK extends Serial
 	public DataListenerImpl(GenericService<T, PK> genericService) {
 		this.genericService = genericService;
 	}
+	
 	
 	@RequestMapping("/")
 	public @ResponseBody String findAll(@PathVariable("conId") String conId) {

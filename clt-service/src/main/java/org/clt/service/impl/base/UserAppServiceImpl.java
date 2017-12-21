@@ -24,5 +24,11 @@ public class UserAppServiceImpl extends GenericServiceImpl<UserApp, String> impl
 	public List<Map<String, Object>> findByContactIdAndName(String conId, String name) {
 		return this.userAppDao.findByContactIdAndName(conId, name);
 	}
+
+	@Override
+	public List<Map<String, Object>> findByContactId(String conId) {
+		// TODO Auto-generated method stub
+		return this.userAppDao.findByContactId(conId);
+	}
 	
 }

@@ -1,5 +1,6 @@
 package org.clt.data.controller;
 
+import org.clt.data.generic.DataListenerImpl;
 import org.clt.repository.pojo.WechatAccount;
 import org.clt.service.base.WechatAccountService;
 import org.springframework.beans.factory.annotation.Autowired;

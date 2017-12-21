@@ -9,12 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
-//@Repository
 public interface GenericDao<E extends Serializable, PK extends Serializable> 
-	extends JpaRepository<E, PK>, JpaSpecificationExecutor<Object>{
+	extends JpaRepository<E, PK>, JpaSpecificationExecutor<E> {
 	
 	@Query
 	List<E> findAllByContactId(String conId);
 
-	
+	//E findEnableFieldsById(Set<String> fields, String id);
 }

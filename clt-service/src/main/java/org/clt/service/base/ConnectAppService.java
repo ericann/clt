@@ -9,4 +9,5 @@ import org.springframework.stereotype.Service;
 public interface ConnectAppService extends GenericService<ConnectApp, String> {
 	
 	List<ConnectApp> findByContactIdAndName(String conId, String name);
+	
 }

@@ -1,4 +1,4 @@
-package org.clt.util.metadata;
+package org.clt.service.metadata;
 
 public class Field {
 	
@@ -15,7 +15,7 @@ public class Field {
 	/**
 	 * default/current value of field in html. 
 	 */
-	private String value;
+	private String defaultValue;
 	
 	/**
 	 * value of field modify or not.
@@ -45,13 +45,13 @@ public class Field {
 	/**
 	 * display or not
 	 */
-	private String display;
+	private Boolean display;
 
-	public String getDisplay() {
+	public Boolean getDisplay() {
 		return display;
 	}
 
-	public void setDisplay(String display) {
+	public void setDisplay(Boolean display) {
 		this.display = display;
 	}
 
@@ -71,12 +71,12 @@ public class Field {
 		this.type = type;
 	}
 
-	public String getValue() {
-		return value;
+	public String getDefaultValue() {
+		return defaultValue;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
 	}
 
 	public Boolean getReadonly() {
@@ -123,7 +123,7 @@ public class Field {
 		return " Field:" + 
 				"\n label: " + label +
 				"\n type: " + type +
-				"\n value: " + value +
+				"\n defaultValue: " + defaultValue +
 				"\n readonly: " + readonly +
 				"\n help: " + help +
 				"\n link: " + link +
