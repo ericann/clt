@@ -18,5 +18,17 @@
   	<context:component-scan base-package="org.clt.service"/>
   	
   	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
+  	
+  	<aop:config proxy-target-class="true">
+        <aop:aspect id="logTest" ref="mylogger" >
+            <aop:pointcut id="printerTest" expression="execution(* org.clt.service.impl..*.*(..))" />
+            <aop:before method="before" pointcut-ref="printerTest" />
+            <aop:after method="after" pointcut-ref="printerTest" />
+            <aop:after-returning method="afterReturn" pointcut-ref="printerTest"/>
+            <aop:after-throwing method="afterThrow" pointcut-ref="printerTest"/>
+            <aop:around method="around" pointcut-ref="printerTest"/>
+        </aop:aspect>
+    </aop:config>
+	
 	
 </beans>

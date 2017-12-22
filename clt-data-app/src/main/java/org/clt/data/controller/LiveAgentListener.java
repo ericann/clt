@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/data-api/{conId}/LiveAgent")
+@RequestMapping("/data-api/LiveAgent")
 public class LiveAgentListener extends DataListenerImpl<LiveAgent, String> {
 	
 	@Autowired

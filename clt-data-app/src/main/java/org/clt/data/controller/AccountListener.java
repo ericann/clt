@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/data-api/{conId}/Account")
+@RequestMapping("/data-api/Account")
 public class AccountListener extends DataListenerImpl<Account, String> {
 	
 	private AccountService accountService;

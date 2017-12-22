@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/data-api/{conId}/Sfdc")
+@RequestMapping("/data-api/Sfdc")
 public class SfdcListener extends DataListenerImpl<Sfdc, String> {
 	
 	@Autowired

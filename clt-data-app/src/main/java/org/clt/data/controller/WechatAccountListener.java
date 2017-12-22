@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/data-api/{conId}/WechatAccount")
+@RequestMapping("/data-api/WechatAccount")
 public class WechatAccountListener extends DataListenerImpl<WechatAccount, String> {
 	
 	@Autowired

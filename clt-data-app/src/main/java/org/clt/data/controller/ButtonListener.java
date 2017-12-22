@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/data-api/{conId}/Button")
+@RequestMapping("/data-api/Button")
 public class ButtonListener extends DataListenerImpl<Button, String> {
 	
 	@Autowired

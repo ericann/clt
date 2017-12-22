@@ -11,6 +11,7 @@ import org.clt.service.base.FieldPermissionService;
 import org.clt.service.base.ObjectPermissionService;
 import org.clt.service.base.ScopeService;
 import org.clt.service.base.UserAppService;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,6 @@ public class TestService {
 	}
 	
 	public String getAccessTokenInfo(String token) {
-		return this.accessService.getAccessTokenInfo(token);
+		return new JSONObject(this.accessService.getAccessTokenInfo(token)).toString();
 	}
 }

@@ -181,12 +181,16 @@ public class AccessService {
 		List<Map<String, Object>> access = this.userAppService.findByContactId(conId);
 		
 		Map<String, Object> accessSort = this.metadataService.convertAccess(access);
-		System.out.println("access: " + new JSONObject(accessSort).toString());
-		String access_token = Token.generateAccessToken(3600, new JSONObject(accessSort).toString());
+		String access_token = Token.generateAccessToken(3600 * 1000, new JSONObject(accessSort).toString());
 		return access_token;
 	}
 	
-	public String getAccessTokenInfo(String access) {
-		return new JSONObject(Token.parse(access)).toString();
+	public Map<String, Object> getAccessTokenInfo(String access) {
+		return Token.parse(access);
+	}
+	
+	public String refreshAccessToken(String token) {
+		Map<String, Object> accessToken_old = this.getAccessTokenInfo(token);
+		return Token.generateAccessToken(3600 * 1000, new JSONObject(accessToken_old).toString());
 	}
 }
