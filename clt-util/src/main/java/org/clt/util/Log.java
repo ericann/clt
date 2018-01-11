@@ -13,7 +13,7 @@ public class Log {//implements AopGeneric {
 	}
 	
 	public void debug(JoinPoint jp) {
-		//logger.debug(o);
+		//logger.debug(jp);
 		System.out.println("-- Logger debug: " + jp);
 	}
 	
@@ -55,15 +55,4 @@ public class Log {//implements AopGeneric {
 
 	}
 
-//	@Override
-//	public void before(Joinpoint joinPoint) {
-//		// TODO Auto-generated method stub
-//		this.debug(null);
-//	}
-//
-//	@Override
-//	public void after(Joinpoint joinPoint) {
-//		// TODO Auto-generated method stub
-//		this.info(null);
-//	}
 }

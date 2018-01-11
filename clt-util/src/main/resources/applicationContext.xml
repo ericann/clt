@@ -14,13 +14,12 @@
         
     <aop:config proxy-target-class="true">
         <aop:aspect id="log" ref="mylogger" >
-            <aop:pointcut id="printerPC" expression="execution(* org.clt.util.print..*.*(..))" />
+            <aop:pointcut id="printerPC" expression="execution(* org.clt.*.controller..*.*(..))" />
             <aop:before method="before" pointcut-ref="printerPC" />
             <aop:after method="after" pointcut-ref="printerPC" />
             <aop:after-returning method="afterReturn" pointcut-ref="printerPC"/>
             <aop:after-throwing method="afterThrow" pointcut-ref="printerPC"/>
             <aop:around method="around" pointcut-ref="printerPC"/>
-        	
         </aop:aspect>
     </aop:config>
         
