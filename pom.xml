@@ -16,7 +16,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.4.4.RELEASE</version>
-		<relativePath></relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	
 	<properties>
@@ -98,5 +98,6 @@
 		<module>clt-oauth-app</module>
 		<module>clt-data-app</module>
 		<module>clt-main-app</module>
+		<module>clt-test-app</module>
 	</modules>
 </project>
