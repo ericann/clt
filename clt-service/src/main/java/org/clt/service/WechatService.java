@@ -140,6 +140,10 @@ public class WechatService {
         return res.getBody();
     }
     
+    public String sendTemplate(String wechatAccessToken, String templateId, String content) {
+    	return null;
+    }
+    
 	public void setWechatAccessToken(String wechatAccessToken) {
 		this.wechatAccessToken = wechatAccessToken;
 	}

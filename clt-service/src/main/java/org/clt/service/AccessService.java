@@ -132,7 +132,7 @@ public class AccessService {
 				Map<String, Object> infor = new HashMap<String, Object>();
 				infor.put("conId", wu.getContact().getId());
 				infor.put("wcId", wu.getId());
-				String token = Token.generateAccessToken(3600, infor.toString());
+				String token = this.getAccessToken(wu.getContact().getId());
 				result.put("access_token", token);
 				break;
 			case 1:
@@ -161,7 +161,7 @@ public class AccessService {
 			if(wt != null) {
 				
 				if(wt.getContact() != null && wt.getWechatuser() != null) {
-					result = Token.generateAccessToken(3600, wt.getContact().getId());
+					result = this.getAccessToken(wt.getContact().getId());
 					break;
 				}
 			}

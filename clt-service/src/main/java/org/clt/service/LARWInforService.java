@@ -6,9 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.clt.repository.dao.AccountDao;
 import org.clt.repository.dao.ButtonDao;
-import org.clt.repository.dao.ContactDao;
 import org.clt.repository.dao.LiveAgentDao;
 import org.clt.repository.dao.WechatAccountDao;
 import org.clt.repository.pojo.Account;
@@ -17,6 +15,8 @@ import org.clt.repository.pojo.Contact;
 import org.clt.repository.pojo.LiveAgent;
 import org.clt.repository.pojo.Sfdc;
 import org.clt.repository.pojo.WechatAccount;
+import org.clt.service.base.AccountService;
+import org.clt.service.base.ContactService;
 
 import static org.clt.util.DefaultMsg.NO_AGENTS_ALERT;
 import static org.clt.util.DefaultMsg.ORG_C_COUNT;
@@ -47,10 +47,10 @@ public class LARWInforService {
 	private ButtonDao bDao;
 	
 	@Autowired
-	private AccountDao accDao;
+	private AccountService accService;
 	
 	@Autowired
-	private ContactDao conDao;
+	private ContactService conService;
 	
 	@Autowired
 	private WechatTokenService wtService;
@@ -67,7 +67,7 @@ public class LARWInforService {
 			acc.setId(UUID.randomUUID().toString());
 			acc.setName(o.getString("companyname"));
 			
-			this.accDao.save(acc);
+			this.accService.save(acc);
 			
 			Contact con = new Contact();
 			con.setAccount(acc);
@@ -76,7 +76,7 @@ public class LARWInforService {
 			con.setName(o.getString("yourname"));
 			con.setId(UUID.randomUUID().toString());
 			
-			this.conDao.save(con);
+			this.conService.save(con);
 			
 			Map<String, String> data = new HashMap<String, String>();
 			data.put("conId", con.getId());
@@ -124,7 +124,7 @@ public class LARWInforService {
 			wa.setWechatAppSecret(o.getString("appsecret"));
 			wa.setWechatToken(o.getString("token"));
 			wa.setAccount(acc);
-			wa.setLiveagent(la);
+			wa.setLiveAgent(la);
 			wa.setLimitCount(Integer.parseInt(ORG_C_COUNT));
 			
 			this.waDao.save(wa);

@@ -48,7 +48,7 @@ public class LARWService implements Runnable {
     public void startChat() {
     	
         Map<String, String> chatInfo = this.wechatService.parseChatXML(this.xmlString);
-        this.chatSession = this.chatMessageDao.findByOpenId(chatInfo.get("openId"));
+        this.chatSession = this.chatMessageDao.findByOpenIdAndValid(chatInfo.get("openId"), true);
         this.wa = this.waDao.findAndLiveAgentByWechatAccount(chatInfo.get("wechatAccount"));
         
         if(this.chatSession == null) {
@@ -56,7 +56,7 @@ public class LARWService implements Runnable {
         	//platform limit connection count check by org id
         	//this.chatMessageDao.findCountByButtonId(buttonId);
         	
-            this.button = this.buttonDao.findByIsDefaultAndLaId(true, this.wa.getLiveagent().getId());
+            this.button = this.buttonDao.findByIsDefaultAndLaId(true, this.wa.getLiveAgent().getId());
             
             //platform limit connection count check by button id
             Integer buttonLimitCount = this.chatMessageDao.findCountByButtonId(this.button.getButtonId());
@@ -68,14 +68,14 @@ public class LARWService implements Runnable {
             
             this.wechatService.setWechatAccessToken(this.wa.getWechatAccessToken());
             
-            this.laService.setLiveagent(this.wa.getLiveagent());
+            this.laService.setLiveagent(this.wa.getLiveAgent());
         	this.chatSession = this.initLiveAgentChat(chatInfo.get("openId"), this.button.getButtonId());
             
             if(this.chatSession == null) {
                 this.wechatService.sendTextMSG(chatInfo.get("openId"), chatInfo.get("wechatAccount"), this.button.getDisplayInfo());
             } else {
             	this.chatSession.setWechatAccount(this.wa.getWechatAccount());
-            	this.chatSession.setLiveagent(this.wa.getLiveagent());
+            	this.chatSession.setLiveagent(this.wa.getLiveAgent());
                 this.chatMessageDao.save(this.chatSession);
                 this.laService.chatMessage(this.chatSession, chatInfo.get("msg"));
                 

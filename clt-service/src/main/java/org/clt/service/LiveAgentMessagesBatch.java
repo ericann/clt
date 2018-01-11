@@ -58,7 +58,8 @@ public class LiveAgentMessagesBatch implements Runnable {
 		if(flag) {
 			this.getMessagesBacth();
 		} else {
-			this.chatMessageDao.deleteByOpenId(this.chatMessage.getOpenId());
+			//this.chatMessageDao.deleteByOpenId(this.chatMessage.getOpenId());
+			this.chatMessageDao.updateByOpenId(false, this.chatMessage.getOpenId());
 		}
 	}
 	

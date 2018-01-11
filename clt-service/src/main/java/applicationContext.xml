@@ -19,6 +19,8 @@
   	
   	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
   	
+  	<bean id="permissionService" class="org.clt.service.PermissionService" />
+  	
   	<aop:config proxy-target-class="true">
         <aop:aspect id="logTest" ref="mylogger" >
             <aop:pointcut id="printerTest" expression="execution(* org.clt.service.impl..*.*(..))" />
@@ -27,6 +29,14 @@
             <aop:after-returning method="afterReturn" pointcut-ref="printerTest"/>
             <aop:after-throwing method="afterThrow" pointcut-ref="printerTest"/>
             <aop:around method="around" pointcut-ref="printerTest"/>
+        </aop:aspect>
+    </aop:config>
+    
+    <!-- 权限控制，待完善  -->
+    <aop:config proxy-target-class="true">
+        <aop:aspect id="permission" ref="permissionService" >
+            <aop:pointcut id="grant" expression="execution(* org.clt.service.impl.base.GenericServiceImpl.save(org.clt.repository.pojo.Contact))" />
+            <aop:after method="grantPermissions" pointcut-ref="grant" />
         </aop:aspect>
     </aop:config>
 	
