@@ -12,7 +12,6 @@ import static org.clt.util.DefaultMsg.O_WS_CONFIRM;
 import static org.clt.util.DefaultMsg.O_UA_CONFIRM;
 import static org.clt.util.DefaultMsg.O_UP;
 
-import org.clt.service.PermissionService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +30,6 @@ import org.springframework.web.client.RestTemplate;
 public class SFDCOauth {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired
-	private PermissionService permissionService;
 	
 	@Autowired
 	private RestTemplate http;

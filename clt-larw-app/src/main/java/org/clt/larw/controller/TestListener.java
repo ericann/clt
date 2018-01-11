@@ -1,6 +1,5 @@
 package org.clt.larw.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,50 +72,6 @@ public class TestListener {
 	public @ResponseBody String parseAccessToken(@PathVariable("token") String token) {
 		
 		return this.testService.getAccessTokenInfo(token);
-	}
-	
-	private Map<String, Object> sortMenu(List<Map<String, Object>> maps) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		Map<String, Object> menu = new HashMap<String, Object>(); 
-		
-		for(Map<String, Object> m : maps) {
-			if(result.get("uaId") == null) {
-				result.put("uaId", m.get("uaId"));
-			}
-			
-			if(result.get("caId") == null) {
-				result.put("caId", m.get("caId"));
-			}
-			
-			if(menu.get(m.get("m_id")) == null) {
-				Object mId = m.get("m_id");
-				Object mName = m.get("m_name");
-				Object fpId = m.get("fpId");
-				Object opId = m.get("opId");
-				Object opName = m.get("op_name");
-				
-				menu.put("m_id", mId);
-				menu.put("m_name", mName);
-				menu.put("fpId", fpId);
-				
-				Map<String, Object> objs = new HashMap<String, Object>();
-				objs.put("opId", m.get("opId"));
-				objs.put("op_name", m.get("op_name"));
-				
-				menu.put("objs", objs);
-			} else {
-				if(((Map<String,Object>) menu.get(m.get("m_id"))).get("objs") != null) {
-					Map<String, Object> objs = new HashMap<String, Object>();
-					objs.put("opId", m.get("opId"));
-					objs.put("op_name", m.get("op_name"));
-					
-					menu.put("objs", objs);
-				}
-			}
-			
-		}
-		
-		return result;
 	}
 	
 //	@RequestMapping(value="/getMenus/2", method=RequestMethod.GET)
