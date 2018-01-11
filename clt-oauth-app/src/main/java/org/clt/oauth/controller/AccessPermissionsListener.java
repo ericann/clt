@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,19 +41,24 @@ public class AccessPermissionsListener {
 		return this.accessService.getQRInfoShort(null);
 	}
 	
+	@RequestMapping(value="/profile", method=RequestMethod.GET)
+	public @ResponseBody String getProfile(@RequestHeader("CLT-Access-Token") String access_token) {
+		return (String)this.accessService.getAccessTokenInfo(access_token).get("jti");
+	}
+	
 	@RequestMapping(value="/getUUID", method=RequestMethod.GET)
 	public @ResponseBody String getUUID() {
 		return UUID.randomUUID().toString();
 	}
 	
 	@RequestMapping(value="/getUUIDs/{count}", method=RequestMethod.GET)
-	public @ResponseBody String getUUIDs(@RequestParam("count") String count) {
-		String[] uuids = new String[] {};
-		for(Integer i = 0; i < Integer.valueOf(count); i++) {
+	public @ResponseBody String getUUIDs(@PathVariable("count") Integer count) {
+		String[] uuids = new String[count];
+		for(Integer i = 0; i < count; i++) {
 			String uuid = UUID.randomUUID().toString();
 			uuids[i] = uuid;
 		}
 		
-		return uuids.toString();
+		return JSONObject.valueToString(uuids);
 	}
 }

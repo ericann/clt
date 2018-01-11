@@ -22,6 +22,7 @@ public class OauthService {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	@SuppressWarnings("unused")
 	@RequestMapping(value="/token", method=RequestMethod.POST)
 	public @ResponseBody String token(@RequestBody String json) {
 		Map<String, Object> result = initErrorResult("E_1");
@@ -58,6 +59,7 @@ public class OauthService {
 	public @ResponseBody String authorize(@RequestParam("grant_type") String grant_type,
 			@RequestParam("client_id") String client_id, 
 			@RequestParam("client_secret") String client_secret) {
+		@SuppressWarnings("unused")
 		Map<String, Object> result = initErrorResult("E_1");
 		
 		try {
