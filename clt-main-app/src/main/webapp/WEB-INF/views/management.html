@@ -5,6 +5,11 @@
 
 	<script type="text/javascript" src="../resources/js/manage.js"></script>
 	<script type="text/javascript" src="../resources/js/Ajax.js"></script>
+	<script type="text/javascript">
+		Ajax.get({url:"http://localhost:8080/clt/test/at/61118512-daaa-431f-8595-f9bbb21a1179", type: "GET", success: function(result) {
+			sessionStorage.setItem("CLT-Access-Token", result);
+		}});
+	</script>
 </head>
 <body>
 	<div class="head">
@@ -18,12 +23,30 @@
 	
 	<script>
 		clt.init();
-		Ajax.get({url:"http://localhost:8080/clt/test/getMenus/1?conId=61118512-daaa-431f-8595-f9bbb21a1179&name=managment", type: "POST", success: function(result) {
-			var profile = convertMenu(JSON.parse(result));
-			showMenu(profile);
+		
+		clt.currentPage = {
+			ua: "19fcfbca-b71a-4708-a38c-beaa8ea71d8b",
+			ca: "891acad4-50d7-46d8-95ec-3d3171b734f6",
+			id: "49d026f9-6638-414b-a976-bd5ad93c4933",
+			name: "Management",
+			metadata: {},
+			data: {},
+			profile: {},
+			menu: {}
+		}
+		
+		Ajax.get({
+			url:"http://localhost:8080/clt/security/profile/", 
+			type: "GET",
+			headers: [{key: "CLT-Access-Token", value: sessionStorage.getItem("CLT-Access-Token")}],
+			success: function(result) {
+				clt.currentPage.profile = JSON.parse(result);
+				var menu = convertMenu(clt.currentPage.profile);
+				showMenu(menu);
 		}});
 		
-		function convertMenu(menuStr) {
+		function convertMenu(profileStr) {
+			/*
 			var menu = (typeof menuStr === "string" ? JSON.parse(menuStr) : menuStr);
 			
 			var profile = {};
@@ -47,7 +70,8 @@
 				if(menu[i]["op_name"]) {
 					profile["menu"][menu[i]["m_name"]]["objects"][menu[i]["op_name"]] = menu[i]["opId"];
 					Ajax.get({
-						url: "http://localhost:8080/clt/metadata-api/FieldPermission/" + menu[i]["opId"] + "/all", 
+						url: "http://localhost:8080/clt/metadata-api/FieldPermission/" + menu[i]["opId"] + "/all",
+						headers: [{"key": "CLT-Access-Token", "value": sessionStorage.getItem("CLT-Access-Token")}],
 						type: "GET", 
 						success: function(result) {
 							var metas = JSON.parse(result);
@@ -59,12 +83,42 @@
 				}
 				
 			}
+			*/
+			var profile = (typeof profileStr === "string" ? JSON.parse(profileStr) : profileStr),
+				menu_ = profile[clt.currentPage.ua][clt.currentPage.ca],
+				menu = {},
+				keys = Object.keys(menu_);
+			for(var i = 0; i < keys.length; i++) {
+				var menuItem = menu_[keys[i]],
+					objs = menuItem["objects"],
+					objNames = Object.keys(objs);
+				
+				menu[menuItem.name] = menuItem;
+				
+				if(!objs) {
+					continue;
+				}
+				
+				for(var j = 0; j < objNames.length; j++) {
+					Ajax.get({
+						url: "http://localhost:8080/clt/metadata-api/FieldPermission/" + objs[objNames[j]] + "/all",
+						headers: [{"key": "CLT-Access-Token", "value": sessionStorage.getItem("CLT-Access-Token")}],
+						type: "GET", 
+						success: function(result) {
+							var metas = JSON.parse(result);
+							if(metas["objectName"]) {
+								clt.currentPage.metadata[metas["objectName"]] = metas;
+							}
+						}
+					});
+				}
+			}
 			
-			return defaultMenuData(profile);
+			return defaultMenuData(menu);
 		}
 		
 		function showMenu(data) {
-			clt.data.profile = data;
+			clt.currentPage.menu = data;
 			
 			var objs = {
 				title: "Menu",
@@ -73,7 +127,7 @@
 				classname: "menu",
 			};
 			
-			var keys = Object.keys(data.menu);
+			var keys = Object.keys(data);
 			
 			for(var i = 0; i < keys.length; i++) {
 				
@@ -109,7 +163,7 @@
 						document.body.removeChild(sections[i]);
 					}
 					
-					var objs = clt.data.profile.menu[e.target.innerText].objects;
+					var objs = clt.currentPage.menu[e.target.innerText].objects;
 					var keys = Object.keys(objs);
 					for(var i = 0; i < keys.length; i++) {
 						
@@ -143,15 +197,16 @@
 			var content_ = parent.getElementsByClassName("content")[0];
 			var objectName = parent.getElementsByClassName("default")[0].innerHTML;
 			
-			if((clt.data[objectName] && clt.data[objectName].length)) {
-				updateShowList(parent, clt.data[objectName]);
-			} else if (Object.prototype.toString.call(clt.data[objectName]) === "[object Object]") {
-				showFormService(parent, clt.data[objectName]);
+			if((clt.currentPage.data[objectName] && clt.currentPage.data[objectName].length)) {
+				updateShowList(parent, clt.currentPage.data[objectName]);
+			} else if (Object.prototype.toString.call(clt.currentPage.data[objectName]) === "[object Object]") {
+				showFormService(parent, clt.currentPage.data[objectName]);
 			} else {
 			
 				Ajax.get({
-					url:"http://localhost:8080/clt/data-api/61118512-daaa-431f-8595-f9bbb21a1179/" + objectName + "/", 
+					url:"http://localhost:8080/clt/data-api/" + objectName + "/", 
 					type: "POST", 
+					headers: [{"key": "CLT-Access-Token", "value": sessionStorage.getItem("CLT-Access-Token")}],
 					success: function(result) {
 						var objs = JSON.parse(result);
 						updateShowList(parent, objs, objectName);
@@ -175,7 +230,7 @@
 		//List object
         function updateShowList(parent, data, objectName) {
             
-            clt.data[objectName] = data;    
+            clt.currentPage.data[objectName] = data;    
             parent.getElementsByClassName("row_count")[0].innerHTML = data.length;
             
             var fields = data.length ? createAllRows(data) : defaultNoData();
@@ -259,18 +314,18 @@
         	return [data ? data : obj];
         }
         
-        function defaultMenuData(profile) {
-        	profile.menu.Management.objects = {
+        function defaultMenuData(menu) {
+        	menu["Management"].objects = {
         		"Management": null		
         	};
         	
-        	clt.data.Management = {
+        	clt.currentPage.data.Management = {
         		label : "Welcome",
         		default : "Welcome to CLT v2.0 Management!",
         		type: "div"
         	}
         	
-        	return profile;
+        	return menu;
         }
 	</script>
 </body>

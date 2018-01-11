@@ -3,10 +3,10 @@ window.clt = window.clt || {};
 clt.default = {
 		
 	url: window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split("/")[1],
-	type: ["account", "scanqr"],
+	type: ["scanqr"],
 	scanqr: {
-		title: "Bind Wechat",
-		buttons: ["Back", "Refresh"],
+		title: "Login",
+		buttons: [],
 		fields: [{
 			label: "Scan QR",
 			type: "img",
@@ -14,36 +14,6 @@ clt.default = {
 		}]
 	},
 
-	account: {
-		title: "Your Infor.",
-		buttons: ["Next"],
-		fields: [{
-			label: "Company Name",
-			type: "input",
-			minlength: 7,
-			maxlength: -1,
-			readonly: false
-		}, {
-			label: "Your Name",
-			type: "input",
-			minlength: 2,
-			maxlength: -1,
-			readonly: false
-		}, {
-			label: "Mobile",
-			type: "input",
-			minlength: 11,
-			maxlength: 11,
-			readonly: false
-		}, {
-			label: "Email",
-			type: "input",
-			minlength: 6,
-			maxlength: -1,
-			readonly: false
-		}]
-	},
-	
 	currentStep: 0
 };
 
@@ -220,42 +190,23 @@ clt.action = {
 			}
 		}
 		
-		//save account info
-		if(clt.default.type[clt.default.currentStep - 1] == "account") {
-			clt.action.doCall(clt.default.url + "/larwint/insert/acc_con",
-					JSON.stringify(clt.data),
-					function(result) {
-						var r = JSON.parse(result);
-						if(r.code == 0) {
-							clt.data.accId = r.data.accId;
-							clt.data.conId = r.data.conId;
-							
-							clt.action.refresh(r.data.conId);
-						} else {
-							console.debug("-- save Account infor error");
-						}
-				}, null, "POST");
-		}
-		
 		clt.action.removeSection();
 		clt.action.changeSection();
 	},
 	
-	refresh: function(conId) {
+	refresh: function() {
 		document.getElementById("Scan QR").querySelector("img").src = clt.default.scanqr.fields[0].default;
-		clt.action.doCall(clt.default.url + "/security/getQR/" + conId, null,
+		clt.action.doCall(clt.default.url + "/security/getQR", null,
 				function(result) {
 					var r = JSON.parse(result);
 					document.getElementById("Scan QR").querySelector("img").src = r.url;
-					clt.action.doCall(clt.default.url + "/security/accesstoken/" + clt.data.conId + "/" + r.ticket, null,
+					clt.action.doCall(clt.default.url + "/security/accesstoken/" + r.ticket, null,
 							function(result) {
-								alert(JSON.parse(result).msg);
-								console.log("success: " + JSON.stringify(result));
-								sessionStorage.setItem("CLT-Access-Token", JSON.parse(result).access_token);
-								window.location.href = "http://localhost:8080/clt/pages/management.html";
+								alert("Login Success.");
+								window.location.href = "/index";
 					}, 
 					function(result) {
-						alert("Bind Failed.");
+						alert("Login Failed.");
 						console.log("--failed: " + result);
 					}, "POST", 120000);
 		}, null);
@@ -427,4 +378,5 @@ clt.action = {
 
 clt.init = function() {
 	clt.action.changeSection();
+	clt.action.refresh();
 }
