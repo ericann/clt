@@ -32,6 +32,8 @@ public class ChatMessage implements Serializable {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateTime;
+	
+	private Boolean valid;
 
 	private String wechatAccount;
 
@@ -46,6 +48,14 @@ public class ChatMessage implements Serializable {
 	private LiveAgent liveagent;
 
 	public ChatMessage() {
+	}
+
+	public Boolean getValid() {
+		return valid;
+	}
+
+	public void setValid(Boolean valid) {
+		this.valid = valid;
 	}
 
 	public String getId() {

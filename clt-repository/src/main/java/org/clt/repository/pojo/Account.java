@@ -16,15 +16,13 @@ public class Account implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Basic(fetch=FetchType.EAGER)
 	private String id;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
 
 	private Boolean master;
-	
-	@Basic(fetch=FetchType.EAGER)
+
 	private String name;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -40,7 +38,7 @@ public class Account implements Serializable {
 
 	//bi-directional many-to-one association to WechatAccount
 	@OneToMany(mappedBy="account")
-	private List<WechatAccount> wechatAccounts;
+	private List<WechatAccount> wechataccounts;
 
 	public Account() {
 	}
@@ -93,20 +91,6 @@ public class Account implements Serializable {
 		this.contacts = contacts;
 	}
 
-	public Contact addContact(Contact contact) {
-		getContacts().add(contact);
-		contact.setAccount(this);
-
-		return contact;
-	}
-
-	public Contact removeContact(Contact contact) {
-		getContacts().remove(contact);
-		contact.setAccount(null);
-
-		return contact;
-	}
-
 	public List<LiveAgent> getLiveagents() {
 		return this.liveagents;
 	}
@@ -129,26 +113,11 @@ public class Account implements Serializable {
 		return liveagent;
 	}
 
-	public List<WechatAccount> getWechatAccounts() {
-		return this.wechatAccounts;
+	public List<WechatAccount> getWechataccounts() {
+		return this.wechataccounts;
 	}
 
-	public void setWechatAccounts(List<WechatAccount> wechatAccounts) {
-		this.wechatAccounts = wechatAccounts;
+	public void setWechataccounts1(List<WechatAccount> wechataccounts) {
+		this.wechataccounts = wechataccounts;
 	}
-
-	public WechatAccount addWechatAccount(WechatAccount wechatAccount) {
-		getWechatAccounts().add(wechatAccount);
-		wechatAccount.setAccount(this);
-
-		return wechatAccount;
-	}
-
-	public WechatAccount removeWechatAccount(WechatAccount wechatAccount) {
-		getWechatAccounts().remove(wechatAccount);
-		wechatAccount.setAccount(null);
-
-		return wechatAccount;
-	}
-
 }

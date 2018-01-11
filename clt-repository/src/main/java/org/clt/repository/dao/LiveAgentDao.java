@@ -2,7 +2,6 @@ package org.clt.repository.dao;
 
 import java.util.List;
 
-import org.clt.repository.pojo.ConnectApp;
 import org.clt.repository.pojo.LiveAgent;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

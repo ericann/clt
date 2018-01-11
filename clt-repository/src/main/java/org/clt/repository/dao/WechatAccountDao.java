@@ -2,7 +2,6 @@ package org.clt.repository.dao;
 
 import java.util.List;
 
-import org.clt.repository.pojo.UserApp;
 import org.clt.repository.pojo.WechatAccount;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +13,7 @@ public interface WechatAccountDao extends GenericDao<WechatAccount, String> {
 	@Query("SELECT wa FROM WechatAccount wa WHERE wa.wechatAccount=:wechatAccount")
 	public WechatAccount findByWechatAccount(@Param("wechatAccount") String wechatAccount);
 	
-	@Query("SELECT wa FROM WechatAccount wa JOIN wa.liveagent la WHERE wa.liveagent.id=la.id AND wa.wechatAccount=:wechatAccount")
+	@Query("SELECT wa FROM WechatAccount wa JOIN wa.liveAgent la WHERE wa.liveAgent.id=la.id AND wa.wechatAccount=:wechatAccount")
 	public WechatAccount findAndLiveAgentByWechatAccount(@Param("wechatAccount") String wechatAccount);
 	
 	@Query("SELECT wa.wechatToken FROM WechatAccount wa")
@@ -44,7 +43,7 @@ public interface WechatAccountDao extends GenericDao<WechatAccount, String> {
 	@Query("SELECT wa FROM WechatAccount wa WHERE wa.account.id=:accId")
 	public WechatAccount findByAccountId(@Param("accId") String accId);
 	
-	@Query("SELECT wa FROM WechatAccount wa JOIN wa.liveagent la WHERE wa.liveagent.id=la.id AND wa.id=:id")
+	@Query("SELECT wa FROM WechatAccount wa JOIN wa.liveAgent la WHERE wa.liveAgent.id=la.id AND wa.id=:id")
 	public WechatAccount findAndLiveAgentById(@Param("id") String id);
 	
 	@Query("SELECT wa FROM WechatAccount wa WHERE wa.useDefault=:useDefault")

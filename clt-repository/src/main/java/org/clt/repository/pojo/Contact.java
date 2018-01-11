@@ -3,8 +3,6 @@ package org.clt.repository.pojo;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.Date;
 import java.util.List;
 

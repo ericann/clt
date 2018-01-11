@@ -3,8 +3,6 @@ package org.clt.repository.pojo;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import org.hibernate.annotations.ForeignKey;
-
 import java.util.Date;
 import java.util.List;
 
@@ -50,8 +48,8 @@ public class LiveAgent implements Serializable {
 	private Sfdc sfdc;
 
 	//bi-directional many-to-one association to WechatAccount
-	@OneToMany(mappedBy="liveagent")
-	private List<WechatAccount> wechataccounts;
+	@OneToMany(mappedBy="liveAgent")
+	private List<WechatAccount> wechatAccounts;
 
 	public LiveAgent() {
 	}
@@ -157,25 +155,11 @@ public class LiveAgent implements Serializable {
 	}
 
 	public List<WechatAccount> getWechataccounts() {
-		return this.wechataccounts;
+		return this.wechatAccounts;
 	}
 
 	public void setWechataccounts(List<WechatAccount> wechataccounts) {
-		this.wechataccounts = wechataccounts;
-	}
-
-	public WechatAccount addWechataccount(WechatAccount wechataccount) {
-		getWechataccounts().add(wechataccount);
-		wechataccount.setLiveagent(this);
-
-		return wechataccount;
-	}
-
-	public WechatAccount removeWechataccount(WechatAccount wechataccount) {
-		getWechataccounts().remove(wechataccount);
-		wechataccount.setLiveagent(null);
-
-		return wechataccount;
+		this.wechatAccounts = wechataccounts;
 	}
 
 }

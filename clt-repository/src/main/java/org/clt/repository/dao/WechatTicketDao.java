@@ -2,7 +2,6 @@ package org.clt.repository.dao;
 
 import java.util.List;
 
-import org.clt.repository.pojo.FunctionPermission;
 import org.clt.repository.pojo.WechatTicket;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
