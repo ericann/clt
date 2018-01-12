@@ -240,14 +240,19 @@ createHref: function(label, text) {
 },
 
 createSelectInput: function(field) {
-    var html = '<select name="{0}" id="{1}" >{3}</select>';
+    var html = '<div class="input-select-box">' +
+			'<div name="{name}" id="{id}" class="input-box" contenteditable="true" onclick="">{default}</div>' +
+			'<div class="select-box">' +
+				'<div class="select-detail-loading" onclick="">loading...</div>' +
+			'</div>' +
+		'</div>';
     
     //Replace name
-    html = html.replace("{0}", field.label.replace(" ", "").toLowerCase());
+    html = html.replace("{name}", field.label.replace(" ", "").toLowerCase());
     //Replace id
-    html = html.replace("{1}", field.label);
+    html = html.replace("{id}", field.label);
     //Replace id
-    html = html.replace("{3}", field.default);
+    html = html.replace("{default}", field.default);
 
     return this.parseToDom(html);
 },
