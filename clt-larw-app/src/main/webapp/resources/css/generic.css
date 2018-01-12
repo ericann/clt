@@ -1,15 +1,15 @@
 body {
 	background: #f4f5f9;
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    font-size: 14px;
-    word-wrap: inherit;
-    word-spacing: inherit;
-    overflow-y: auto;
-    overflow-x: hidden;
-    -moz-user-select: none;
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	font-size: 14px;
+	word-wrap: inherit;
+	word-spacing: inherit;
+	overflow-y: auto;
+	overflow-x: hidden;
+	-moz-user-select: none;
 }
 
 @keyframes leftIn {
@@ -303,4 +303,35 @@ div .f_action .f_button:active {
 
 div .t_action .t_button:active {
 	top: 1px;
+}
+
+//for select input
+.input-select-box {
+	width: auto;
+	height: auto;
+}
+
+.input-box {
+	border: 1px solid darkgrey;
+	width: auto;
+	height: auto;
+}
+
+.input-box:focus + div {
+	display: block;
+}
+
+.select-box {
+	display: none;
+	position: relative;
+	height: 0px;
+}
+
+.select-box:hover {
+	display: block;
+}
+
+.select-detail, .select-detail-loading {
+	padding: 2px;
+	background: lightgrey;
 }
