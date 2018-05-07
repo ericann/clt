@@ -6,7 +6,7 @@ clt.default = {
 	type: ["scanqr"],
 	scanqr: {
 		title: "Login",
-		buttons: [],
+		buttons: ["Refresh"],
 		fields: [{
 			label: "Scan QR",
 			type: "img",
@@ -25,6 +25,8 @@ clt.data = {
 	accId: null,
 	conId: null,
 	ticket: null,
+	time_confirm: null,
+	startTime: null
 };
 
 clt.template = {
@@ -195,23 +197,51 @@ clt.action = {
 	},
 	
 	refresh: function() {
+		window.clearInterval(clt.data.time_confirm);
 		document.getElementById("Scan QR").querySelector("img").src = clt.default.scanqr.fields[0].default;
 		clt.action.doCall(clt.default.url + "/security/getQR", null,
 				function(result) {
 					var r = JSON.parse(result);
 					document.getElementById("Scan QR").querySelector("img").src = r.url;
-					clt.action.doCall(clt.default.url + "/security/accesstoken/" + r.ticket, null,
-							function(result) {
-								alert("Login Success.");
-								window.location.href = "/index";
-					}, 
-					function(result) {
-						alert("Login Failed.");
-						console.log("--failed: " + result);
-					}, "POST", 120000);
+					clt.data.ticket = r.ticket;
+					clt.data.time_confirm = setInterval(clt.action.confirmLogin, 1000);
+					clt.data.startTime = new Date().getTime();
 		}, null);
 	},
+	
+	timeout: function() {
+		var now = new Date().getTime();
+		
+		if(clt.data.startTime && now - clt.data.startTime > 100000) {
+			window.clearInterval(clt.data.time_confirm);
+			document.getElementById("Scan QR").querySelector("img").src = clt.default.scanqr.fields[0].default;
+			clt.data.startTime = null;
+			clt.action.doCall(clt.default.url + "/security/QR/" + clt.data.ticket, null, null, null);
+		}
+	},
 
+	confirmLogin: function() {
+		clt.action.doCall(clt.default.url + "/security/accesstoken/" + clt.data.ticket, null,
+				function(result) {
+					result = JSON.parse(result);
+					if(result.code == 0) {
+						alert(result.msg);
+						sessionStorage.setItem("CLT-ACCESS-TOKEN", result.access_token);
+						window.location.href = "http://localhost:8080/clt/pages/management.html";
+						window.clearInterval(clt.data.time_confirm);
+					} else if(result.code == 1) {
+			
+					} else {
+						alert(result.msg);
+						window.clearInterval(clt.data.time_confirm);
+					}
+		}, 
+		function(result) {
+			alert("Login Failed.");
+			console.log("--failed: " + result);
+		}, "POST");
+	},
+	
 	back: function() {
 		clt.default.currentStep--;
 		clt.action.removeSection();
@@ -379,4 +409,5 @@ clt.action = {
 clt.init = function() {
 	clt.action.changeSection();
 	clt.action.refresh();
+	setInterval(clt.action.timeout, 4000);
 }

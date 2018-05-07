@@ -1,9 +1,11 @@
 package org.clt.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.clt.repository.pojo.Contact;
 import org.clt.repository.pojo.WechatAccount;
 import org.clt.repository.pojo.WechatTicket;
 import org.clt.repository.pojo.WechatUser;
@@ -33,6 +35,7 @@ public class UserBindService {
 		try {
 			WechatUser wu = this.wechatUserService.findByOpenId(openId);
 			WechatTicket wt = this.wechatTicketService.findByTicket(ticket);
+			List<WechatTicket> wtL = null;
 			
 			if(wu == null) {
 				WechatAccount wa = new WechatAccount();
@@ -40,23 +43,28 @@ public class UserBindService {
 				
 				wu = new WechatUser();
 				wu.setId(UUID.randomUUID().toString());
-				wu.setBindTicket(ticket);
 				wu.setOpenId(openId);
 				wu.setWechataccount(wt.getWechataccount());
 				wu.setContact(wt.getContact());
 				this.wechatUserService.save(wu);
 				
-			} else {
-				
-				logger.debug("-- wt:" + wt);
-				logger.debug("-- wu:" + wu);
-				
 				wt.setWechatuser(wu);
 				wt.setContact(wu.getContact());
-				this.wechatTicketService.updateContactAndWUById(wt);
-				result.put("msg", "The user has already bind success.");
+			} else {
+				wtL = this.wechatTicketService.findByWechatAccountAndWechatUserId(wechatAccount, wu.getId(), wt.getId());
+				if(!wtL.isEmpty()) {
+					wt.setWechatuser(new WechatUser());
+					result.put("code", 1);
+					result.put("msg", "The user has already exsit.");
+				} else {
+					wt.setWechatuser(wu);
+					wt.setContact(wu.getContact());
+				}
 			}
-			
+
+			wt.setIsValid(false);
+			this.wechatTicketService.updateContactAndWUByIdAndIsValid(wt);
+		
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			result.put("msg", "Bind failed.");
@@ -71,18 +79,24 @@ public class UserBindService {
 		result.put("msg", "Login Success.");
 		logger.debug("-- in loginByWechat");
 		try {
+			
 			WechatUser wu = this.wechatUserService.findByOpenIdAndWechatAccount(openId, wechatAccount);
+			WechatTicket wt_bind = this.wechatTicketService.findByWechatUserIdAndWechatAcoount(wechatAccount, wu.getId());
 			WechatTicket wt = this.wechatTicketService.findByTicket(ticket);
 			
-			if(wt != null && wu != null) {
+			if(wt != null && wu != null && wt_bind != null) {
 				wt.setContact(wu.getContact());
 				wt.setWechatuser(wu);
-				
-				this.wechatTicketService.updateContactAndWUById(wt);
+			} else {
+				wt.setContact(new Contact());
+				wt.setWechatuser(new WechatUser());
 			}
+			
+			wt.setIsValid(false);
+			this.wechatTicketService.updateContactAndWUByIdAndIsValid(wt);
 		} catch(Exception ex) {
 			result.put("code", -1);
-			result.put("msg", "Login information is not correct.");
+			result.put("msg", "Login information is not correct or unsign up.");
 			ex.printStackTrace();
 		}
 		

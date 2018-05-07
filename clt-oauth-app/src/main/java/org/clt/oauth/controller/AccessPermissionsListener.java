@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -22,7 +21,7 @@ public class AccessPermissionsListener {
 	
 	@RequestMapping("/accesstoken/{ticket}")
 	public @ResponseBody String login(@PathVariable("ticket") String ticket) {
-		return this.accessService.loginByWechat(ticket);
+		return JSONObject.valueToString(this.accessService.loginByWechat(ticket));
 	}
 	
 	@RequestMapping(value="/accesstoken/{conId}/{ticket}", method=RequestMethod.POST)
@@ -39,6 +38,11 @@ public class AccessPermissionsListener {
 	@RequestMapping(value="/getQR", method=RequestMethod.GET)
 	public @ResponseBody String getQRImg() {
 		return this.accessService.getQRInfoShort(null);
+	}
+	
+	@RequestMapping(value="/QR/{ticket}", method=RequestMethod.GET)
+	public @ResponseBody String qrExpried(@PathVariable("ticket") String ticket) {
+		return this.accessService.setQRExpried(ticket);
 	}
 	
 	@RequestMapping(value="/profile", method=RequestMethod.GET)

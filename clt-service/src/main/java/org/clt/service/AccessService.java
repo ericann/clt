@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.clt.repository.pojo.Contact;
 import org.clt.repository.pojo.WechatAccount;
 import org.clt.repository.pojo.WechatTicket;
-import org.clt.repository.pojo.WechatUser;
 import org.clt.service.base.UserAppService;
 import org.clt.service.base.WechatAccountService;
 import org.clt.service.base.WechatTicketService;
@@ -27,7 +26,6 @@ public class AccessService {
 	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	@SuppressWarnings("unused")
 	@Autowired
 	private UserAppService userAppService;
 	
@@ -78,6 +76,7 @@ public class AccessService {
 			
 			wt.setWechataccount(waDefault);
 			wt.setType(type);
+			wt.setIsValid(true);
 			
 			if(conId != null) {
 				Contact con = new Contact();
@@ -98,46 +97,24 @@ public class AccessService {
 		result.put("msg", "Bind Successd.");
 		Integer flag = -1;
 		
-		WechatUser wu = null;
-		WechatTicket wt = null;
+		WechatTicket wt = this.wechatTicketService.findByTicket(ticket);
 		
-		final Integer totalSeconds = 120;
-		Long lastTime = System.currentTimeMillis();
-		Long currentTime = lastTime;
-		
-		while(lastTime + totalSeconds * 1000 > currentTime) {
-			currentTime = System.currentTimeMillis();
-			wu = this.wechatUserService.findByConIdAndTicket(conId, ticket);
-			wt = this.wechatTicketService.findByTicket(ticket);
-			if(wu != null) {
-				flag = 0;
-				break;
-			}
-			
-			if(wt.getWechatuser() != null) {
-				flag = 1;
-				break;
-			}
-			
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if(wt.getWechatuser() != null) {
+			flag = 0;
+		} else if(!wt.getIsValid() && wt.getWechatuser() == null) {
+			flag = -1;
+		} else {
+			flag = 1;
 		}
 		
 		switch(flag) {
 			case 0:
-				Map<String, Object> infor = new HashMap<String, Object>();
-				infor.put("conId", wu.getContact().getId());
-				infor.put("wcId", wu.getId());
-				String token = this.getAccessToken(wu.getContact().getId());
+				String token = this.getAccessToken(wt.getContact().getId());
 				result.put("access_token", token);
 				break;
 			case 1:
 				result.put("code", flag);
-				result.put("msg", "This wechat user has already been bind the others. ");
+				result.put("msg", "Waiting for response.");
 				break;
 			default: 
 				result.put("code", flag);
@@ -147,34 +124,36 @@ public class AccessService {
 		return result;
 	}
 	
-	public String loginByWechat(String ticket) {
+	public Map<String, Object> loginByWechat(String ticket) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("code", 0);
+		result.put("msg", "Login successd.");
 		
-		final Integer totalSeconds = 120;
-		Long lastTime = System.currentTimeMillis();
-		Long currentTime = lastTime;
-		String result = null;
+		WechatTicket wt = wechatTicketService.findByTicket(ticket);
 		
-		while(lastTime + totalSeconds * 1000 > currentTime) {
-			currentTime = System.currentTimeMillis();
-			WechatTicket wt = wechatTicketService.findByTicket(ticket);
+		if(wt != null) {
 			
-			if(wt != null) {
+			if(wt.getContact() != null && wt.getWechatuser() != null) {
+				result.put("access_token", this.getAccessToken(this.getAccessToken(wt.getContact().getId())));
+			} else if (wt.getWechatuser() == null && wt.getIsValid()) {
+				result.put("code", 1);
+				result.put("msg", "Waiting for message.");
+			} else if (!wt.getIsValid() && wt.getWechatuser() == null) {
+				result.put("msg", "User is not exist. Please sign up.");
+				result.put("code", -1);
+			} else {
 				
-				if(wt.getContact() != null && wt.getWechatuser() != null) {
-					result = this.getAccessToken(wt.getContact().getId());
-					break;
-				}
 			}
-			
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		} else {
+			result.put("msg", "User is not exist.");
+			result.put("code", -1);
 		}
 		
 		return result;
+	}
+	
+	public String setQRExpried(String ticket) {
+		return String.valueOf(this.wechatTicketService.updateIsValidByTicket(ticket));
 	}
 	
 	public String getAccessToken(String conId) {

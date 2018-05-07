@@ -18,6 +18,7 @@ public class WechatTicket implements Serializable {
 	private String id;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date createTime;
 
 	private String ticket;
@@ -25,6 +26,7 @@ public class WechatTicket implements Serializable {
 	private String type;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date updateTime;
 
 	//bi-directional many-to-one association to Contact
@@ -41,6 +43,8 @@ public class WechatTicket implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="wechatUserId")
 	private WechatUser wechatuser;
+	
+	private Boolean isValid;
 
 	public WechatTicket() {
 	}
@@ -109,4 +113,12 @@ public class WechatTicket implements Serializable {
 		this.wechatuser = wechatuser;
 	}
 
+	public Boolean getIsValid() {
+		return isValid;
+	}
+
+	public void setIsValid(Boolean isValid) {
+		this.isValid = isValid;
+	}
+	
 }

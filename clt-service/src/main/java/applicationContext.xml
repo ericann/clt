@@ -21,22 +21,32 @@
   	
   	<bean id="permissionService" class="org.clt.service.PermissionService" />
   	
-  	<aop:config proxy-target-class="true">
-        <aop:aspect id="logTest" ref="mylogger" >
-            <aop:pointcut id="printerTest" expression="execution(* org.clt.service.impl..*.*(..))" />
-            <aop:before method="before" pointcut-ref="printerTest" />
-            <aop:after method="after" pointcut-ref="printerTest" />
-            <aop:after-returning method="afterReturn" pointcut-ref="printerTest"/>
+  	<bean id="wechatPushNotice" class="org.clt.service.interceptor.WechatPushNotice" />
+  	
+  	<!-- <bean id="wechatException" class="org.clt.service.WechatException" /> -->
+  	
+  	<!-- 微信异常控制 -->
+  	<!-- <aop:config proxy-target-class="true">
+        <aop:aspect id="wechatE" ref="wechatExceptionService" >
+            <aop:pointcut id="" expression="execution(* org.clt.service.impl..*.*(..))" />
             <aop:after-throwing method="afterThrow" pointcut-ref="printerTest"/>
-            <aop:around method="around" pointcut-ref="printerTest"/>
         </aop:aspect>
-    </aop:config>
+    </aop:config> -->
     
     <!-- 权限控制，待完善  -->
     <aop:config proxy-target-class="true">
         <aop:aspect id="permission" ref="permissionService" >
             <aop:pointcut id="grant" expression="execution(* org.clt.service.impl.base.GenericServiceImpl.save(org.clt.repository.pojo.Contact))" />
             <aop:after method="grantPermissions" pointcut-ref="grant" />
+        </aop:aspect>
+    </aop:config>
+    
+    <aop:config proxy-target-class="true">
+        <aop:aspect id="signup" ref="wechatPushNotice" >
+            <aop:pointcut id="pushSU" expression="execution(* org.clt.service.UserBindService.bindWechatUser(..))" />
+            <aop:after method="pushSignUpNotice" pointcut-ref="pushSU" />
+            <aop:pointcut id="pushSI" expression="execution(* org.clt.service.UserBindService.loginByWechat(..))" />
+            <aop:after method="pushSignInNotice" pointcut-ref="pushSI" />
         </aop:aspect>
     </aop:config>
 	

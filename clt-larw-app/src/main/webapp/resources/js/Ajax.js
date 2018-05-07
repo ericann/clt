@@ -42,8 +42,9 @@ Ajax = (function() {
 					ajax.async ? ajax.async : options.async);
 			
 			if(ajax.headers) {
-				for(var i = 0; i < ajax.headers.length; i++) {
-					xhr.setRequestHeader(ajax.headers[i]["key"], ajax.headers[i]["value"]);
+				var keys = Object.keys(ajax.headers);
+				for(var i = 0; i < keys.length; i++) {
+					xhr.setRequestHeader(keys[i], ajax.headers[keys[i]]);
 				}
 			}
 

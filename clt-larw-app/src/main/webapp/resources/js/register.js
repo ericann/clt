@@ -2,8 +2,12 @@ window.clt = window.clt || {};
 
 clt.default = {
 		
-	url: window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split("/")[1],
+	TOKEN: "CLT-ACCESS-TOKEN",
 	type: ["introduction", "liveagent", "wechat", "confirm", "congratulations"],
+	currentStep: 0
+};
+
+clt.metadata = {
 	introduction: {
 		title: "Introduction",
 		buttons: ["Next"],
@@ -14,7 +18,7 @@ clt.default = {
 		}, {
 			label: "Agreement",
 			type: "checkbox",
-			value: true,
+			vali_value: true,
 			error: "You must agree it with notices."
 		}]
 	},
@@ -27,6 +31,7 @@ clt.default = {
 			type: "selectInput",
 			help: "Id of official wechat.Click link for help.",
 			link: "help/wechat.html",
+			table: "WechatAccount",
 			minlength: 15,
 			maxlength: -1,
 			readonly: false
@@ -71,7 +76,7 @@ clt.default = {
 		buttons: ["Add", "Back",  "Next"],
 		fields: [{
 			label: "Organization ID",
-			type: "selectInput",
+			type: "input",
 			help: "Your org id.Click link for help.",
 			link: "help/la.html",
 			minlength: 15,
@@ -79,9 +84,10 @@ clt.default = {
 			readonly: false
 		}, {
 			label: "Deployment ID",
-			type: "input",
+			type: "selectInput",
 			help: "Click link for help.",
 			link: "help/la.html",
+			table: "LiveAgent",
 			minlength: 15,
 			maxlength: 15,
 			readonly: false
@@ -95,9 +101,10 @@ clt.default = {
 			readonly: false
 		}, {
 			label: "Button ID",
-			type: "input",
+			type: "selectInput",
 			help: "Click link for help.",
 			link: "help/la.html",
+			table: "Button",
 			minlength: 15,
 			maxlength: 15,
 			readonly: false
@@ -149,327 +156,338 @@ clt.default = {
 			type: "div",
 			default: "Congratulations! You can use this service now, send message from your wechat official account to feel what's easy.</br>Remind again, the connections limit for 3 now, you can contact us to increase it."
 		}]
-	},
-	currentStep: 0
-};
+	}
+}
 
 clt.data = {
-	accountid: null,
-	appid: null,
-	appsecret: null,
-	token: null,
-	organizationid: null,
-	deploymentid: null,
-	endpoint: null,
-	buttonid: [],
-	companyname: null,
-	yourname: null,
-	mobile: null,
-	email: null,
-	refreshtype: null,
-	refreshnow: null,
-	accId: null
+	user: {
+		token: null,
+		conId: null,
+		accId: null,
+		isLogin: false
+	},
+	liveagent: null,
+	wechataccount: null
 };
 
-clt.template = {
-default: {
-    classname: "section",
-    style: "f",
-    styles: ["f", "t"]
-},
-
-createInput: function(field, text) {
-    var html = '<input type="{type}" {readonly} name="{name}" required="true" id="{id}" {key}="{value}">';
-    
-    html = html.replace("{type}", field.type);
-    
-    html = html.replace("{readonly}", field.readonly ? 'readonly="readonly"' : "");
-    
-    html = html.replace("{name}", field.label.replace(" ", "").toLowerCase());
-
-    html = html.replace("{id}", field.label);
-
-    html = html.replace("{value}", text);
-
-    if(field.type == "checkbox" && text) {
-        html = html.replace("{key}", "checked");
-    } else {
-        html = html.replace("{key}", "value");
-    }
-
-    return this.parseToDom(html);
-},
-
-createImage: function(label, src) {
-    var html = '<div name="{0}" id="{1}"><img src="{2}" onload="showListService(this)"></img></div>';
-
-    //Replace name
-    html = html.replace("{0}", label.replace(" ", "").toLowerCase());
-    //Replace id
-    html = html.replace("{1}", label);
-    //Replace id
-    html = html.replace("{2}", src);
-
-    return this.parseToDom(html);
-},
-   
-createDIV: function(label, text) {
-    var html = '<div name="{0}" id="{1}">{2}</div>';
-
-    //Replace name
-    html = html.replace("{0}", label.replace(" ", "").toLowerCase());
-    //Replace id
-    html = html.replace("{1}", label);
-    //Replace id
-    html = html.replace("{2}", text);
-
-    return this.parseToDom(html);
-},
-
-createHref: function(label, text) {
-    var html = '<a name="{0}" id="{1}" href="#" >{3}</a>';
-    
-    //Replace name
-    html = html.replace("{0}", label.replace(" ", "").toLowerCase());
-    //Replace id
-    html = html.replace("{1}", label);
-    //Replace id
-    html = html.replace("{3}", text);
-
-    return this.parseToDom(html);
-},
-
-createSelectInput: function(field) {
-    var html = '<div class="input-select-box">' +
-			'<div name="{name}" id="{id}" class="input-box" contenteditable="true" onclick="">{default}</div>' +
-			'<div class="select-box">' +
-				'<div class="select-detail-loading" onclick="">loading...</div>' +
-			'</div>' +
-		'</div>';
-    
-    //Replace name
-    html = html.replace("{name}", field.label.replace(" ", "").toLowerCase());
-    //Replace id
-    html = html.replace("{id}", field.label);
-    //Replace id
-    html = html.replace("{default}", field.default);
-
-    return this.parseToDom(html);
-},
-
-createShowTypeService: function(field) {
-    var content = "";
-    
-    switch(field.type) {
-    
-        case "img":
-            content = this.createImage(field.label, field.default);
-            break;
-        case "div":
-            content = this.createDIV(field.label, field.default);
-            break;
-        case "a":
-            content = this.createHref(field.label, field.default);
-            break;
-        case "selectInput":
-            content = this.createSelectInput(field);
-            break;
-        default:
-            content = this.createInput(field, text);
-    }
-    
-    return content;
-},
-    
-createField: function(field) {
-    var html = '<div class="f_field">' +
-                '<div class="f_label">' +
-                    '<label>{label}</label>' +
-                '</div>' +
-                '<div class="f_values" >' +
-                    '<div class="f_value">{content}</div>' +
-                    '<div class="f_link"><a href="{href}" target="_blank">help</a></div>' + 
-                    '<div class="f_help">{helptext}</div>' +
-                '</div>' +
-            '</div>',
-        name = field.label.replace(" ", "").toLowerCase();
-        text = field.default || "",
-        help = field.help || "",
-        content = this.createShowTypeService(field);
-
-    if(field.link) {
-        html = html.replace("{href}", field.link);
-    } else {
-        html = html.replace('<a href="{href}" target="_blank">help</a>', "");
-    }
-
-    html = html.replace("{helptext}", help);
-
-    html = html.replace("{label}", field.label);
-    var htmlDom = this.parseToDom(html)[0],
-        f_valueD = htmlDom.getElementsByClassName("f_values")[0];
-    
-    f_valueD.innerHTML = "";
-    f_valueD.appendChild(content[0]);
-    //html = html.replace("{content}", content);
-
-    return htmlDom;
-},
-
-createRows: function(fields) {
-    
-    var headerH = '<div class="t_header"></div>',
-        bodyH = '<div class="t_body"></div>',
-        html = [],
-        info = '<div class="t_info" id="{id}">' + 
-                    '{details}' + 
-                '</div>',
-        detail = '<div class="t_row" name="{name}">{value}</div>',
-        contentHeader = [],
-        contentBody = [];
-    
-    for(var i = 0; i < fields.length; i++) {
-        var row = [];
-        for(var j = 0; j < fields[i].length; j++) {
-
-            var detailD = this.parseToDom(detail.replace("{name}", fields[i][j].label))[0];
-                detailD.innerText = "";
-                detailD.appendChild(this.createShowTypeService(fields[i][j])[0]);
-            if(fields[i][j].isHeader) {
-                contentHeader.push(detailD);
-            } else {
-                row.push(detailD);
-            }
-        }
-        
-        if(row.length) {
-            contentBody.push(row);
-        }
-    }
-    
-    var t_info_h = null;
-    var t_info_b = null;
-    
-    if(contentHeader.length != 0) {
-        t_info_h = this.parseToDom(info)[0];
-        t_info_h.innerHTML = "";
-        
-        for(var i = 0; i < contentHeader.length; i++) {
-            t_info_h.appendChild(contentHeader[i]);
-        }
-        header = this.parseToDom(headerH)[0];
-        header.appendChild(t_info_h);
-        html.push(header);
-    }
-    
-    if(contentBody.length != 0) {
-        for(var i = 0; i < contentBody.length; i++) {
-            t_info_b = this.parseToDom(info)[0];
-            t_info_b.innerHTML = "";
-            
-            for(var j = 0; j < contentBody[i].length; j++) {
-                t_info_b.appendChild(contentBody[i][j]);
-            }
-            body = this.parseToDom(bodyH)[0];
-            body.appendChild(t_info_b);
-            html.push(body);
-        }
-    }
-    
-    return html;
-},
-
-createContent: function(fields, style) {
-
-    var html = [];
-
-    if(!fields) {
-        return html;
-    }
-    if(style && style != this.default.style) {
-        html = this.createRows(fields);
-    } else {
-        for(var i = 0; i < fields.length; i++) {
-            var field = fields[i];
-            html.push(this.createField(field));
-        }
-    }
-    return html;
-},
-
-createButton: function(label) {
-    var html = '<div class="f_button" id={0}>{1}</div>';
-    html = html.replace("{0}", label.toLowerCase()).replace("{1}", label);
-    return html;
-},
-
-createButtons: function(buttons) {
-    
-},
-
-createSection: function(obj) {
-    
-    obj.style = !obj.style || obj.style == this.default.style ? this.default.style : "t";
-    
-    var fTitleContent = '<div class="default">{title}</div>' +
-    					'<div class="row_count">{count}</div>',
-    
-        tTitleContent = '<div class="s_fold"><button></button></div>' +
-                        '<div class="default">{title}</div>' +
-                        '<div class="row_count">{count}</div>',
-                        
-        html = '<div class="{classname}">' +
-                    '<div class="error_info"></div>' +
-                    '<div class="title">' +
-                    (obj.style == "f" ? fTitleContent : tTitleContent) +
-                    '</div>' + 
-                    '<div class="content">' + 
-                        '{content}' +
-                    '</div>' +
-                    '<div class="{pre}_action">{buttons}</div>' + 
-                '</div>';
-    html = html.replace("{pre}", obj.style);
-    html = html.replace("{classname}", obj.classname || this.default.classname);
-    html = html.replace("{classname}", obj.style || this.default.style);
-    html = html.replace("{title}", obj.title || "");
-    html = html.replace("{count}", obj.count || "");
-    
-    var contents = this.createContent(obj.fields, obj.style || this.default.style);
-    var buttons = '';
-
-    for(var i = 0; i < obj.buttons.length; i++) {
-        buttons += this.createButton(obj.buttons[i]);
-    }
-    
-    html = html.replace("{buttons}", buttons);
-    var section = clt.action.parseToDom(html)[0],
-        content = section.getElementsByClassName("content")[0];
-    content.innerHTML = "";
-    
-    if(Object.prototype.toString.call(contents) === "[object HTMLDivElement]") {
-        content.appendChild(contents);
-    
-    } else {
-        for(var i = 0; i < contents.length; i++) {
-            content.appendChild(contents[i]);
-        }
-    }
-    return section;
-},
-
-createSections: function(obj) {
-    
-},
-
-parseToDom: function(html) {
-    var d = document.createElement("div");
-    d.innerHTML = html;
-    return d.children;
+clt.submitData = {
+	liveagent: {},
+	wechat: {},
+	account: {},
+	contact: {}
 }
+
+clt.template = {
+	default: {
+	    classname: "section",
+	    style: "f",
+	    styles: ["f", "t"]
+	},
+	
+	createInput: function(field) {
+	    var html = '<input type="{type}" {readonly} name="{name}" required="true" id="{id}" {key}="{value}">';
+	    
+	    html = html.replace("{type}", field.type);
+	    
+	    html = html.replace("{readonly}", field.readonly ? 'readonly="readonly"' : "");
+	    
+	    html = html.replace("{name}", field.label.replace(" ", "").toLowerCase());
+	
+	    html = html.replace("{id}", field.label);
+	
+	    html = html.replace("{value}", field.value || "");
+	
+	    if(field.type == "checkbox" && field.value) {
+	        html = html.replace("{key}", "checked");
+	    } else {
+	        html = html.replace("{key}", "value");
+	    }
+	    
+	    return this.parseToDom(html);
+	},
+	
+	createImage: function(label, src) {
+	    var html = '<div name="{0}" id="{1}"><img src="{2}" onload="showListService(this)"></img></div>';
+	
+	    //Replace name
+	    html = html.replace("{0}", label.replace(" ", "").toLowerCase());
+	    //Replace id
+	    html = html.replace("{1}", label);
+	    //Replace id
+	    html = html.replace("{2}", src);
+	
+	    return this.parseToDom(html);
+	},
+	   
+	createDIV: function(label, text) {
+	    var html = '<div name="{0}" id="{1}">{2}</div>';
+	
+	    //Replace name
+	    html = html.replace("{0}", label.replace(" ", "").toLowerCase());
+	    //Replace id
+	    html = html.replace("{1}", label);
+	    //Replace id
+	    html = html.replace("{2}", text);
+	
+	    return this.parseToDom(html);
+	},
+	
+	createHref: function(label, text) {
+	    var html = '<a name="{0}" id="{1}" href="#" >{3}</a>';
+	    
+	    //Replace name
+	    html = html.replace("{0}", label.replace(" ", "").toLowerCase());
+	    //Replace id
+	    html = html.replace("{1}", label);
+	    //Replace id
+	    html = html.replace("{3}", text);
+	
+	    return this.parseToDom(html);
+	},
+	
+	createSelectInput: function(field) {
+	    var html = '<div class="input-select-box">' +
+				//'<div name="{name}" id="{id}" class="input-box" contenteditable="true" onclick="">{default}</div>' +
+				'<input name="{name}" id="{id}" class="input-box" onclick="getSelectContent(this)" value="{default}" table="{table}"/>' + 
+	    		'<div class="select-box">' +
+					'<div class="select-detail-loading" onclick="">loading...</div>' +
+				'</div>' +
+			'</div>';
+	    
+	    //Replace name
+	    html = html.replace("{name}", field.label.replace(" ", "").toLowerCase());
+	    //Replace id
+	    html = html.replace("{id}", field.label);
+	    //Replace field value
+	    html = html.replace("{default}", field.value || "");
+	    //Replace table
+	    html = html.replace("{table}", field.table);
+	
+	    return this.parseToDom(html);
+	},
+	
+	createShowTypeService: function(field) {
+	    var content = "";
+	    
+	    switch(field.type) {
+	    
+	        case "img":
+	            content = this.createImage(field.label, field.default);
+	            break;
+	        case "div":
+	            content = this.createDIV(field.label, field.default);
+	            break;
+	        case "a":
+	            content = this.createHref(field.label, field.default);
+	            break;
+	        case "selectInput":
+	            content = this.createSelectInput(field);
+	            break;
+	        default:
+	            content = this.createInput(field);
+	    }
+	    
+	    return content;
+	},
+	    
+	createField: function(field) {
+	    var html = '<div class="f_field">' +
+	                '<div class="f_label">' +
+	                    '<label>{label}</label>' +
+	                '</div>' +
+	                '<div class="f_values" >' +
+	                    '<div class="f_value">{content}</div>' +
+	                    '<div class="f_link"><a href="{href}" target="_blank">help</a></div>' + 
+	                    '<div class="f_help">{helptext}</div>' +
+	                '</div>' +
+	            '</div>',
+	        name = field.label.replace(" ", "").toLowerCase();
+	        text = field.default || "",
+	        help = field.help || "",
+	        content = this.createShowTypeService(field);
+	
+	    if(field.link) {
+	        html = html.replace("{href}", field.link);
+	    } else {
+	        html = html.replace('<a href="{href}" target="_blank">help</a>', "");
+	    }
+	
+	    html = html.replace("{helptext}", help);
+	
+	    html = html.replace("{label}", field.label);
+	    var htmlDom = this.parseToDom(html)[0],
+	        f_valueD = htmlDom.getElementsByClassName("f_values")[0];
+	    
+	    f_valueD.innerHTML = "";
+	    f_valueD.appendChild(content[0]);
+	    //html = html.replace("{content}", content);
+	
+	    return htmlDom;
+	},
+	
+	createRows: function(fields) {
+	    
+	    var headerH = '<div class="t_header"></div>',
+	        bodyH = '<div class="t_body"></div>',
+	        html = [],
+	        info = '<div class="t_info" id="{id}">' + 
+	                    '{details}' + 
+	                '</div>',
+	        detail = '<div class="t_row" name="{name}">{value}</div>',
+	        contentHeader = [],
+	        contentBody = [];
+	    
+	    for(var i = 0; i < fields.length; i++) {
+	        var row = [];
+	        for(var j = 0; j < fields[i].length; j++) {
+	
+	            var detailD = this.parseToDom(detail.replace("{name}", fields[i][j].label))[0];
+	                detailD.innerText = "";
+	                detailD.appendChild(this.createShowTypeService(fields[i][j])[0]);
+	            if(fields[i][j].isHeader) {
+	                contentHeader.push(detailD);
+	            } else {
+	                row.push(detailD);
+	            }
+	        }
+	        
+	        if(row.length) {
+	            contentBody.push(row);
+	        }
+	    }
+	    
+	    var t_info_h = null;
+	    var t_info_b = null;
+	    
+	    if(contentHeader.length != 0) {
+	        t_info_h = this.parseToDom(info)[0];
+	        t_info_h.innerHTML = "";
+	        
+	        for(var i = 0; i < contentHeader.length; i++) {
+	            t_info_h.appendChild(contentHeader[i]);
+	        }
+	        header = this.parseToDom(headerH)[0];
+	        header.appendChild(t_info_h);
+	        html.push(header);
+	    }
+	    
+	    if(contentBody.length != 0) {
+	        for(var i = 0; i < contentBody.length; i++) {
+	            t_info_b = this.parseToDom(info)[0];
+	            t_info_b.innerHTML = "";
+	            
+	            for(var j = 0; j < contentBody[i].length; j++) {
+	                t_info_b.appendChild(contentBody[i][j]);
+	            }
+	            body = this.parseToDom(bodyH)[0];
+	            body.appendChild(t_info_b);
+	            html.push(body);
+	        }
+	    }
+	    
+	    return html;
+	},
+	
+	createContent: function(fields, style) {
+	
+	    var html = [];
+	
+	    if(!fields) {
+	        return html;
+	    }
+	    if(style && style != this.default.style) {
+	        html = this.createRows(fields);
+	    } else {
+	        for(var i = 0; i < fields.length; i++) {
+	            var field = fields[i];
+	            html.push(this.createField(field));
+	        }
+	    }
+	    return html;
+	},
+	
+	createButton: function(label) {
+	    var html = '<div class="f_button" id={0}>{1}</div>';
+	    html = html.replace("{0}", label.toLowerCase()).replace("{1}", label);
+	    return html;
+	},
+	
+	createButtons: function(buttons) {
+	    
+	},
+	
+	createSection: function(obj, v_obj) {
+	    
+	    obj.style = !obj.style || obj.style == this.default.style ? this.default.style : "t";
+	    
+	    var fTitleContent = '<div class="default">{title}</div>' +
+	    					'<div class="row_count">{count}</div>',
+	    
+	        tTitleContent = '<div class="s_fold"><button></button></div>' +
+	                        '<div class="default">{title}</div>' +
+	                        '<div class="row_count">{count}</div>',
+	                        
+	        html = '<div class="{classname}">' +
+	                    '<div class="error_info"></div>' +
+	                    '<div class="title">' +
+	                    (obj.style == "f" ? fTitleContent : tTitleContent) +
+	                    '</div>' + 
+	                    '<div class="content">' + 
+	                        '{content}' +
+	                    '</div>' +
+	                    '<div class="{pre}_action">{buttons}</div>' + 
+	                '</div>';
+	    html = html.replace("{pre}", obj.style);
+	    html = html.replace("{classname}", obj.classname || this.default.classname);
+	    html = html.replace("{classname}", obj.style || this.default.style);
+	    html = html.replace("{title}", obj.title || "");
+	    html = html.replace("{count}", obj.count || "");
+	    
+	    var contents = this.createContent(obj.fields, obj.style || this.default.style);
+	    var buttons = '';
+	
+	    for(var i = 0; i < obj.buttons.length; i++) {
+	        buttons += this.createButton(obj.buttons[i]);
+	    }
+	    
+	    html = html.replace("{buttons}", buttons);
+	    var section = clt.action.parseToDom(html)[0],
+	        content = section.getElementsByClassName("content")[0];
+	    content.innerHTML = "";
+	    
+	    if(Object.prototype.toString.call(contents) === "[object HTMLDivElement]") {
+	        content.appendChild(contents);
+	    
+	    } else {
+	        for(var i = 0; i < contents.length; i++) {
+	            content.appendChild(contents[i]);
+	        }
+	    }
+	    return section;
+	},
+	
+	createSections: function(obj) {
+	    
+	},
+	
+	parseToDom: function(html) {
+	    var d = document.createElement("div");
+	    d.innerHTML = html;
+	    return d.children;
+	}
 
 };
 
 clt.action = {
+		
+	checkLogin: function() {
+		return Boolean(sessionStorage.getItem("CLT-ACCESS-TOKEN"));
+	},
+	
+	prepareConfig: function() {
+		
+	},
+
 	next: function() {
 
 		var result = clt.action.validation();
@@ -494,14 +512,15 @@ clt.action = {
 					type = inputs[i].type,
 					v = type == "checkbox" ? inputs[i].checked : inputs[i].value;
 
-				if(clt.data[name] === undefined) {
+				if(clt.submitData[currentStep] === undefined) {
 					continue;
 				}
 
 				if(name.indexOf("buttonid") != -1) {
-					clt.data.buttonid.push(v);
+					clt.submitData[currentStep].buttonid = clt.submitData[currentStep].buttonid ? clt.submitData[currentStep].buttonid : [];
+					clt.submitData[currentStep].buttonid.push(v);
 				} else {
-					clt.data[name] = v;
+					clt.submitData[currentStep][name] = v;
 				}
 			}
 		}
@@ -547,7 +566,7 @@ clt.action = {
 	confirm: function() {
 		var obj = {
 			url: clt.default.url+ "/larwint/insert/bc_b",
-			data: JSON.stringify(clt.data),
+			data: JSON.stringify(clt.submitData),
 			success: success,
 			error: error
 		};
@@ -592,11 +611,11 @@ clt.action = {
 	},
 
 	reset: function() {
-		for(var f in clt.data) {
+		for(var f in clt.submitData) {
 			if(f != "buttonid") {
-				clt.data[f] = null;
+				clt.submitData[f] = null;
 			} else {
-				clt.data.buttonid.splice(0, clt.data[f].length);
+				clt.submitData.buttonid.splice(0, clt.submitData[f].length);
 			}
 			
 		}
@@ -632,12 +651,47 @@ clt.action = {
 
 	changeSection: function() {
 		
-		var currentStep = clt.default.type[clt.default.currentStep];
-		var html = clt.template.createSection(clt.default[currentStep]);
+		var currentStep = clt.default.type[clt.default.currentStep], 
+			obj = clt.metadata[currentStep],
+			values = clt.submitData[currentStep];
+		if(typeof values == "object") {
+			var keys = Object.keys(values);
+			for(var i = 0; i < obj.fields.length; i++) {
+				var name = obj.fields[i].label.replace(" ", "").toLowerCase();
+				for(var j = 0; j < keys.length; j++) {
+					if(name == keys[j]) {
+						obj.fields[i].value = values[keys[j]];
+					}
+				}
+			}
+		}
+		
+		if(currentStep == "confirm") {
+			var wechat = clt.submitData.wechat;
+			var liveagent = clt.submitData.liveagent;
+			
+			var w_keys = Object.keys(wechat);
+			var la_keys = Object.keys(liveagent);
+			
+			for(var i = 0; i < obj.fields.length; i++) {
+				var name = obj.fields[i].label.replace(" ", "").toLowerCase();
+				for(var j = 0; j < w_keys.length; j++) {
+					if(name == w_keys[j]) {
+						obj.fields[i].value = wechat[w_keys[j]];
+					}
+				}
+				for(var j = 0; j < la_keys.length; j++) {
+					if(name == la_keys[j]) {
+						obj.fields[i].value = liveagent[la_keys[j]];
+					}
+				}
+			}
+		}
+		var html = clt.template.createSection(obj);
 		document.body.appendChild(html);
 
-		if(clt.default[currentStep].buttons) {
-			var buttons = clt.default[currentStep].buttons;
+		if(obj.buttons) {
+			var buttons = obj.buttons;
 
 			for(var i = 0; i < buttons.length; i++) {
 				var b = document.getElementById(buttons[i].toLowerCase());
@@ -689,7 +743,7 @@ clt.action = {
 		var inputs = document.querySelectorAll(".content input"),
 
 			currentStep = clt.default.type[clt.default.currentStep],
-			fields = clt.default[currentStep].fields,
+			fields = clt.metadata[currentStep].fields,
 
 			result = {flag: true, msg: ""},
 			

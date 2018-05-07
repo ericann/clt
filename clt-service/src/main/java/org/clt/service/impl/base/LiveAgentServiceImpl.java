@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 public class LiveAgentServiceImpl extends GenericServiceImpl<LiveAgent, String> implements LiveAgentService {
 
 	@Autowired
-	public LiveAgentServiceImpl(LiveAgentDao genericDao) {
-		super(genericDao);
+	public LiveAgentServiceImpl(LiveAgentDao liveAgentDao) {
+		super(liveAgentDao);
 		// TODO Auto-generated constructor stub
 	}
 	

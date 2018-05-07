@@ -55,6 +55,8 @@ clt.data = {
 	accId: null,
 	conId: null,
 	ticket: null,
+	time_confirm: null,
+	startTime: null
 };
 
 clt.template = {
@@ -230,7 +232,7 @@ clt.action = {
 							clt.data.accId = r.data.accId;
 							clt.data.conId = r.data.conId;
 							
-							clt.action.refresh(r.data.conId);
+							clt.action.refresh();
 						} else {
 							console.debug("-- save Account infor error");
 						}
@@ -241,24 +243,54 @@ clt.action = {
 		clt.action.changeSection();
 	},
 	
-	refresh: function(conId) {
+	refresh: function() {
+		window.clearInterval(clt.data.time_confirm);
 		document.getElementById("Scan QR").querySelector("img").src = clt.default.scanqr.fields[0].default;
-		clt.action.doCall(clt.default.url + "/security/getQR/" + conId, null,
+		clt.action.doCall(clt.default.url + "/security/getQR/" + clt.data.conId, null,
 				function(result) {
 					var r = JSON.parse(result);
 					document.getElementById("Scan QR").querySelector("img").src = r.url;
-					clt.action.doCall(clt.default.url + "/security/accesstoken/" + clt.data.conId + "/" + r.ticket, null,
-							function(result) {
-								alert(JSON.parse(result).msg);
-								console.log("success: " + JSON.stringify(result));
-								sessionStorage.setItem("CLT-Access-Token", JSON.parse(result).access_token);
-								window.location.href = "http://localhost:8080/clt/pages/management.html";
-					}, 
-					function(result) {
-						alert("Bind Failed.");
-						console.log("--failed: " + result);
-					}, "POST", 120000);
+					clt.data.ticket = r.ticket;
+					clt.data.time_confirm = setInterval(clt.action.confirmLogin, 1000);
+					clt.data.startTime = new Date().getTime();
 		}, null);
+	},
+	
+	timeout: function() {
+		var now = new Date().getTime();
+		
+		if(clt.data.startTime && now - clt.data.startTime > 100000) {
+			window.clearInterval(clt.data.time_confirm);
+			document.getElementById("Scan QR").querySelector("img").src = clt.default.scanqr.fields[0].default;
+			clt.data.startTime = null;
+			clt.action.doCall(clt.default.url + "/security/QR/" + clt.data.ticket, null, null, null);
+		}
+	},
+	
+	confirmLogin: function(ticket, time_confirm) {
+		console.log("--- confirmLogin");
+		clt.action.doCall(clt.default.url + "/security/accesstoken/" + clt.data.conId + "/" + clt.data.ticket, null,
+				function(result) {
+					
+					console.log("success: " + JSON.stringify(result));
+					result = JSON.parse(result);
+					if(result.code == 0) {
+						alert(result.msg);
+						sessionStorage.setItem("CLT-ACCESS-TOKEN", result.access_token);
+						window.location.href = "http://localhost:8080/clt/pages/management.html";
+						window.clearInterval(clt.data.time_confirm);
+					} else if(result.code == 1) {
+//						alert(result.msg);
+//						window.clearInterval(clt.data.time_confirm);
+					} else {
+						alert(result.msg);
+						window.clearInterval(clt.data.time_confirm);
+					}
+		}, 
+		function(result) {
+			alert("Bind Failed.");
+			window.clearInterval(clt.data.time_confirm);
+		}, "POST");
 	},
 
 	back: function() {
@@ -427,4 +459,5 @@ clt.action = {
 
 clt.init = function() {
 	clt.action.changeSection();
+	setInterval(clt.action.timeout, 4000);
 }

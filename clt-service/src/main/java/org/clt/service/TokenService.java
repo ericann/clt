@@ -42,7 +42,7 @@ public class TokenService {
 	}
 	
 	public Boolean isValid(Map<String, Object> accessToken) {
-		Long expried = (Long) accessToken.get("exp");
-		return expried - new Date().getTime() > 0 ? true : false;
+		long expried = (Integer) accessToken.get("exp");
+		return (((expried * 1000 - new Date().getTime()) / 1000 > 0) ? true : false);
 	}
 }

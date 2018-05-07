@@ -142,3 +142,11 @@ div .f_action .f_button {
 	display: inline-block;
 	margin: 10px;
 }
+
+.select-box {
+	display: none;
+}
+
+.input-box:active .select-box {
+	display: block;
+}

@@ -1,5 +1,7 @@
 package org.clt.service.impl.base;
 
+import java.util.List;
+
 import org.clt.repository.dao.WechatTicketDao;
 import org.clt.repository.pojo.WechatTicket;
 import org.clt.service.base.WechatTicketService;
@@ -21,13 +23,27 @@ public class WechatTicketServiceImpl extends GenericServiceImpl<WechatTicket, St
 	public WechatTicket findByTicket(String ticket) {
 		return this.wechatTicketDao.findByTicket(ticket);
 	}
-
+	
 	@Override
-	public Integer updateContactAndWUById(WechatTicket wt) {
-		return this.wechatTicketDao.updateContactAndWUById(wt.getContact().getId(),
-				wt.getWechatuser().getId(), wt.getId());
-		
+	public WechatTicket findByWechatUserIdAndWechatAcoount(String wechatAccount, String wechatUserId) {
+		return this.wechatTicketDao.findByWechatUserIdAndWechatAcoount(wechatAccount, wechatUserId);
 	}
 	
+	@Override
+	public List<WechatTicket> findByWechatAccountAndWechatUserId(String wechatAccount, String wechatUserId, String id) {
+		return this.wechatTicketDao.findByWechatAccountAndWechatUserId(wechatAccount, wechatUserId, id);
+	}
 
+	@Override
+	public Integer updateContactAndWUByIdAndIsValid(WechatTicket wt) {
+		return this.wechatTicketDao.updateContactAndWUByIdAndIsValid(wt.getContact().getId(),
+				wt.getWechatuser().getId(), wt.getIsValid(), wt.getId());
+		
+	}
+
+	@Override
+	public Integer updateIsValidByTicket(String ticket) {
+		return this.wechatTicketDao.updateIsValidByTicket(ticket);
+	}
+	
 }
