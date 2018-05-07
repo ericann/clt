@@ -134,7 +134,7 @@ public class AccessService {
 		if(wt != null) {
 			
 			if(wt.getContact() != null && wt.getWechatuser() != null) {
-				result.put("access_token", this.getAccessToken(this.getAccessToken(wt.getContact().getId())));
+				result.put("access_token", this.getAccessToken(wt.getContact().getId()));
 			} else if (wt.getWechatuser() == null && wt.getIsValid()) {
 				result.put("code", 1);
 				result.put("msg", "Waiting for message.");
@@ -156,11 +156,21 @@ public class AccessService {
 		return String.valueOf(this.wechatTicketService.updateIsValidByTicket(ticket));
 	}
 	
-	public String getAccessToken(String conId) {
+	public String getProfile(String token) {
+		String conId = (String) this.getAccessTokenInfo(token).get("jti");
+		logger.debug("-- getProfile conId: " + conId);
+		logger.debug("-- :" + this.getAccessTokenInfo(token));
 		List<Map<String, Object>> access = this.userAppService.findByContactId(conId);
-		
 		Map<String, Object> accessSort = this.metadataService.convertAccess(access);
-		String access_token = Token.generateAccessToken(3600 * 1000, new JSONObject(accessSort).toString());
+		return new JSONObject(accessSort).toString();
+	}
+	
+	public String getAccessToken(String conId) {
+//		List<Map<String, Object>> access = this.userAppService.findByContactId(conId);
+//		logger.debug("-- getAccessToken: " + access);
+//		logger.debug("-- conId: " + conId);
+//		Map<String, Object> accessSort = this.metadataService.convertAccess(access);
+		String access_token = Token.generateAccessToken(3600 * 1000, conId);
 		return access_token;
 	}
 	

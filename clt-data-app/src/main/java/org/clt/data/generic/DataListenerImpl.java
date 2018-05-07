@@ -32,7 +32,7 @@ public abstract class DataListenerImpl<T extends Serializable, PK extends Serial
 	@RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String findAll(@RequestHeader("CLT-ACCESS-TOKEN") String token) {
 		this.token = token;
-		return JSONObject.valueToString(this.genericService.findAllByContactId(userId));
+		return JSONObject.valueToString(this.genericService.findAllByContactId(this.getUserId()));
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
@@ -42,7 +42,7 @@ public abstract class DataListenerImpl<T extends Serializable, PK extends Serial
 	}
 	
 	public String getUserId() {
-		return userId != null ? userId : (String)tokenService.getTokenInfo(token, "iat");
+		return userId != null ? userId : (String)tokenService.getTokenInfo(token, "jti");
 	}
 	
 }

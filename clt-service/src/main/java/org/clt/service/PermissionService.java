@@ -32,16 +32,15 @@ public class PermissionService {
 	
 	public void grantPermissions(JoinPoint jp) {
 		System.out.println("--- go in grantPermissions ---");
-		String conId = null;
+		Contact con = (Contact) jp.getArgs()[0];
 		List<ConnectApp> caL = this.connectAppService.findAll();
-		Contact con = new Contact();
-		con.setId(conId);
 		
 		for(ConnectApp ca : caL) {
 			UserApp ua = new UserApp();
 			ua.setConnectApp(ca);
 			ua.setId(UUID.randomUUID().toString());
 			ua.setContact(con);
+			ua.setName("management");
 			
 			this.userAppService.save(ua);
 		}

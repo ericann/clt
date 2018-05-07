@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import org.clt.service.AccessService;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/security")
 public class AccessPermissionsListener {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private AccessService accessService;
@@ -46,8 +50,8 @@ public class AccessPermissionsListener {
 	}
 	
 	@RequestMapping(value="/profile", method=RequestMethod.GET)
-	public @ResponseBody String getProfile(@RequestHeader("CLT-Access-Token") String access_token) {
-		return (String)this.accessService.getAccessTokenInfo(access_token).get("jti");
+	public @ResponseBody String getProfile(@RequestHeader("CLT-ACCESS-TOKEN") String access_token) {
+		return (String)this.accessService.getProfile(access_token);
 	}
 	
 	@RequestMapping(value="/getUUID", method=RequestMethod.GET)

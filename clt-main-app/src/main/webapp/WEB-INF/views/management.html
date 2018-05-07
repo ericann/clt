@@ -5,11 +5,6 @@
 
 	<script type="text/javascript" src="../resources/js/manage.js"></script>
 	<script type="text/javascript" src="../resources/js/Ajax.js"></script>
-	<script type="text/javascript">
-		Ajax.get({url:"http://localhost:8080/clt/test/at/61118512-daaa-431f-8595-f9bbb21a1179", type: "GET", success: function(result) {
-			sessionStorage.setItem("CLT-Access-Token", result);
-		}});
-	</script>
 </head>
 <body>
 	<div class="head">
@@ -25,9 +20,9 @@
 		clt.init();
 		
 		clt.currentPage = {
-			ua: "19fcfbca-b71a-4708-a38c-beaa8ea71d8b",
+			/* ua: "19fcfbca-b71a-4708-a38c-beaa8ea71d8b",
 			ca: "891acad4-50d7-46d8-95ec-3d3171b734f6",
-			id: "49d026f9-6638-414b-a976-bd5ad93c4933",
+			id: "49d026f9-6638-414b-a976-bd5ad93c4933", */
 			name: "Management",
 			metadata: {},
 			data: {},
@@ -38,7 +33,7 @@
 		Ajax.get({
 			url:"http://localhost:8080/clt/security/profile/", 
 			type: "GET",
-			headers: [{key: "CLT-Access-Token", value: sessionStorage.getItem("CLT-Access-Token")}],
+			headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
 			success: function(result) {
 				clt.currentPage.profile = JSON.parse(result);
 				var menu = convertMenu(clt.currentPage.profile);
@@ -85,7 +80,8 @@
 			}
 			*/
 			var profile = (typeof profileStr === "string" ? JSON.parse(profileStr) : profileStr),
-				menu_ = profile[clt.currentPage.ua][clt.currentPage.ca],
+				uaAndCa = getUaAndCa(profile),
+				menu_ = profile[uaAndCa[0]][uaAndCa[1]],
 				menu = {},
 				keys = Object.keys(menu_);
 			for(var i = 0; i < keys.length; i++) {
@@ -102,7 +98,7 @@
 				for(var j = 0; j < objNames.length; j++) {
 					Ajax.get({
 						url: "http://localhost:8080/clt/metadata-api/FieldPermission/" + objs[objNames[j]] + "/all",
-						headers: [{"key": "CLT-Access-Token", "value": sessionStorage.getItem("CLT-Access-Token")}],
+						headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
 						type: "GET", 
 						success: function(result) {
 							var metas = JSON.parse(result);
@@ -206,7 +202,7 @@
 				Ajax.get({
 					url:"http://localhost:8080/clt/data-api/" + objectName + "/", 
 					type: "POST", 
-					headers: [{"key": "CLT-Access-Token", "value": sessionStorage.getItem("CLT-Access-Token")}],
+					headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
 					success: function(result) {
 						var objs = JSON.parse(result);
 						updateShowList(parent, objs, objectName);
@@ -249,7 +245,7 @@
             var rowHeader = [];
             
             for(var i = 0; i < headers.length; i++) {
-            	//ÔÝÊ±²»¶Ô1:n ×öÏÔÊ¾
+            	//ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½1:n ï¿½ï¿½ï¿½ï¿½Ê¾
             	if(typeof data[headers[i]] === "object") {
             		continue;
             	}
@@ -273,7 +269,7 @@
             for(var i = 0; i < data.length; i++) {
                 var rowBody = [];
                 for(var j = 0; j < keys.length; j++) {
-                	//ÔÝÊ±²»¶Ô1:n ×öÏÔÊ¾
+                	//ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½1:n ï¿½ï¿½ï¿½ï¿½Ê¾
                 	if(typeof data[i][keys[j]] === "object") {
                 		continue;
                 	}
@@ -326,6 +322,19 @@
         	}
         	
         	return menu;
+        }
+        
+        function getUaAndCa(profile) {
+        	var uaAndCa = [];
+        	var keys = Object.keys(profile);
+        	for(var i = 0; i < keys.length; i++) {
+        		if(keys[i].length == 36) {
+        			uaAndCa.push(keys[i]);
+        			break;
+        		}
+        	}
+        	uaAndCa.push(Object.keys(profile[uaAndCa[0]])[0]);
+        	return uaAndCa;
         }
 	</script>
 </body>
