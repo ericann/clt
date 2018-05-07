@@ -25,6 +25,7 @@ public class WechatUser implements Serializable {
 	private String country;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date createTime;
 
 	private String headimgurl;
@@ -42,6 +43,7 @@ public class WechatUser implements Serializable {
 	private Boolean sex;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date subscribeTime;
 
 	private String unionid;

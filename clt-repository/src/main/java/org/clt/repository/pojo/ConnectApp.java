@@ -23,11 +23,13 @@ public class ConnectApp implements Serializable {
 	private String clientSecret;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date createTime;
 
 	private String redirectURI;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date updateTime;
 
 	//bi-directional many-to-one association to Scope

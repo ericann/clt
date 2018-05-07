@@ -19,11 +19,13 @@ public class FunctionPermission implements Serializable {
 	private String id;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date createTime;
 
 	private String name;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date updateTime;
 
 	private String url;

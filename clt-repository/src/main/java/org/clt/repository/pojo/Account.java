@@ -19,6 +19,7 @@ public class Account implements Serializable {
 	private String id;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date createTime;
 
 	private Boolean master;
@@ -26,6 +27,7 @@ public class Account implements Serializable {
 	private String name;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date updateTime;
 
 	//bi-directional many-to-one association to Contact

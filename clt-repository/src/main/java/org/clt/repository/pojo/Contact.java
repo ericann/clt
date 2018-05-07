@@ -20,6 +20,7 @@ public class Contact implements Serializable {
 	private String id;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date createTime;
 
 	private String email;
@@ -37,9 +38,11 @@ public class Contact implements Serializable {
 	private String sessionId;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date sessionUpdateTime;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date updateTime;
 
 	//bi-directional many-to-one association to Account

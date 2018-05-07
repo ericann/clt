@@ -20,6 +20,7 @@ public class LiveAgent implements Serializable {
 	private String id;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date createTime;
 
 	private String deploymentId;
@@ -27,6 +28,7 @@ public class LiveAgent implements Serializable {
 	private String endPoint;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date updateTime;
 
 	//bi-directional many-to-one association to Button

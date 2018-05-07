@@ -18,11 +18,13 @@ public class Scope implements Serializable {
 	private String id;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date createTime;
 
 	private String name;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date updateTime;
 
 	//bi-directional many-to-one association to ConnectApp

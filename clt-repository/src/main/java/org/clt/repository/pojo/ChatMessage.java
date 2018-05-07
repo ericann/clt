@@ -20,6 +20,7 @@ public class ChatMessage implements Serializable {
 	private String affinityToken;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date createTime;
 
 	private String openId;
@@ -31,6 +32,7 @@ public class ChatMessage implements Serializable {
 	private String sessionKey;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date updateTime;
 	
 	private Boolean valid;

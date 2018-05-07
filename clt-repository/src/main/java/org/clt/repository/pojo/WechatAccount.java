@@ -19,6 +19,7 @@ public class WechatAccount implements Serializable {
 	private String id;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date createTime;
 
 	private String description;
@@ -32,6 +33,7 @@ public class WechatAccount implements Serializable {
 	private Boolean refreshByUs;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(insertable = false, updatable = false)
 	private Date updateTime;
 
 	private Boolean useDefault;
