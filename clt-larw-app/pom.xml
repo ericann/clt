@@ -6,7 +6,7 @@
   	<parent>
     	<groupId>clt</groupId>
     	<artifactId>clt</artifactId>
-    	<version>0.0.1-SNAPSHOT</version>
+    	<version>2.0.0</version>
   	</parent>
   
   	<artifactId>clt-larw-app</artifactId>
@@ -18,7 +18,7 @@
   		<dependency>
   			<groupId>clt</groupId>
   			<artifactId>clt-service</artifactId>
-  			<version>0.0.1-SNAPSHOT</version>
+  			<version>2.0.0</version>
   		</dependency>
   	
    		<dependency>
@@ -91,18 +91,6 @@
 	 	 <finalName>larw</finalName>
 	 	 
 	 	 <plugins>
-	 	 	<!-- 远程部署到server -->
-            <plugin>
-	            <groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-				    <url>http://47.93.254.177/manager/text</url>
-				    <username>tomcat</username>
-				    <password>sdfSD145</password>
-				    <update>true</update>
-				</configuration>
-			</plugin>
 	 	 	<!-- for heroku -->
 			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>

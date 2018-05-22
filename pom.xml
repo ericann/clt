@@ -6,7 +6,6 @@
 	
 	<groupId>clt</groupId>
 	<artifactId>clt</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<name>clt</name>
@@ -99,4 +98,5 @@
 		<module>clt-data-app</module>
 		<module>clt-main-app</module>
 	</modules>
+	<version>2.0.0</version>
 </project>
