@@ -229,32 +229,21 @@ clt.action = {
 		//save account info
 		if(clt.default.type[clt.default.currentStep - 1] == "account") {
 			Ajax.post({
-				url: clt.default.baseURL + "/data-api/Account/save",
-				data: JSON.stringify({"name": clt.data.companyname}),
+				url: clt.default.baseURL + "/larw/account",
+				data: JSON.stringify({
+					"name": clt.data.companyname,
+					"contacts": {
+						"name": clt.data.yourname,
+						"mobile": clt.data.mobile,
+						"email": clt.data.email
+					}}),
 				requestHeader: "application/json",
 				headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
 				success: function(result) {
 					result = JSON.parse(result);
 					if(result.code == 0) {
 						clt.data.accId = result.id;
-						Ajax.post({
-							url: clt.default.baseURL + "/data-api/Contact/save",
-							data: JSON.stringify({
-								"name": clt.data.yourname,
-								"mobile": clt.data.mobile,
-								"email": clt.data.email,
-								"account": {"id": clt.data.accId}
-							}),
-							requestHeader: "application/json",
-							headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
-							success: function(result) {
-								result = JSON.parse(result);
-								if(result.code == 0) {
-									clt.data.conId = result.id;
-									clt.action.refresh();
-								}
-							}
-						});
+						clt.action.refresh();
 					}
 				}
 			});
