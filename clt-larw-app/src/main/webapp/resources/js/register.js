@@ -562,19 +562,38 @@ clt.action = {
 		};
 		Ajax.post(obj);
 	},
+	
+	getId: function(table, property, key) {
+		var result = null;
+		if(!clt.data[table]) {
+			return result;
+		}
+		var keys = Object.keys(clt.data[table]);
+		for(var i = 0; i < keys.length; i++) {
+			if(key == clt.data[table][keys[i]][property]) {
+				result = clt.data[table][keys[i]].id;
+				break;
+			}
+		}
+		
+		return result;
+	},
 
 	confirm: function() {
 		Ajax.post({
 			url: clt.default.baseURL + "/larw/sfdc",
 			headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
 			data: JSON.stringify({
+				"id": clt.action.getId("sfdc", "orgId", clt.submitData.liveagent.organizationid),
 				"orgId": clt.submitData.liveagent.organizationid,
 				"domain": "login",
 				"liveagents": {
+					"id": clt.action.getId("liveagent", "deploymentId", clt.submitData.liveagent.deploymentid),
 					"deploymentId": clt.submitData.liveagent.deploymentid,
 					"endPoint": clt.submitData.liveagent.endpoint,
 					"account": {"id": clt.user.accId},
 					"wechataccounts": {
+						"id": clt.action.getId("wechataccount", "wechatAccount", clt.submitData.wechat.accountid),
 						"firstTimeRefresh": clt.submitData.wechat.refreshnow,
 						"refreshByUs": clt.submitData.wechat.refreshnow,
 						"wechatAccount": clt.submitData.wechat.accountid,
@@ -583,6 +602,7 @@ clt.action = {
 						"wechatToken": clt.submitData.wechat.token,
 					},
 					"buttons": {
+						"id": clt.action.getId("button", "buttonId", clt.submitData.liveagent.buttonid[0]),
 						"buttonId": clt.submitData.liveagent.buttonid[0],
 						"isDefault": true,
 					}
