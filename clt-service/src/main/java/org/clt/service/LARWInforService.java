@@ -105,7 +105,7 @@ public class LARWInforService {
 			result.put("msg", "Unknown Error.");
 		}
 		
-		return result.toString();
+		return JSONObject.valueToString(result);
 	}
 	
 }
