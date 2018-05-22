@@ -316,7 +316,7 @@ clt.template = {
 	
 	    html = html.replace("{label}", field.label);
 	    var htmlDom = this.parseToDom(html)[0],
-	        f_valueD = htmlDom.getElementsByClassName("f_values")[0];
+	        f_valueD = htmlDom.getElementsByClassName("f_value")[0];
 	    
 	    f_valueD.innerHTML = "";
 	    f_valueD.appendChild(content[0]);
@@ -565,7 +565,7 @@ clt.action = {
 
 	confirm: function() {
 		Ajax.post({
-			url: clt.default.baseURL + "/data-api/Sfdc/save",
+			url: clt.default.baseURL + "/larw/sfdc",
 			headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
 			data: JSON.stringify({
 				"orgId": clt.submitData.liveagent.organizationid,
