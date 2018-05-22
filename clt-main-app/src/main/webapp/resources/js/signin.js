@@ -2,7 +2,7 @@ window.clt = window.clt || {};
 
 clt.default = {
 		
-	url: window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split("/")[1],
+	baseURL: window.document.location.pathname.substring(0, window.document.location.pathname.substring(1).indexOf("/") + 1),
 	type: ["scanqr"],
 	scanqr: {
 		title: "Login",
@@ -10,7 +10,7 @@ clt.default = {
 		fields: [{
 			label: "Scan QR",
 			type: "img",
-			default: "http://localhost:8080/clt/resources/images/loading.gif"
+			default: "../resources/images/loading.gif"
 		}]
 	},
 
@@ -199,7 +199,7 @@ clt.action = {
 	refresh: function() {
 		window.clearInterval(clt.data.time_confirm);
 		document.getElementById("Scan QR").querySelector("img").src = clt.default.scanqr.fields[0].default;
-		clt.action.doCall(clt.default.url + "/security/getQR", null,
+		clt.action.doCall(clt.default.baseURL + "/security/getQR", null,
 				function(result) {
 					var r = JSON.parse(result);
 					document.getElementById("Scan QR").querySelector("img").src = r.url;
@@ -216,18 +216,18 @@ clt.action = {
 			window.clearInterval(clt.data.time_confirm);
 			document.getElementById("Scan QR").querySelector("img").src = clt.default.scanqr.fields[0].default;
 			clt.data.startTime = null;
-			clt.action.doCall(clt.default.url + "/security/QR/" + clt.data.ticket, null, null, null);
+			clt.action.doCall(clt.default.baseURL + "/security/QR/" + clt.data.ticket, null, null, null);
 		}
 	},
 
 	confirmLogin: function() {
-		clt.action.doCall(clt.default.url + "/security/accesstoken/" + clt.data.ticket, null,
+		clt.action.doCall(clt.default.baseURL + "/security/accesstoken/" + clt.data.ticket, null,
 				function(result) {
 					result = JSON.parse(result);
 					if(result.code == 0) {
 						alert(result.msg);
 						sessionStorage.setItem("CLT-ACCESS-TOKEN", result.access_token);
-						window.location.href = "http://localhost:8080/clt/pages/management.html";
+						window.location.href = "management.html";
 						window.clearInterval(clt.data.time_confirm);
 					} else if(result.code == 1) {
 			
@@ -322,7 +322,7 @@ clt.action = {
 	
 	checkWechatStatus: function(ticket) {
 		clt.action.doCall({
-			url: clt.default.url + "/wechat/bind/" + ticket
+			url: clt.default.baseURL + "/wechat/bind/" + ticket
 		});
 	},
 

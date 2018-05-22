@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script type="text/javascript" src="../resources/js/detectPF.js"></script>
-	<title>Register Your Information</title>
+	<!-- <script type="text/javascript" src="../resources/js/detectPF.js"></script> -->
+	<title>Connection Definition</title>
 	<link rel="stylesheet" href="../resources/css/generic.css" type="text/css" />
 	
 	<script type="text/javascript" src="../resources/js/register.js"></script>
@@ -17,8 +17,104 @@
 </body>
 <script type="text/javascript">
 	(function init() {
-		clt.action.changeSection();
+		clt.init();
 	})();
+	
+	function getSelectContent(e) {
+		var e = e.target || e,
+			selectBox = e.nextSibling,
+			table = e.getAttribute("table");
+		
+		if(clt.data[table.toLowerCase()]) {
+			return;
+		}
+		
+		var ajaxObj = {
+			url: clt.default.baseURL + "/data-api/" + table +"/",
+			headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
+			success: function(result) {
+				var htmlContent = "<div class='select-detail'>{value}</div>";
+				var results = JSON.parse(result);
+				
+				if(results.length == 0) {
+					var select = document.querySelector("input[table='" + table + "']");
+					select.nextElementSibling.innerHTML = htmlContent.replace("{value}", "There are no data.");
+					return;
+				}
+				
+				for(var i = 0; i < results.length; i++) {
+					var obj = {}, dom = null;
+					switch(table) {
+						case "LiveAgent":
+							obj["organizationId"] = results[0]["sfdc"]["orgId"];
+							obj["deploymentId"] = results[0]["deploymentId"];
+							obj["endPoint"] = results[0]["endPoint"];
+							obj["id"] = results[0]["id"];
+							
+							clt.data.liveagent = clt.data.liveagent ? clt.data.liveagent : {};
+							clt.data.liveagent[obj.deploymentId] = obj;
+							dom = clt.action.parseToDom(htmlContent.replace("{value}", obj.deploymentId))[0];
+							break;
+							
+						case "Button":
+							obj["buttonId"] = results[0]["buttonId"];
+							obj["id"] = results[0]["id"];
+							
+							clt.data.button = clt.data.button ? clt.data.button : {};
+							clt.data.button[obj.buttonId] = obj;
+							dom = clt.action.parseToDom(htmlContent.replace("{value}", obj.buttonId))[0];
+							break;
+						
+						case "WechatAccount":
+							obj["accountId"] = results[0]["wechatAccount"];
+							obj["appId"] = results[0]["wechatAppId"];
+							obj["AppSecret"] = results[0]["wechatAppSecret"];
+							obj["token"] = results[0]["wechatToken"];
+							obj["refreshNow"] = results[0]["firstTimeRefresh"];
+							obj["refreshType"] = results[0]["refreshByUs"];
+							obj["id"] = results[0]["id"];
+							
+							clt.data.wechataccount = clt.data.wechataccount ? clt.data.wechataccount : {};
+							clt.data.wechataccount[obj.accountId] = obj;
+							dom = clt.action.parseToDom(htmlContent.replace("{value}", obj.accountId))[0];
+							break;
+							
+						default:
+					}
+					
+					dom.addEventListener("click", function(e) {
+						var e = e.target || e,
+							table = e.parentElement.parentElement.firstElementChild.getAttribute("table");
+						
+						var obj = clt.data[table.toLowerCase()][e.innerText];
+
+						var keys = Object.keys(obj);
+						for(var i = 0; i < keys.length; i++) {
+							var name = keys[i].toLowerCase();
+							//name = (name == "orgid" ? "organizationid" : name);
+							var input = document.getElementsByName(name)[0];
+							if(input) {
+								if(input.getAttribute("type") == "checkbox") {
+									input.checked = obj[keys[i]];
+								} else {
+									input.value = obj[keys[i]];
+								}
+							}
+						}
+
+					}, false);
+					selectBox.innerHTML = "";
+					selectBox.appendChild(dom);
+				}
+				
+			},
+			error: function() {
+				alert("Network is error!");
+			}
+		};
+		
+		Ajax.get(ajaxObj);
+	}
 
 </script>
 </html>

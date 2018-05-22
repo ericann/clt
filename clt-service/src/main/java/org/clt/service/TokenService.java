@@ -1,6 +1,7 @@
 package org.clt.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.clt.util.Token;
@@ -8,6 +9,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 
 @Service
 public class TokenService {
@@ -37,12 +41,35 @@ public class TokenService {
 		return Token.generateAccessToken(3600 * 1000, new JSONObject(accessToken_old.get("jti")).toString());
 	}
 	
-	public Boolean isValid(String token) {
-		return this.isValid(this.getAccessTokenInfo(token));
-	}
-	
-	public Boolean isValid(Map<String, Object> accessToken) {
-		long expried = (Integer) accessToken.get("exp");
-		return (((expried * 1000 - new Date().getTime()) / 1000 > 0) ? true : false);
+	public Map<String, Object> isValid(String token) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			Map<String, Object> accessToken = this.getAccessTokenInfo(token);
+			long expried = (Integer) accessToken.get("exp");
+			if(((expried * 1000 - new Date().getTime()) / 1000 > 0)) {
+				result.put("code", 0);
+				result.put("expire_in", (expried * 1000 - new Date().getTime()) / 1000);
+				result.put("msg", "Success.");
+				result.put("conId", accessToken.get("jti"));
+			} else {
+				result.put("code", 1);
+				result.put("msg", "Token is expired.");
+			}
+		} catch(SignatureException ex) {
+			result.put("code", 2);
+			result.put("msg", "Unknown token,");
+		} catch(MalformedJwtException me) {
+			result.put("code", 3);
+			result.put("msg", "Invalid format token,");
+		} catch(IllegalArgumentException ex) {
+			result.put("code", 5);
+			result.put("msg", "Empty token.");
+		} catch(Exception ex) {
+			result.put("code", -1);
+			result.put("msg", "Error token,");
+		}
+		
+		return result;
 	}
 }

@@ -1,6 +1,7 @@
 package org.clt.util.print;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Printer {
@@ -15,5 +16,7 @@ public class Printer {
 		Printer p = ctx.getBean("printer", Printer.class);
 		
 	    p.print("AOP Test.");
+	    
+	    ((AbstractApplicationContext) ctx).close();
 	}
 }

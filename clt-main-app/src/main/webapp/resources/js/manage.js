@@ -2,7 +2,7 @@ window.clt = window.clt || {};
 
 clt.default = {
 
-    base_url: window.location.protocol + "//" + window.location.host + "/clt",
+    baseURL: window.document.location.pathname.substring(0, window.document.location.pathname.substring(1).indexOf("/") + 1),
     objects: {
         welcome: {
             title: "Welcome",

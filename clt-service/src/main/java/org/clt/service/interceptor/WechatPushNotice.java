@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class WechatPushNotice {
 	
+	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired

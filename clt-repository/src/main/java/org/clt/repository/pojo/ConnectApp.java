@@ -2,6 +2,9 @@ package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,8 @@ public class ConnectApp implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(generator="system-guid")
+	@GenericGenerator(name="system-guid", strategy = "guid")
 	private String id;
 
 	private String clientId;
@@ -95,9 +100,9 @@ public class ConnectApp implements Serializable {
 		return this.scopes;
 	}
 
-	public void setScopes(List<Scope> scopes) {
-		this.scopes = scopes;
-	}
+//	public void setScopes(List<Scope> scopes) {
+//		this.scopes = scopes;
+//	}
 
 	public Scope addScope(Scope scope) {
 		getScopes().add(scope);
@@ -116,10 +121,10 @@ public class ConnectApp implements Serializable {
 	public List<UserApp> getUserapps() {
 		return this.userapps;
 	}
-
-	public void setUserapps(List<UserApp> userapps) {
-		this.userapps = userapps;
-	}
+//
+//	public void setUserapps(List<UserApp> userapps) {
+//		this.userapps = userapps;
+//	}
 
 	public UserApp addUserApp(UserApp userApp) {
 		getUserapps().add(userApp);

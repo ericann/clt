@@ -2,6 +2,10 @@ package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +20,8 @@ public class Account implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(generator="system-guid")
+	@GenericGenerator(name="system-guid", strategy = "guid")
 	private String id;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -31,8 +37,8 @@ public class Account implements Serializable {
 	private Date updateTime;
 
 	//bi-directional many-to-one association to Contact
-	@OneToMany(mappedBy="account")
-	private List<Contact> contacts;
+	@OneToMany(mappedBy="account", cascade=CascadeType.PERSIST)
+	private List<Contact> contacts = new ArrayList<Contact>();
 
 	//bi-directional many-to-one association to LiveAgent
 	@OneToMany(mappedBy="account")
@@ -88,18 +94,32 @@ public class Account implements Serializable {
 	public List<Contact> getContacts() {
 		return this.contacts;
 	}
+	
+	public Contact addContact(Contact contact) {
+		getContacts().add(contact);
+		contact.setAccount(this);
 
-	public void setContacts(List<Contact> contacts) {
-		this.contacts = contacts;
+		return contact;
 	}
+
+	public Contact removeContact(Contact contact) {
+		getContacts().remove(contact);
+		contact.setAccount(null);
+
+		return contact;
+	}
+
+//	public void setContacts(List<Contact> contacts) {
+//		this.contacts = contacts;
+//	}
 
 	public List<LiveAgent> getLiveagents() {
 		return this.liveagents;
 	}
 
-	public void setLiveagents(List<LiveAgent> liveagents) {
-		this.liveagents = liveagents;
-	}
+//	public void setLiveagents(List<LiveAgent> liveagents) {
+//		this.liveagents = liveagents;
+//	}
 
 	public LiveAgent addLiveagent(LiveAgent liveagent) {
 		getLiveagents().add(liveagent);

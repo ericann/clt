@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/data-api/WechatUser")
 public class WechatUserListener extends DataListenerImpl<WechatUser, String> {
 	
+	@SuppressWarnings("unused")
+	private WechatUserService wechatUserService;
+	
 	@Autowired
     public WechatUserListener(WechatUserService wechatUserService) {
         super(wechatUserService);
     }
+	
 }

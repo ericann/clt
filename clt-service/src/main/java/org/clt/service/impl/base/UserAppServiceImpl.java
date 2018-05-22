@@ -30,5 +30,23 @@ public class UserAppServiceImpl extends GenericServiceImpl<UserApp, String> impl
 		// TODO Auto-generated method stub
 		return this.userAppDao.findByContactId(conId);
 	}
+
+	@Override
+	public List<Map<String, Object>> findByName(String name) {
+		// TODO Auto-generated method stub
+		return this.userAppDao.findByName(name);
+	}
+
+	@Override
+	public List<Map<String, Object>> findObjectsByName(String name) {
+		// TODO Auto-generated method stub
+		return this.userAppDao.findObjectsByName(name);
+	}
+
+	@Override
+	public List<Map<String, Object>> findObjectsByConId(String conId) {
+		// TODO Auto-generated method stub
+		return this.findObjectsByConId(conId);
+	}
 	
 }

@@ -11,8 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/data-api/Sfdc")
 public class SfdcListener extends DataListenerImpl<Sfdc, String> {
 	
+	@SuppressWarnings("unused")
+	private SfdcService sfdcService;
+	
 	@Autowired
     public SfdcListener(SfdcService sfdcService) {
         super(sfdcService);
+        this.sfdcService = sfdcService;
     }
+	
 }

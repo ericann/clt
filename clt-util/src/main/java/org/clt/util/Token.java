@@ -68,5 +68,14 @@ public class Token {
 		Integer exp = (Integer)result.get("exp");
 		System.out.println(simpleDateFormat.format(new Date(iat)));
 		System.out.println(simpleDateFormat.format(new Date(exp)));
+
+		long expried = (Integer) result.get("exp");
+		long i = 1529180110;
+		System.out.println("i: \t\t" + i * 1000);
+		System.out.println("expried: \t" + expried);
+		System.out.println("expried * 1000: " + (expried * 1000));
+		System.out.println("current: " + new Date().getTime());
+		System.out.println("add: " + String.valueOf(expried * 1000 - new Date().getTime()));
+		System.out.println("boolean: " + (((expried * 1000 - new Date().getTime()) / 1000 > 0) ? true : false));
 	}
 }

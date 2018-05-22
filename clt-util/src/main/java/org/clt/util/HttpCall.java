@@ -78,11 +78,12 @@ public class HttpCall {
 	
 	private static String getURL(String url, Map<String, Object> params) {
 		StringBuilder sb = new StringBuilder(url);
-		sb.append(url.contains("?") ? "&" : "?");
-		for(String k : params.keySet()) {
-			sb.append(k).append("=").append(params.get(k)).append("&");
+		if(params != null && !params.isEmpty()) {
+			sb.append(url.contains("?") ? "&" : "?");
+			for(String k : params.keySet()) {
+				sb.append(k).append("=").append(params.get(k)).append("&");
+			}
 		}
-		
 		return sb.toString();
 	}
 }

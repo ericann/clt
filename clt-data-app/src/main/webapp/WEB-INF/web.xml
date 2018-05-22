@@ -49,6 +49,6 @@
   
   <context-param>
   	<param-name>webAppRootKey</param-name>
-  	<param-value>oauth</param-value>
+  	<param-value>data</param-value>
   </context-param>
 </web-app>

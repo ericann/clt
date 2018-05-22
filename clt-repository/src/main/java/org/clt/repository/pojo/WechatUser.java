@@ -2,6 +2,9 @@ package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,8 @@ public class WechatUser implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(generator="system-guid")
+	@GenericGenerator(name="system-guid", strategy = "guid")
 	private String id;
 
 	private String bindTicket;

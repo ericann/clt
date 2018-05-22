@@ -2,7 +2,7 @@ window.clt = window.clt || {};
 
 clt.default = {
 		
-	url: window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split("/")[1],
+	baseURL: window.document.location.pathname.substring(0, window.document.location.pathname.substring(1).indexOf("/") + 1),
 	type: ["account", "scanqr"],
 	scanqr: {
 		title: "Bind Wechat",
@@ -10,7 +10,7 @@ clt.default = {
 		fields: [{
 			label: "Scan QR",
 			type: "img",
-			default: "http://localhost:8080/clt/resources/images/loading.gif"
+			default: "../resources/images/loading.gif"
 		}]
 	},
 
@@ -47,7 +47,11 @@ clt.default = {
 	currentStep: 0
 };
 
+clt.metadata = {};
+
 clt.data = {
+	account: null,
+	contact: null,
 	companyname: null,
 	yourname: null,
 	mobile: null,
@@ -224,19 +228,36 @@ clt.action = {
 		
 		//save account info
 		if(clt.default.type[clt.default.currentStep - 1] == "account") {
-			clt.action.doCall(clt.default.url + "/larwint/insert/acc_con",
-					JSON.stringify(clt.data),
-					function(result) {
-						var r = JSON.parse(result);
-						if(r.code == 0) {
-							clt.data.accId = r.data.accId;
-							clt.data.conId = r.data.conId;
-							
-							clt.action.refresh();
-						} else {
-							console.debug("-- save Account infor error");
-						}
-				}, null, "POST");
+			Ajax.post({
+				url: clt.default.baseURL + "/data-api/Account/save",
+				data: JSON.stringify({"name": clt.data.companyname}),
+				requestHeader: "application/json",
+				headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
+				success: function(result) {
+					result = JSON.parse(result);
+					if(result.code == 0) {
+						clt.data.accId = result.id;
+						Ajax.post({
+							url: clt.default.baseURL + "/data-api/Contact/save",
+							data: JSON.stringify({
+								"name": clt.data.yourname,
+								"mobile": clt.data.mobile,
+								"email": clt.data.email,
+								"account": {"id": clt.data.accId}
+							}),
+							requestHeader: "application/json",
+							headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
+							success: function(result) {
+								result = JSON.parse(result);
+								if(result.code == 0) {
+									clt.data.conId = result.id;
+									clt.action.refresh();
+								}
+							}
+						});
+					}
+				}
+			});
 		}
 		
 		clt.action.removeSection();
@@ -246,7 +267,7 @@ clt.action = {
 	refresh: function() {
 		window.clearInterval(clt.data.time_confirm);
 		document.getElementById("Scan QR").querySelector("img").src = clt.default.scanqr.fields[0].default;
-		clt.action.doCall(clt.default.url + "/security/getQR/" + clt.data.conId, null,
+		clt.action.doCall(clt.default.baseURL + "/security/getQR/" + clt.data.conId, null,
 				function(result) {
 					var r = JSON.parse(result);
 					document.getElementById("Scan QR").querySelector("img").src = r.url;
@@ -263,13 +284,13 @@ clt.action = {
 			window.clearInterval(clt.data.time_confirm);
 			document.getElementById("Scan QR").querySelector("img").src = clt.default.scanqr.fields[0].default;
 			clt.data.startTime = null;
-			clt.action.doCall(clt.default.url + "/security/QR/" + clt.data.ticket, null, null, null);
+			clt.action.doCall(clt.default.baseURL + "/security/QR/" + clt.data.ticket, null, null, null);
 		}
 	},
 	
 	confirmLogin: function(ticket, time_confirm) {
 		console.log("--- confirmLogin");
-		clt.action.doCall(clt.default.url + "/security/accesstoken/" + clt.data.conId + "/" + clt.data.ticket, null,
+		clt.action.doCall(clt.default.baseURL + "/security/accesstoken/" + clt.data.conId + "/" + clt.data.ticket, null,
 				function(result) {
 					
 					console.log("success: " + JSON.stringify(result));
@@ -277,7 +298,7 @@ clt.action = {
 					if(result.code == 0) {
 						alert(result.msg);
 						sessionStorage.setItem("CLT-ACCESS-TOKEN", result.access_token);
-						window.location.href = "http://localhost:8080/clt/pages/management.html";
+						window.location.href = "management.html";
 						window.clearInterval(clt.data.time_confirm);
 					} else if(result.code == 1) {
 //						alert(result.msg);
@@ -373,7 +394,7 @@ clt.action = {
 	
 	checkWechatStatus: function(ticket) {
 		clt.action.doCall({
-			url: clt.default.url + "/wechat/bind/" + ticket
+			url: clt.default.baseURL + "/wechat/bind/" + ticket
 		});
 	},
 
@@ -454,7 +475,8 @@ clt.action = {
 		}
 
 		return result;
-	}
+	},
+	
 };
 
 clt.init = function() {

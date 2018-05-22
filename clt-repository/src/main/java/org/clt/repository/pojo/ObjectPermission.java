@@ -2,6 +2,9 @@ package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,8 @@ public class ObjectPermission implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(generator="system-guid")
+	@GenericGenerator(name="system-guid", strategy = "guid")
 	private String id;
 	
 	private String objectName;
@@ -125,9 +130,9 @@ public class ObjectPermission implements Serializable {
 		return this.fieldpermissions;
 	}
 
-	public void setFieldpermissions(List<FieldPermission> fieldpermissions) {
-		this.fieldpermissions = fieldpermissions;
-	}
+//	public void setFieldpermissions(List<FieldPermission> fieldpermissions) {
+//		this.fieldpermissions = fieldpermissions;
+//	}
 
 	public FieldPermission addFieldpermission(FieldPermission fieldpermission) {
 		getFieldpermissions().add(fieldpermission);
@@ -147,9 +152,9 @@ public class ObjectPermission implements Serializable {
 		return this.functionobjects;
 	}
 
-	public void setFunctionobjects(List<FunctionObject> functionobjects) {
-		this.functionobjects = functionobjects;
-	}
+//	public void setFunctionobjects(List<FunctionObject> functionobjects) {
+//		this.functionobjects = functionobjects;
+//	}
 
 	public FunctionObject addFunctionobject(FunctionObject functionobject) {
 		getFunctionobjects().add(functionobject);

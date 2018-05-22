@@ -29,4 +29,5 @@ public class FieldPermissionListener extends DataListenerImpl<FieldPermission, S
 			@PathVariable("opId") String opId) {
 		return JSONObject.valueToString(this.fieldPermissionService.findAllByOpId(opId));
 	}
+	
 }

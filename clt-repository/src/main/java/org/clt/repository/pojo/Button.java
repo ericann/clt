@@ -2,6 +2,9 @@ package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,8 @@ public class Button implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(generator="system-guid")
+	@GenericGenerator(name="system-guid", strategy = "guid")
 	private String id;
 
 	private String buttonId;
@@ -36,7 +41,7 @@ public class Button implements Serializable {
 
 	//bi-directional many-to-one association to LiveAgent
 	@ManyToOne
-	@JoinColumn(name="laId")
+	@JoinColumn(name="laId", referencedColumnName="id")
 	private LiveAgent liveagent;
 
 	//bi-directional many-to-one association to ChatMessage
@@ -113,10 +118,10 @@ public class Button implements Serializable {
 	public List<ChatMessage> getChatmessages() {
 		return this.chatmessages;
 	}
-
-	public void setChatmessages(List<ChatMessage> chatmessages) {
-		this.chatmessages = chatmessages;
-	}
+//
+//	public void setChatmessages(List<ChatMessage> chatmessages) {
+//		this.chatmessages = chatmessages;
+//	}
 
 	public ChatMessage addChatmessage(ChatMessage chatmessage) {
 		getChatmessages().add(chatmessage);

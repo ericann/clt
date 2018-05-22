@@ -11,8 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/data-api/LiveAgent")
 public class LiveAgentListener extends DataListenerImpl<LiveAgent, String> {
 	
+	@SuppressWarnings("unused")
+	private LiveAgentService liveAgentService;
+	
 	@Autowired
     public LiveAgentListener(LiveAgentService liveAgentService) {
         super(liveAgentService);
+        this.liveAgentService = liveAgentService;
     }
+	
 }

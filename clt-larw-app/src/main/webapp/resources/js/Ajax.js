@@ -33,7 +33,6 @@ Ajax = (function() {
 				xhr.timeout = ajax.timeout ? ajax.timeout : options.timeout;
 				xhr.ontimeout = (ajax.timeout && typeof ajax.timeout === "function") ? ajax.timeout : null;
 			}
-			console.log("xhr init complete :", xhr);
 		},
 
 		execute = function() {
@@ -49,7 +48,11 @@ Ajax = (function() {
 			}
 
 			if(ajax.type.toUpperCase() == "POST") {
-				xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				if(ajax.requestHeader) {
+					xhr.setRequestHeader("Content-Type", ajax.requestHeader);
+				} else{
+					xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				}
 			} else if(ajax.type.toUpperCase() == "GET") {
 				ajax.data = null;
 			}

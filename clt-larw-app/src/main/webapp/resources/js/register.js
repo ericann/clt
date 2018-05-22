@@ -1,7 +1,7 @@
 window.clt = window.clt || {};
 
 clt.default = {
-		
+	baseURL: window.document.location.pathname.substring(0, window.document.location.pathname.substring(1).indexOf("/") + 1),
 	TOKEN: "CLT-ACCESS-TOKEN",
 	type: ["introduction", "liveagent", "wechat", "confirm", "congratulations"],
 	currentStep: 0
@@ -564,44 +564,56 @@ clt.action = {
 	},
 
 	confirm: function() {
-		var obj = {
-			url: clt.default.url+ "/larwint/insert/bc_b",
-			data: JSON.stringify(clt.submitData),
-			success: success,
-			error: error
-		};
-		Ajax.post(obj);
-		clt.action.loading();
-
-		function success(result) {
-			//console.debug("Ajax post success");
-			//console.debug(res);
-			clt.action.clearDomById("loading");
-			var r = JSON.parse(result);
-			if(r.errCode == 0) {
-				clt.action.next();
-			} else {
-				var error = document.getElementsByClassName("error_title");
+		Ajax.post({
+			url: clt.default.baseURL + "/data-api/Sfdc/save",
+			headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
+			data: JSON.stringify({
+				"orgId": clt.submitData.liveagent.organizationid,
+				"domain": "login",
+				"liveagents": {
+					"deploymentId": clt.submitData.liveagent.deploymentid,
+					"endPoint": clt.submitData.liveagent.endpoint,
+					"account": {"id": clt.user.accId},
+					"wechataccounts": {
+						"firstTimeRefresh": clt.submitData.wechat.refreshnow,
+						"refreshByUs": clt.submitData.wechat.refreshnow,
+						"wechatAccount": clt.submitData.wechat.accountid,
+						"wechatAppId": clt.submitData.wechat.appid,
+						"wechatAppSecret": clt.submitData.wechat.appsecret,
+						"wechatToken": clt.submitData.wechat.token,
+					},
+					"buttons": {
+						"buttonId": clt.submitData.liveagent.buttonid[0],
+						"isDefault": true,
+					}
+				}
+			}),
+			requestHeader: "application/json",
+			success: function(result) {
+				clt.action.clearDomById("loading");
+				var r = JSON.parse(result);
+				if(r.code == 0) {
+					clt.action.next();
+				} else {
+					var error = document.getElementsByClassName("error_info");
+					if(error) {
+						error[0].innerHTML = r.msg;
+					}
+				}
+			},
+			error: function (res) {
+				clt.action.clearDomById("loading");
+				var error = document.getElementsByClassName("error_info");
 				if(error) {
-					error[0].innerHTML = r.errMsg;
+					error[0].innerHTML = "Send Request failed, try again later please.";
 				}
 			}
-			
-		}
-
-		function error(res) {
-			clt.action.clearDomById("loading");
-			var error = document.getElementsByClassName("error_title");
-			if(error) {
-				error[0].innerHTML = "Send Request failed, try again later please.";
-			}
-			//console.debug("Ajax post error");
-			//console.debug(res);
-		}
+		});
+		clt.action.loading();
 	},
 	
 	complete: function() {
-		window.location.href = clt.default.url + "/pages/help/larw.html";
+		window.location.href = "help/larw.html";
 	},
 
 	cancel: function() {
@@ -816,9 +828,38 @@ clt.action = {
 		}
 
 		return result;
+	},
+	
+	checkToken: function() {
+		Ajax.get({
+			url: clt.default.baseURL + "/security/accesstoken/verify/", 
+			headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
+			success: function(result) {
+				result = JSON.parse(result);
+				if(result.code != 0) {
+					window.location.href = "signin.html";
+				}
+			}
+		});
+	},
+	
+	getUserInfo: function() {
+		Ajax.get({
+			url: clt.default.baseURL + "/data-api/Contact/userInfor/", 
+			headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
+			success: function(result) {
+				result = JSON.parse(result);
+				clt.user = {
+					"conId": result.id,
+					"accId": result.account.id
+				}
+			}
+		});
 	}
 };
 
 clt.init = function() {
+	clt.action.checkToken();
+	clt.action.getUserInfo();
 	clt.action.changeSection();
 }

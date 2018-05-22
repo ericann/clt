@@ -36,8 +36,14 @@
     <!-- 权限控制，待完善  -->
     <aop:config proxy-target-class="true">
         <aop:aspect id="permission" ref="permissionService" >
-            <aop:pointcut id="grant" expression="execution(* org.clt.service.impl.base.GenericServiceImpl.save(org.clt.repository.pojo.Contact))" />
+        	<!-- 未每个插入的user补充Management的权限 -->
+            <aop:pointcut id="grant" expression="execution(* org.clt.service.impl.base.GenericServiceImpl+.save(..)) and target(org.clt.service.impl.base.ContactServiceImpl)" />
             <aop:after method="grantPermissions" pointcut-ref="grant" />
+            
+            <!-- 为每个插入的WechatAccount补充wechatAccessToken -->
+            <aop:pointcut id="setWAT" expression="execution(* org.clt.service.impl.base.GenericServiceImpl+.save(..)) and target(org.clt.service.impl.base.WechatAccountServiceImpl)" />
+            <aop:around method="setWechatAccessToken" pointcut-ref="setWAT" />
+            
         </aop:aspect>
     </aop:config>
     

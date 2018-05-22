@@ -91,6 +91,18 @@
 	 	 <finalName>larw</finalName>
 	 	 
 	 	 <plugins>
+	 	 	<!-- 远程部署到server -->
+            <plugin>
+	            <groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+				    <url>http://47.93.254.177/manager/text</url>
+				    <username>tomcat</username>
+				    <password>sdfSD145</password>
+				    <update>true</update>
+				</configuration>
+			</plugin>
 	 	 	<!-- for heroku -->
 			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>

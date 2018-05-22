@@ -2,6 +2,10 @@ package org.clt.repository.pojo;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,6 +19,8 @@ public class Sfdc implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(generator="system-guid")
+	@GenericGenerator(name="system-guid", strategy = "guid")
 	private String id;
 
 	private String description;
@@ -33,8 +39,8 @@ public class Sfdc implements Serializable {
 	private String username;
 
 	//bi-directional many-to-one association to LiveAgent
-	@OneToMany(mappedBy="sfdc")
-	private List<LiveAgent> liveagents;
+	@OneToMany(mappedBy="sfdc", cascade=CascadeType.PERSIST)
+	private List<LiveAgent> liveagents = new ArrayList<LiveAgent>();
 
 	public Sfdc() {
 	}
@@ -107,9 +113,9 @@ public class Sfdc implements Serializable {
 		return this.liveagents;
 	}
 
-	public void setLiveagents(List<LiveAgent> liveagents) {
-		this.liveagents = liveagents;
-	}
+//	public void setLiveagents(List<LiveAgent> liveagents) {
+//		this.liveagents = liveagents;
+//	}
 
 	public LiveAgent addLiveagent(LiveAgent liveagent) {
 		getLiveagents().add(liveagent);

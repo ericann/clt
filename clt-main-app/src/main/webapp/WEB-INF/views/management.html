@@ -31,7 +31,7 @@
 		}
 		
 		Ajax.get({
-			url:"http://localhost:8080/clt/security/profile/", 
+			url: clt.default.baseURL + "/security/profile/", 
 			type: "GET",
 			headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
 			success: function(result) {
@@ -97,7 +97,7 @@
 				
 				for(var j = 0; j < objNames.length; j++) {
 					Ajax.get({
-						url: "http://localhost:8080/clt/metadata-api/FieldPermission/" + objs[objNames[j]] + "/all",
+						url: clt.default.baseURL + "/metadata-api/FieldPermission/" + objs[objNames[j]] + "/all",
 						headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
 						type: "GET", 
 						success: function(result) {
@@ -168,7 +168,7 @@
 							fields: [{
 								label: "waiting",
 								type: "img",
-								default: "http://localhost:8080/clt/resources/images/loading.gif",
+								default: clt.default.baseURL + "/resources/images/loading.gif",
 								defaultAction: showListService
 							}],
 							buttons: [],
@@ -200,7 +200,7 @@
 			} else {
 			
 				Ajax.get({
-					url:"http://localhost:8080/clt/data-api/" + objectName + "/", 
+					url: clt.default.baseURL + "/data-api/" + objectName + "/", 
 					type: "POST", 
 					headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
 					success: function(result) {

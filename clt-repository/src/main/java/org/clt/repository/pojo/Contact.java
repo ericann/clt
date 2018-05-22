@@ -3,6 +3,8 @@ package org.clt.repository.pojo;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +19,8 @@ public class Contact implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(generator="system-guid")
+	@GenericGenerator(name="system-guid", strategy = "guid")
 	private String id;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -165,9 +169,9 @@ public class Contact implements Serializable {
 		return this.userapps;
 	}
 
-	public void setUserapps(List<UserApp> userapps) {
-		this.userapps = userapps;
-	}
+//	public void setUserapps(List<UserApp> userapps) {
+//		this.userapps = userapps;
+//	}
 
 	public UserApp addUserapp(UserApp userapp) {
 		getUserapps().add(userapp);
@@ -187,9 +191,9 @@ public class Contact implements Serializable {
 		return this.wechattickets;
 	}
 
-	public void setWechattickets(List<WechatTicket> wechattickets) {
-		this.wechattickets = wechattickets;
-	}
+//	public void setWechattickets(List<WechatTicket> wechattickets) {
+//		this.wechattickets = wechattickets;
+//	}
 
 	public WechatTicket addWechatticket(WechatTicket wechatticket) {
 		getWechattickets().add(wechatticket);
@@ -209,9 +213,9 @@ public class Contact implements Serializable {
 		return this.wechatusers;
 	}
 
-	public void setWechatusers(List<WechatUser> wechatusers) {
-		this.wechatusers = wechatusers;
-	}
+//	public void setWechatusers(List<WechatUser> wechatusers) {
+//		this.wechatusers = wechatusers;
+//	}
 
 	public WechatUser addWechatuser(WechatUser wechatuser) {
 		getWechatusers().add(wechatuser);

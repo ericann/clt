@@ -2,7 +2,6 @@ package org.clt.service.impl.base;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 import org.clt.repository.dao.GenericDao;
 import org.clt.service.base.GenericService;
@@ -22,7 +21,7 @@ public abstract class GenericServiceImpl<E extends Serializable, PK extends Seri
 	}
 	
 	public E findById(PK id) {
-		return null;
+		return this.genericDao.findOne(id);
 	}
 	
 	public List<E> findAll() {

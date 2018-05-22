@@ -11,7 +11,6 @@ import org.clt.repository.pojo.WechatTicket;
 import org.clt.service.base.UserAppService;
 import org.clt.service.base.WechatAccountService;
 import org.clt.service.base.WechatTicketService;
-import org.clt.service.base.WechatUserService;
 import org.clt.service.metadata.CreateObjectMetadataService;
 import org.clt.util.Token;
 import org.json.JSONObject;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccessService {
 	
-	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
@@ -39,10 +37,10 @@ public class AccessService {
 	private WechatTicketService wechatTicketService;
 	
 	@Autowired
-	private WechatUserService wechatUserService;
+	private CreateObjectMetadataService metadataService;
 	
 	@Autowired
-	private CreateObjectMetadataService metadataService;
+	private TokenService tokenService;
 	
 	public Map<String, String> getPermissions() {
 		return null;
@@ -160,8 +158,16 @@ public class AccessService {
 		String conId = (String) this.getAccessTokenInfo(token).get("jti");
 		logger.debug("-- getProfile conId: " + conId);
 		logger.debug("-- :" + this.getAccessTokenInfo(token));
-		List<Map<String, Object>> access = this.userAppService.findByContactId(conId);
-		Map<String, Object> accessSort = this.metadataService.convertAccess(access);
+		List<Map<String, Object>> access = null;
+		Map<String, Object> accessSort = null;
+		if(conId == null || conId.isEmpty()) {
+			access = this.userAppService.findObjectsByName("FreeLogin");
+			accessSort = this.metadataService.convertObjects(access);
+		} else {
+			access = this.userAppService.findByContactId(conId);
+			accessSort = this.metadataService.convertAccess(access);
+		}
+		
 		return new JSONObject(accessSort).toString();
 	}
 	
@@ -182,4 +188,9 @@ public class AccessService {
 		Map<String, Object> accessToken_old = this.getAccessTokenInfo(token);
 		return Token.generateAccessToken(3600 * 1000, new JSONObject(accessToken_old).toString());
 	}
+
+	public Map<String, Object> check(String token) {
+		return tokenService.isValid(token);
+	}
+	
 }

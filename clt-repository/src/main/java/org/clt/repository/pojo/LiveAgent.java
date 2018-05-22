@@ -1,10 +1,15 @@
 package org.clt.repository.pojo;
 
 import java.io.Serializable;
-import javax.persistence.*;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.*;
+
 
 
 /**
@@ -17,6 +22,8 @@ public class LiveAgent implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(generator="system-guid")
+	@GenericGenerator(name="system-guid", strategy = "guid")
 	private String id;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -32,8 +39,8 @@ public class LiveAgent implements Serializable {
 	private Date updateTime;
 
 	//bi-directional many-to-one association to Button
-	@OneToMany(mappedBy="liveagent")
-	private List<Button> buttons;
+	@OneToMany(mappedBy="liveagent", cascade=CascadeType.PERSIST)
+	private List<Button> buttons = new ArrayList<Button>();
 
 	//bi-directional many-to-one association to ChatMessage
 	@OneToMany(mappedBy="liveagent")
@@ -50,8 +57,8 @@ public class LiveAgent implements Serializable {
 	private Sfdc sfdc;
 
 	//bi-directional many-to-one association to WechatAccount
-	@OneToMany(mappedBy="liveAgent")
-	private List<WechatAccount> wechatAccounts;
+	@OneToMany(mappedBy="liveAgent", cascade=CascadeType.PERSIST)
+	private List<WechatAccount> wechatAccounts = new ArrayList<WechatAccount>();
 
 	public LiveAgent() {
 	}
@@ -100,9 +107,9 @@ public class LiveAgent implements Serializable {
 		return this.buttons;
 	}
 
-	public void setButtons(List<Button> buttons) {
-		this.buttons = buttons;
-	}
+//	public void setButtons(List<Button> buttons) {
+//		this.buttons = buttons;
+//	}
 
 	public Button addButton(Button button) {
 		getButtons().add(button);
@@ -122,9 +129,9 @@ public class LiveAgent implements Serializable {
 		return this.chatmessages;
 	}
 
-	public void setChatmessages(List<ChatMessage> chatmessages) {
-		this.chatmessages = chatmessages;
-	}
+//	public void setChatmessages(List<ChatMessage> chatmessages) {
+//		this.chatmessages = chatmessages;
+//	}
 
 	public ChatMessage addChatmessage(ChatMessage chatmessage) {
 		getChatmessages().add(chatmessage);
@@ -159,9 +166,23 @@ public class LiveAgent implements Serializable {
 	public List<WechatAccount> getWechataccounts() {
 		return this.wechatAccounts;
 	}
+//
+//	public void setWechataccounts(List<WechatAccount> wechataccounts) {
+//		this.wechatAccounts = wechataccounts;
+//	}
+	
+	public WechatAccount addWechataccount(WechatAccount wechataccount) {
+		getWechataccounts().add(wechataccount);
+		wechataccount.setLiveAgent(this);
 
-	public void setWechataccounts(List<WechatAccount> wechataccounts) {
-		this.wechatAccounts = wechataccounts;
+		return wechataccount;
+	}
+
+	public WechatAccount removeWechataccount(WechatAccount wechataccount) {
+		getWechataccounts().remove(wechataccount);
+		wechataccount.setLiveAgent(null);
+
+		return wechataccount;
 	}
 
 }

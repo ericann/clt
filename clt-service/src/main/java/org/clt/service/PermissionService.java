@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.UUID;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.clt.repository.pojo.ConnectApp;
 import org.clt.repository.pojo.Contact;
 import org.clt.repository.pojo.UserApp;
+import org.clt.repository.pojo.WechatAccount;
 import org.clt.service.base.ConnectAppService;
 import org.clt.service.base.UserAppService;
 import org.slf4j.Logger;
@@ -25,6 +27,9 @@ public class PermissionService {
 	
 	@Autowired
 	private UserAppService userAppService;
+	
+	@Autowired
+	private WechatTokenService wechatTokenService;
 	
 	public List<ConnectApp> getConnectAppByIdAndName(String conId, String name) {
 		return this.connectAppService.findByContactIdAndName(conId, name);
@@ -45,4 +50,20 @@ public class PermissionService {
 			this.userAppService.save(ua);
 		}
 	}
+	
+	public void setWechatAccessToken(ProceedingJoinPoint jp) {
+		try {
+			Object[] args = jp.getArgs();
+			WechatAccount wechatAccount = (WechatAccount) args[0];
+			String wechatAccessToken = wechatAccount.getFirstTimeRefresh() ? 
+					this.wechatTokenService.getByAppIdAndSecret(wechatAccount.getWechatAppId(), wechatAccount.getWechatAppSecret()) : null;
+			wechatAccount.setWechatAccessToken(wechatAccessToken);
+			
+			jp.proceed(args);
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }

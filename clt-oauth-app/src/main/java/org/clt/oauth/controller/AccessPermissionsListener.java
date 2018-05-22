@@ -1,7 +1,5 @@
 package org.clt.oauth.controller;
 
-import java.util.UUID;
-
 import org.clt.service.AccessService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/security")
 public class AccessPermissionsListener {
 	
+	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
@@ -26,6 +25,16 @@ public class AccessPermissionsListener {
 	@RequestMapping("/accesstoken/{ticket}")
 	public @ResponseBody String login(@PathVariable("ticket") String ticket) {
 		return JSONObject.valueToString(this.accessService.loginByWechat(ticket));
+	}
+	
+	@RequestMapping("/accesstoken/free")
+	public @ResponseBody String free() {
+		return this.accessService.getAccessToken(null);
+	}
+	
+	@RequestMapping("/accesstoken/verify/")
+	public @ResponseBody String checkAccessToken(@RequestHeader("CLT-ACCESS-TOKEN") String token) {
+		return JSONObject.valueToString(this.accessService.check(token));
 	}
 	
 	@RequestMapping(value="/accesstoken/{conId}/{ticket}", method=RequestMethod.POST)
@@ -54,19 +63,4 @@ public class AccessPermissionsListener {
 		return (String)this.accessService.getProfile(access_token);
 	}
 	
-	@RequestMapping(value="/getUUID", method=RequestMethod.GET)
-	public @ResponseBody String getUUID() {
-		return UUID.randomUUID().toString();
-	}
-	
-	@RequestMapping(value="/getUUIDs/{count}", method=RequestMethod.GET)
-	public @ResponseBody String getUUIDs(@PathVariable("count") Integer count) {
-		String[] uuids = new String[count];
-		for(Integer i = 0; i < count; i++) {
-			String uuid = UUID.randomUUID().toString();
-			uuids[i] = uuid;
-		}
-		
-		return JSONObject.valueToString(uuids);
-	}
 }

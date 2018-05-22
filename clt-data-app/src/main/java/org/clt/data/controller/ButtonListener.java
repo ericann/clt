@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/data-api/Button")
 public class ButtonListener extends DataListenerImpl<Button, String> {
 	
+	@SuppressWarnings("unused")
+	private ButtonService buttonService;
+	
 	@Autowired
     public ButtonListener(ButtonService buttonService) {
         super(buttonService);
+        this.buttonService = buttonService;
     }
 }

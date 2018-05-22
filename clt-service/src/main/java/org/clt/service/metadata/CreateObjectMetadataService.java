@@ -25,9 +25,10 @@ public class CreateObjectMetadataService {
 			op.setRead(fp.getObjectpermission().getRead());
 			
 			fp.setObjectpermission(null);
+			op.addFieldpermission(fp);
 		}
 		
-		op.setFieldpermissions(fpL);
+		//op.setFieldpermissions(fpL);
 		
 		return op;
 	}
@@ -75,6 +76,8 @@ public class CreateObjectMetadataService {
 				menu.put("objects", objects);
 				menu.put("id", m_id);
 				menu.put("name", m_name);
+//				objects.put(m_name, m_id);
+//				menu.put("objects", objects);
 			}
 			
 			Map<String, java.lang.Object> objects = ((Map<String, java.lang.Object>) menu.get("objects"));
@@ -151,5 +154,16 @@ public class CreateObjectMetadataService {
 		}
 		
 		return buttons;
+	}
+
+	public Map<String, java.lang.Object> convertObjects(List<Map<String, java.lang.Object>> access) {
+		Map<String, java.lang.Object> result = new HashMap<String, java.lang.Object>();
+		
+		for(Map<String, java.lang.Object> o : access) {
+			String op_name = String.valueOf(o.get("op_name"));
+			result.put(op_name, o.get("opId"));
+		}
+		
+		return result;
 	}
 }
