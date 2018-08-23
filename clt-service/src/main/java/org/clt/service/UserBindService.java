@@ -54,7 +54,7 @@ public class UserBindService {
 				wtL = this.wechatTicketService.findByWechatAccountAndWechatUserId(wechatAccount, wu.getId(), wt.getId());
 				if(!wtL.isEmpty()) {
 					wt.setWechatuser(new WechatUser());
-					result.put("code", 1);
+					result.put("code", 1043);
 					result.put("msg", "The user has already exsit.");
 				} else {
 					wt.setWechatuser(wu);
@@ -95,7 +95,7 @@ public class UserBindService {
 			wt.setIsValid(false);
 			this.wechatTicketService.updateContactAndWUByIdAndIsValid(wt);
 		} catch(Exception ex) {
-			result.put("code", -1);
+			result.put("code", 1011);
 			result.put("msg", "Login information is not correct or unsign up.");
 			ex.printStackTrace();
 		}

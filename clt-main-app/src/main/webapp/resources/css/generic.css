@@ -205,6 +205,12 @@ body {
 	display: inline-block;
 }
 
+.f_values {
+    width: 62%;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
 .f_label {
 	width: 28%;
 	padding-left: 10%;
@@ -334,4 +340,25 @@ div .t_action .t_button:active {
 .select-detail, .select-detail-loading {
 	padding: 2px;
 	background: lightgrey;
+}
+
+.expand, .fold {
+	width: 0px;
+    height: 0px;
+    border-width: 8px;
+    border-style: solid;
+    outline: none;
+    cursor: pointer;
+}
+
+.expand {
+	margin-bottom: 2px;
+    margin-right: 5px;
+	border-color: transparent transparent rgb(190, 190, 190) transparent;
+}
+
+.fold {
+	margin-bottom: -7px;
+    margin-right: 5px;
+	border-color: rgb(190, 190, 190) transparent transparent transparent;
 }

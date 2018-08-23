@@ -16,6 +16,7 @@ public abstract class GenericServiceImpl<E extends Serializable, PK extends Seri
 		this.genericDao = genericDao;
 	}
 	
+	@Override
 	public List<E> findAllByContactId(String conId) {
 		return this.genericDao.findAllByContactId(conId);
 	}
@@ -24,12 +25,19 @@ public abstract class GenericServiceImpl<E extends Serializable, PK extends Seri
 		return this.genericDao.findOne(id);
 	}
 	
+	@Override
 	public List<E> findAll() {
 		return this.genericDao.findAll();
 	}
 	
+	@Override
 	public E save(E e) {
 		return this.genericDao.save(e);
 	}
 	
+	@Override
+	public E merge(E e) {
+		//return this.genericDao.merge(e);
+		return null;
+	}
 }

@@ -16,4 +16,5 @@ public interface GenericService<E extends Serializable, PK extends Serializable>
 	
 	List<E> findAllByContactId(String conId);
 	
+	E merge(E e);
 }

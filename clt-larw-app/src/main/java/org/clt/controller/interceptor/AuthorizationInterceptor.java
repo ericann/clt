@@ -50,7 +50,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 				
 				if(!flag) {
 					isValid = -1;
-					result.put("code", 4);
+					result.put("code", 1031);
 					result.put("msg", "You have no permissions.");
 					logger.debug("-- result: " + result);
 				}

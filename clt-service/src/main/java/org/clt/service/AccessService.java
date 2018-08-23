@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.clt.repository.pojo.Contact;
 import org.clt.repository.pojo.WechatAccount;
 import org.clt.repository.pojo.WechatTicket;
+import org.clt.service.base.ContactService;
 import org.clt.service.base.UserAppService;
 import org.clt.service.base.WechatAccountService;
 import org.clt.service.base.WechatTicketService;
@@ -41,6 +42,12 @@ public class AccessService {
 	
 	@Autowired
 	private TokenService tokenService;
+	
+	@Autowired
+	private MailService mailService;
+	
+	@Autowired
+	private ContactService contactService;
 	
 	public Map<String, String> getPermissions() {
 		return null;
@@ -134,16 +141,16 @@ public class AccessService {
 			if(wt.getContact() != null && wt.getWechatuser() != null) {
 				result.put("access_token", this.getAccessToken(wt.getContact().getId()));
 			} else if (wt.getWechatuser() == null && wt.getIsValid()) {
-				result.put("code", 1);
+				result.put("code", 1041);
 				result.put("msg", "Waiting for message.");
 			} else if (!wt.getIsValid() && wt.getWechatuser() == null) {
 				result.put("msg", "User is not exist. Please sign up.");
-				result.put("code", -1);
+				result.put("code", 1042);
 			} else {
 				
 			}
 		} else {
-			result.put("msg", "User is not exist.");
+			result.put("msg", "Unknown Error.");
 			result.put("code", -1);
 		}
 		
@@ -191,6 +198,25 @@ public class AccessService {
 
 	public Map<String, Object> check(String token) {
 		return tokenService.isValid(token);
+	}
+	
+	public Map<String, Object> bindWehcatWithEmailCode(String addressStr) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		JSONObject json = new JSONObject(addressStr);
+		String mobile = json.getString("mobile");
+		String email = json.getString("email");
+		
+		Contact con = contactService.findByMobileAndEmail(mobile, email);
+		
+		if(con == null) {
+			result.put("code", "1040");
+			result.put("msg", "User not found.");
+		} else {
+			result = mailService.sendCode(email, "Verify Code");
+			result.put("conId", con.getId());
+		}
+		return result;
 	}
 	
 }

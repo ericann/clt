@@ -26,4 +26,10 @@ public class ContactServiceImpl extends GenericServiceImpl<Contact, String> impl
 		return this.contactDao.findAllByContactId(conId);
 	}
 	
+	@Override
+	public Contact findByMobileAndEmail(String mobile, String email) {
+		
+		return this.contactDao.findByMobileAndEmail(mobile, email);
+	}
+	
 }

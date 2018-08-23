@@ -3,34 +3,45 @@ window.clt = window.clt || {};
 clt.default = {
 		
 	baseURL: window.document.location.pathname.substring(0, window.document.location.pathname.substring(1).indexOf("/") + 1),
-	type: ["scanqr"],
+	type: ["email", "scanqr"],
 	scanqr: {
-		title: "Login",
+		title: "Bind Wechat",
 		buttons: ["Refresh"],
 		fields: [{
 			label: "Scan QR",
 			type: "img",
 			default: "../resources/images/loading.gif"
-		}, {
-			label: "tips",
-			type: "div",
-			default: "If you have signed up but no binding with wechat, click <a href='bindwechat.html'>here</a>."
 		}]
 	},
 
+	email: {
+		title: "Your Email.",
+		buttons: ["Send Code"],
+		fields: [{
+			label: "Email",
+			type: "input",
+			help: "You will receive 'verify code' via email after clicking the button 'Send Code'."
+		}, {
+			label: "Mobile",
+			type: "input"
+		}, {
+			label: "Verify Code",
+			type: "input"
+		}]
+	},
+	
 	currentStep: 0
 };
 
+clt.metadata = {};
+
 clt.data = {
-	companyname: null,
-	yourname: null,
-	mobile: null,
-	email: null,
-	accId: null,
 	conId: null,
+	email: null,
+	mobile: null,
+	code: null,
 	ticket: null,
-	time_confirm: null,
-	startTime: null
+	ticketURL: null
 };
 
 clt.template = {
@@ -128,7 +139,7 @@ clt.template = {
 	
 	createButton: function(label) {
 	    var html = '<div class="f_button" id={0}>{1}</div>';
-	    html = html.replace("{0}", label.toLowerCase()).replace("{1}", label);
+	    html = html.replace("{0}", label.toLowerCase().replace(" ", "")).replace("{1}", label);
 	    return html;
 	},
 	
@@ -196,6 +207,29 @@ clt.action = {
 			}
 		}
 		
+		//save account info
+		if(clt.default.type[clt.default.currentStep - 1] == "account") {
+			Ajax.post({
+				url: clt.default.baseURL + "/larw/account",
+				data: JSON.stringify({
+					"name": clt.data.companyname,
+					"contacts": {
+						"name": clt.data.yourname,
+						"mobile": clt.data.mobile,
+						"email": clt.data.email
+					}}),
+				requestHeader: "application/json",
+				headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem("CLT-ACCESS-TOKEN")},
+				success: function(result) {
+					result = JSON.parse(result);
+					if(result.code == 0) {
+						clt.data.accId = result.id;
+						clt.action.refresh();
+					}
+				}
+			});
+		}
+		
 		clt.action.removeSection();
 		clt.action.changeSection();
 	},
@@ -203,7 +237,7 @@ clt.action = {
 	refresh: function() {
 		window.clearInterval(clt.data.time_confirm);
 		document.getElementById("Scan QR").querySelector("img").src = clt.default.scanqr.fields[0].default;
-		clt.action.doCall(clt.default.baseURL + "/security/getQR", null,
+		clt.action.doCall(clt.default.baseURL + "/security/getQR/" + clt.data.conId, null,
 				function(result) {
 					var r = JSON.parse(result);
 					document.getElementById("Scan QR").querySelector("img").src = r.url;
@@ -223,10 +257,13 @@ clt.action = {
 			clt.action.doCall(clt.default.baseURL + "/security/QR/" + clt.data.ticket, null, null, null);
 		}
 	},
-
-	confirmLogin: function() {
-		clt.action.doCall(clt.default.baseURL + "/security/accesstoken/" + clt.data.ticket, null,
+	
+	confirmLogin: function(ticket, time_confirm) {
+		console.log("--- confirmLogin");
+		clt.action.doCall(clt.default.baseURL + "/security/accesstoken/" + clt.data.conId + "/" + clt.data.ticket, null,
 				function(result) {
+					
+					console.log("success: " + JSON.stringify(result));
 					result = JSON.parse(result);
 					if(result.code == 0) {
 						alert(result.msg);
@@ -234,18 +271,57 @@ clt.action = {
 						window.location.href = "management.html";
 						window.clearInterval(clt.data.time_confirm);
 					} else if(result.code == 1) {
-			
+//						alert(result.msg);
+//						window.clearInterval(clt.data.time_confirm);
 					} else {
 						alert(result.msg);
 						window.clearInterval(clt.data.time_confirm);
 					}
 		}, 
 		function(result) {
-			alert("Login Failed.");
-			console.log("--failed: " + result);
+			alert("Bind Failed.");
+			window.clearInterval(clt.data.time_confirm);
 		}, "POST");
 	},
 	
+	sendcode: function() {
+		var email = document.getElementById("Email").value;
+		var mobile = document.getElementById("Mobile").value;
+		clt.data.email = email;
+		clt.data.mobile = mobile;
+		Ajax.post({
+			url: clt.default.baseURL + "/security/accesstoken/verify/code",
+			requestHeader: "application/json",
+			data: JSON.stringify({email: clt.data.email, mobile: clt.data.mobile}),
+			success: function(result) {
+				console.log("success: " + JSON.stringify(result));
+				result = JSON.parse(result);
+				if(result.code == 0) {
+					clt.data.code = result.verifyCode;
+					clt.data.conId = result.conId;
+					//clt.data.ticket = result.verifyCode;
+					//clt.data.ticketURL = result.verifyCode;
+					document.getElementById("Verify Code").addEventListener("keyup", function(e) {
+						e = e.target || e;
+						if(e.value == result.verifyCode) {
+							clt.action.next();
+							clt.action.refresh();
+						}
+					}, false)
+					
+				} else if(result.code == 1) {
+				} else {
+					alert(result.msg);
+					window.clearInterval(clt.data.time_confirm);
+				}
+			},
+			error: function(result) {
+				alert("Bind Failed.");
+				window.clearInterval(clt.data.time_confirm);
+			}
+		});
+	},
+
 	back: function() {
 		clt.default.currentStep--;
 		clt.action.removeSection();
@@ -314,10 +390,10 @@ clt.action = {
             var buttons = clt.default[currentStep].buttons;
 
             for(var i = 0; i < buttons.length; i++) {
-                var b = document.getElementById(buttons[i].toLowerCase());
+                var b = document.getElementById(buttons[i].toLowerCase().replace(" ", ""));
 
                 if(b) {
-                    b.addEventListener("click", clt.action[buttons[i].toLowerCase()], false);
+                    b.addEventListener("click", clt.action[buttons[i].toLowerCase().replace(" ", "")], false);
                     //b.nextSibling.addEventListener("mouseover", function(){alert("msg")}, false);
                 }
             }
@@ -407,11 +483,15 @@ clt.action = {
 		}
 
 		return result;
+	},
+	
+	compare: function(oldV, newV) {
+		return oldV == newV;
 	}
+	
 };
 
 clt.init = function() {
 	clt.action.changeSection();
-	clt.action.refresh();
 	setInterval(clt.action.timeout, 4000);
 }

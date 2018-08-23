@@ -39,7 +39,7 @@ public class Sfdc implements Serializable {
 	private String username;
 
 	//bi-directional many-to-one association to LiveAgent
-	@OneToMany(mappedBy="sfdc", cascade=CascadeType.PERSIST)
+	@OneToMany(mappedBy="sfdc", cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	private List<LiveAgent> liveagents = new ArrayList<LiveAgent>();
 
 	public Sfdc() {

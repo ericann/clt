@@ -19,12 +19,14 @@ public class LarwInforListener {
 	
 	@Autowired
 	private LARWInforService inforService;
-
+	
+	//保存当前的account对象
 	@RequestMapping(value="/account", method=RequestMethod.POST)
 	public @ResponseBody String insertBC_B(@RequestBody String json) {
 		return this.inforService.addAccountCascade(json);
 	}
 	
+	//保存当前的sfdc、liveagent、button，wechataccount及关联关系
 	@RequestMapping(value="/sfdc", method=RequestMethod.POST)
 	public @ResponseBody String insertAcc_Con(@RequestBody String json) {
 		return this.inforService.addSfdcCascade(json);

@@ -46,7 +46,7 @@ public class UserAppServiceImpl extends GenericServiceImpl<UserApp, String> impl
 	@Override
 	public List<Map<String, Object>> findObjectsByConId(String conId) {
 		// TODO Auto-generated method stub
-		return this.findObjectsByConId(conId);
+		return this.userAppDao.findObjectsByConId(conId);
 	}
 	
 }

@@ -15,8 +15,8 @@ public interface ContactDao extends GenericDao<Contact, String> {
 	@Query("SELECT con FROM Contact con WHERE con.mobile=:mobile AND con.password=:password")
 	public Contact findByMobileAndPassword(@Param("mobile") String mobile, @Param("password") String password);
 
-	@Query("SELECT con FROM Contact con WHERE con.mobile=:mobile AND con.password=:email")
-	public Contact findByMobileAndEmail(@Param("mobile") String mobile, @Param("email") String password);
+	@Query("SELECT con FROM Contact con WHERE con.mobile=:mobile AND con.email=:email")
+	public Contact findByMobileAndEmail(@Param("mobile") String mobile, @Param("email") String email);
 	
 	@Query("SELECT con FROM Contact con WHERE con.sessionId=:sessionId")
 	public Contact findBySessionId(@Param("sessionId") String sessionId);

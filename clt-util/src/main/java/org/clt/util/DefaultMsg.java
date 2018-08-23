@@ -17,7 +17,14 @@ public class DefaultMsg {
 	
 	//错误编码
 	public final static String E_0 = "0";
-	public final static String E_1 = "-1";
+	public final static String E__1 = "-1";
+	//Failed.
+	public final static String E_1 = "1";
+	
+	public final static String E_1001 = "1001";
+	
+	//Login information is not correct or unsign up.
+	public final static String E_1011 = "1011";
 	
 	//Http Error
 	public final static String H_400 = "2001";
@@ -33,7 +40,7 @@ public class DefaultMsg {
 	public final static String E_1_M = "Unknown Error.";
 	public final static String H_400_M = "400 Bad Request.Check your input information, please.";
 	
-	public final static String E_1001 = "Refresh Tokens Error.";
+	//public final static String E_1001 = "Refresh Tokens Error.";
 	
 	public final static String N_0_M = "Not Support.";
 	

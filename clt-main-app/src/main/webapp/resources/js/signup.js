@@ -242,7 +242,7 @@ clt.action = {
 				success: function(result) {
 					result = JSON.parse(result);
 					if(result.code == 0) {
-						clt.data.accId = result.id;
+						clt.data.conId = result.id;
 						clt.action.refresh();
 					}
 				}

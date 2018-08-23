@@ -53,21 +53,21 @@ public class TokenService {
 				result.put("msg", "Success.");
 				result.put("conId", accessToken.get("jti"));
 			} else {
-				result.put("code", 1);
+				result.put("code", 1032);
 				result.put("msg", "Token is expired.");
 			}
 		} catch(SignatureException ex) {
-			result.put("code", 2);
-			result.put("msg", "Unknown token,");
+			result.put("code", 1033);
+			result.put("msg", "Unknown token.");
 		} catch(MalformedJwtException me) {
-			result.put("code", 3);
-			result.put("msg", "Invalid format token,");
+			result.put("code", 1034);
+			result.put("msg", "Invalid format token.");
 		} catch(IllegalArgumentException ex) {
-			result.put("code", 5);
+			result.put("code", 1035);
 			result.put("msg", "Empty token.");
 		} catch(Exception ex) {
 			result.put("code", -1);
-			result.put("msg", "Error token,");
+			result.put("msg", "Error token.");
 		}
 		
 		return result;

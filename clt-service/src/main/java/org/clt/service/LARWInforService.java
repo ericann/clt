@@ -53,10 +53,10 @@ public class LARWInforService {
 			acc.addContact(con);
 			
 			this.accService.save(acc);
-			result.put("id", acc.getId());
+			result.put("id", con.getId());
 		} catch(Exception ex) {
-			result.put("code", 1);
-			result.put("msg", "failed");
+			result.put("code", -1);
+			result.put("msg", "Unknown Error.");
 		}
 		return JSONObject.valueToString(result);
 	}
@@ -98,7 +98,7 @@ public class LARWInforService {
 			this.sfdcService.save(sfdc);
 			result.put("id", sfdc.getId());
 		} catch(DataIntegrityViolationException ex) {
-			result.put("code", 1);
+			result.put("code", 1020);
 			result.put("msg", "Confirm your input informaction currectly.");
 		} catch(Exception ex) {
 			result.put("code", -1);

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mail Notices</title>
+	<link rel="stylesheet" href="../resources/css/generic.css" type="text/css" />
+	<script type="text/javascript" src="../resources/js/clt.js"></script>
+	<script type="text/javascript" src="../resources/js/Ajax.js"></script>
+</head>
+<body>
+	<div class="head">
+		<div class="icon_buttons"></div>
+		<div class="prompt">CLT Mail Notifications</div>
+		<div class="special">v2.0</div>
+	</div>
+</body>
+<script>
+	clt.metadata = {
+		mails: {
+			title: "Send Notices.",
+			style: "f",
+			buttons: ["Send"],
+			fields: [{
+				label: "Subject",
+				type: "input",
+				default: ""
+			}, {
+				label: "Receiver",
+				type: "input",
+				default: ""
+			}, {
+				label: "Content",
+				type: "textarea",
+				default: ""
+			}, {
+				label: "Single",
+				type: "checkbox",
+				default: false
+			}]
+		}
+	};
+	
+	clt.data = {
+		subject: null,
+		receiver: null,
+		content: null,
+		single: false	
+	}
+	
+	clt.action.send = function() {
+		var components = document.querySelectorAll(".f_value");
+		
+		for(var i = 0; i < components.length; i++) {
+			var e = components[i].firstElementChild;
+			
+			clt.data[e.name.toLowerCase()] = e.type == "checkbox" ? e.checked : e.value;
+		}
+		
+		Ajax.post({
+			url: clt.default.baseURL + "/mail/notifications",
+			requestHeader: "application/json",
+			data: JSON.stringify(clt.data),
+			headers: {"CLT-ACCESS-TOKEN": sessionStorage.getItem(clt.default.TOKEN)},
+			success: function(result) {
+				console.log("success: " + JSON.stringify(result));
+				result = JSON.parse(result);
+				if(result.code == 0) {
+					alert(result.msg);
+					
+				} else if(result.code == 1) {
+				} else {
+					alert(result.msg);
+				}
+			},
+			error: function(result) {
+				alert("Send Failed.");
+			}
+		});
+	}
+
+	var firstSection = document.body.appendChild(clt.template.createSection(clt.metadata.mails));
+</script>
+</html>

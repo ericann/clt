@@ -93,7 +93,7 @@ clt.metadata = {
 			readonly: false
 		}, {
 			label: "End Point",
-			type: "input",
+			type: "a",
 			help: "The address of live agent.Click link for help.",
 			link: "help/la.html",
 			minlength: 15,

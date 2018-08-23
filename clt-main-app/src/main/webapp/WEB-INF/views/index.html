@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Index</title>
+	<link rel="stylesheet" href="../resources/css/generic.css" type="text/css" />
+	<script type="text/javascript" src="../resources/js/clt.js"></script>
+</head>
+<body>
+	<div class="head">
+		<div class="icon_buttons"></div>
+		<div class="prompt">CLT Navigation</div>
+		<div class="special">v2.0</div>
+	</div>
+</body>
+<script>
+	clt.metadata = {
+		navigation: {
+			title: "Navigation.",
+			style: "f",
+			buttons: [],
+			fields: [{
+				label: "Index",
+				type: "a",
+				default: "The index page of CLT.",
+				href: "index"
+			}, {
+				label: "Management",
+				type: "a",
+				default: "To manage your information.",
+				href: "management"
+			}, {
+				label: "Register",
+				type: "a",
+				default: "Resiter larw service for you.",
+				help: "LARW Service is not same with CLT Service, it's just a part in CLT.",
+				href: "register"
+			}, {
+				label: "Sign Up",
+				type: "a",
+				default: "To sign up CLT service before you use it. And You can sign in by Wechat directly.",
+				href: "signup"
+			}, {
+				label: "Bind Wechat",
+				type: "a",
+				default: "If you have signed up but dont bind with wechat, you can use this page to re-bind.",
+				href: "bindwechat"
+			}, {
+				label: "Sign In",
+				type: "a",
+				default: "You have to sign in before you use clt service.",
+				help: "You will use Wechat to get the access permissions simplely.",
+				href: "signin"
+			}, {
+				label: "Oauth2.0",
+				type: "a",
+				default: "You can use this util to test your methods for oauth2.0 in salesforce.",
+				href: "oauth"
+			}, {
+				label: "Log",
+				type: "a",
+				default: "This page show the CLT service log.",
+				href: "log"
+			}, {
+				label: "Help Docs - Live Agent",
+				type: "a",
+				default: "This is a help page for Live Agent while you use resiter page.",
+				href: "help/la"
+			}, {
+				label: "Help Docs - Wechat",
+				type: "a",
+				default: "This is a help page for Wechat while you use resiter page.",
+				href: "help/wechat"
+			}, {
+				label: "Help Docs - LARW",
+				type: "a",
+				default: "This is a help page for LARW while you use resiter page.",
+				href: "help/larw"
+			}, {
+				label: "Help Video - v1.0",
+				type: "a",
+				default: "Introduce that how to use LARW v1.0 Service.",
+				help: "It's stay in Baidu Cloud, may be you have to sign in with Baidu. And Baidu Cloud is a free Service.",
+				href: "help/larw"
+			}, {
+				label: "Help Video - v2.0",
+				type: "a",
+				default: "Introduce that how to use CLT v2.0 Service.",
+				help: "It's stay in Baidu Cloud too.",
+				href: "help/larw"
+			}, {
+				label: "CSDN Blog",
+				type: "a",
+				default: "The Blog for salesforce with author.",
+				help: "It's a outside website.",
+				href: "help/larw"
+			}, {
+				label: "tips",
+				type: "div",
+				default: "Maybe typography doesn't make you feel comfortable, but it gives you a initial understanding of CLT services. And you can find it while you need it. Good Luck for you and have a nice day!"
+			}]
+		},
+
+		dataint: {
+			title: "Data Integration",
+			style: "f",
+			buttons: [],
+			fields: [{
+				label: "tips",
+				type: "div",
+				default: "It's easy to use Data Integration with CLT Service and it's based on restful. You can get data with sample url: /data/{objectName}, for example:<br>You need your Wechat User data,<br>&nbsp;&nbsp;&nbsp;&nbsp;URL: /data/WechatUser/<br>&nbsp;&nbsp;&nbsp;&nbsp;Header: {CLT-ACCESS-TOKEN: {YOUR-TOKEN}}<br>Support Objects: Account, Contact, WechatAccount, WechatUser, Sfdc, LiveAgent, Button，ChatMessage."
+			}]
+		},
+
+		oauth: {
+			title: "Oauth 2.0",
+			style: "f",
+			buttons: [],
+			fields: [{
+				label: "Introduction",
+				type: "div",
+				default: "CLT Service has own Oauth2.0 methods. It will be create connect app data while you sign up. You can use it to refresh access token by your system automaticlly. It contains 3 methods: "
+			}, {
+				label: "How to use?",
+				type: "div",
+				default: ""
+			}, {
+				label: "tips",
+				type: "div",
+				default: "Maybe you have to confirm with wechat while you first time using."
+			}]
+		}
+	};
+
+	clt.default.stayOneExpand = true;
+
+	var firstSection = document.body.appendChild(clt.template.createSection(clt.metadata.navigation));
+	document.body.appendChild(clt.template.createSection(clt.metadata.dataint));
+	document.body.appendChild(clt.template.createSection(clt.metadata.oauth));
+
+	//保证当前第一个Section打开
+	firstSection.querySelector(".s_fold div").click();
+	firstSection.querySelector(".s_fold div").click();
+</script>
+</html>

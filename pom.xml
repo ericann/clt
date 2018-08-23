@@ -6,6 +6,7 @@
 	
 	<groupId>clt</groupId>
 	<artifactId>clt</artifactId>
+	<version>2.0.0</version>
 	<packaging>pom</packaging>
 	
 	<name>clt</name>
@@ -22,6 +23,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<maven.version>3.3.9</maven.version>
+		<clt.version>2.0.0</clt.version>
 	</properties>
 	
 	<dependencyManagement>
@@ -98,5 +100,5 @@
 		<module>clt-data-app</module>
 		<module>clt-main-app</module>
 	</modules>
-	<version>2.0.0</version>
+	
 </project>

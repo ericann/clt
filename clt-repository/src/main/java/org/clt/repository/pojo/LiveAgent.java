@@ -39,7 +39,7 @@ public class LiveAgent implements Serializable {
 	private Date updateTime;
 
 	//bi-directional many-to-one association to Button
-	@OneToMany(mappedBy="liveagent", cascade=CascadeType.PERSIST)
+	@OneToMany(mappedBy="liveagent", cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	private List<Button> buttons = new ArrayList<Button>();
 
 	//bi-directional many-to-one association to ChatMessage
@@ -57,7 +57,7 @@ public class LiveAgent implements Serializable {
 	private Sfdc sfdc;
 
 	//bi-directional many-to-one association to WechatAccount
-	@OneToMany(mappedBy="liveAgent", cascade=CascadeType.PERSIST)
+	@OneToMany(mappedBy="liveAgent", cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	private List<WechatAccount> wechatAccounts = new ArrayList<WechatAccount>();
 
 	public LiveAgent() {

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ContactService extends GenericService<Contact, String> {
 	
+	Contact findByMobileAndEmail(String mobile, String email);
 }

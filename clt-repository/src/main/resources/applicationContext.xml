@@ -58,6 +58,6 @@
     <!-- repository-impl-postfix="Impl" -->
 	<jpa:repositories base-package="org.clt.repository.dao" 
 		entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager" />
-	<jpa:repositories base-package="org.clt.repository.dao" repository-impl-postfix="Impl"
-		entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager" />
+	<!-- <jpa:repositories base-package="org.clt.repository.*repository*" repository-impl-postfix="Impl"
+		entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager" /> -->
 </beans>

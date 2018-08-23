@@ -2,15 +2,25 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
     xmlns:tx="http://www.springframework.org/schema/tx"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
         http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+        http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+        
+    <context:annotation-config />
+    <context:component-scan base-package="org.clt.util"/>
+    <context:property-placeholder location="classpath:properties/mail.properties" ignore-unresolvable="true"/>
         
 	<bean id="mylogger" class="org.clt.util.Log" />
     
     <bean id="printer" class="org.clt.util.print.Printer" />
+    
+    <bean id = "templateMessage" class = "org.springframework.mail.SimpleMailMessage">
+	    <property name="from" value="${mail.username}"/>
+	</bean>
         
     <aop:config proxy-target-class="true">
         <aop:aspect id="log" ref="mylogger" >
@@ -22,5 +32,18 @@
             <aop:around method="around" pointcut-ref="printerPC"/>
         </aop:aspect>
     </aop:config>
-        
+    
+    <!-- mail for 163 -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">  
+        <property name="host" value="${mail.host}" />  
+        <property name="username" value="${mail.username}" />  
+        <property name="password" value="${mail.password}" />  
+        <property name="defaultEncoding" value="UTF-8"></property>  
+        <property name="javaMailProperties">  
+            <props>  
+                <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>  
+                <prop key="mail.smtp.timeout">${mail.smtp.timeout}</prop>  
+            </props>  
+        </property>  
+    </bean> 
 </beans>
