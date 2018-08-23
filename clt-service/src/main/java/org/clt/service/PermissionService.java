@@ -1,12 +1,15 @@
 package org.clt.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.clt.repository.pojo.Account;
 import org.clt.repository.pojo.ConnectApp;
 import org.clt.repository.pojo.Contact;
+import org.clt.repository.pojo.Sfdc;
 import org.clt.repository.pojo.UserApp;
 import org.clt.repository.pojo.WechatAccount;
 import org.clt.service.base.ConnectAppService;
@@ -35,29 +38,57 @@ public class PermissionService {
 		return this.connectAppService.findByContactIdAndName(conId, name);
 	}
 	
+	//解决级联插入的问题
 	public void grantPermissions(JoinPoint jp) {
 		System.out.println("--- go in grantPermissions ---");
-		Contact con = (Contact) jp.getArgs()[0];
-		List<ConnectApp> caL = this.connectAppService.findAll();
+		String className = jp.getArgs()[0].getClass().getSimpleName();
+		List<Contact> conL = new ArrayList<Contact>();
 		
-		for(ConnectApp ca : caL) {
-			UserApp ua = new UserApp();
-			ua.setConnectApp(ca);
-			ua.setId(UUID.randomUUID().toString());
-			ua.setContact(con);
-			ua.setName("management");
-			
-			this.userAppService.save(ua);
+		if(className.equals("Account")) {
+			Account acc = (Account) jp.getArgs()[0];
+			conL = acc.getContacts();
+		} else if(className.equals("Contact")) {
+			Contact con = (Contact) jp.getArgs()[0];
+			conL.add(con);
+		}
+		
+		if(!conL.isEmpty()) {
+			for(Contact con : conL) {
+				ConnectApp ca = this.connectAppService.findByName("top_m_management");
+				
+				UserApp ua = new UserApp();
+				ua.setConnectApp(ca);
+				ua.setId(UUID.randomUUID().toString());
+				ua.setContact(con);
+				ua.setName("management");
+				
+				this.userAppService.save(ua);
+			}
 		}
 	}
 	
+	//解决级联插入的问题
 	public void setWechatAccessToken(ProceedingJoinPoint jp) {
 		try {
 			Object[] args = jp.getArgs();
-			WechatAccount wechatAccount = (WechatAccount) args[0];
-			String wechatAccessToken = wechatAccount.getFirstTimeRefresh() ? 
-					this.wechatTokenService.getByAppIdAndSecret(wechatAccount.getWechatAppId(), wechatAccount.getWechatAppSecret()) : null;
-			wechatAccount.setWechatAccessToken(wechatAccessToken);
+			String className = jp.getArgs()[0].getClass().getSimpleName();
+			List<WechatAccount> waL = new ArrayList<WechatAccount>();
+			
+			if(className.equals("Sfdc")) {
+				Sfdc sfdc = (Sfdc) args[0];
+				if(sfdc.getLiveagents() != null) {
+					waL = sfdc.getLiveagents().get(0).getWechataccounts();
+				}
+			} else if(className.equals("WechatAccount")) {
+				WechatAccount wa = (WechatAccount) args[0];
+				waL.add(wa);
+			}
+			
+			for(WechatAccount wa : waL) {
+				String wechatAccessToken = wa.getFirstTimeRefresh() ? 
+						this.wechatTokenService.getByAppIdAndSecret(wa.getWechatAppId(), wa.getWechatAppSecret()) : null;
+				wa.setWechatAccessToken(wechatAccessToken);
+			}
 			
 			jp.proceed(args);
 		} catch (Throwable e) {
