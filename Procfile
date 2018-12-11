@@ -1,1 +1,1 @@
-web: java -jar target/clt.jar
+web: java -war target/clt.war
