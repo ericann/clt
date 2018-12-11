@@ -1,1 +1,1 @@
-web: java -jar target/clt.war
+web: java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --port $PORT target/clt.war
